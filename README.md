@@ -16,7 +16,9 @@ This was designed for a laptop.
 |Terminal Prompt|[Starship](https://starship.rs)|
 
 ## Screenshots
-will be added soon
+Uses [`pywal`](https://github.com/dylanaraps/pywal) to automatically generate a color palette based on wallpaper.
+![Example 1 showing cool black hole background with neofetch](./images/001.png)
+![Example 2 showing how pywal generates colors](./images/002.png)
 
 ## Keybindings
 See the [config](./.config/hypr/hyprland.conf) for hyprland.
