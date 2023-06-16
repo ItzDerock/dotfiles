@@ -1,0 +1,5 @@
+#!/bin/bash
+
+ls ~/.config/wallpapers | sort -R | tail -n 1 | while read file; do 
+  wallpaper-set ~/.config/wallpapers/$file
+done

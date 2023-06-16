@@ -1,0 +1,12 @@
+#!/bin/bash
+
+wal -n -i "$@"
+
+# Update wallpaper
+WALLPAPER="$@" envsubst < ~/.config/hypr/hyprpaper.conf.template > ~/.config/hypr/hyprpaper.conf
+killall hyprpaper || true
+hyprpaper > /dev/null 2>&1 &
+
+# Restart waybar
+killall waybar || true
+waybar > /dev/null 2>&1 &

@@ -1,0 +1,85 @@
+@import url("../../.cache/wal/colors-waybar.css");
+
+@define-color green #98C379;
+@define-color yellow #E5C07B;
+@define-color red #BE5046;
+
+window,
+tooltip {
+    font-family: CaskaydiaCove Nerd Font, Roboto, Helvetica, Arial, sans-serif;
+    font-size: 24px;
+}
+
+window#waybar {
+    border-radius: 10px;
+    background-color: @color0;    
+    color: @color7;
+
+    border: 1px solid @color1;
+}
+
+#workspaces button {
+    color: @color7;
+    border: none;
+}
+
+#workspaces button:hover {
+    background: inherit;
+    background-color: @hover;
+    box-shadow: inherit;
+    text-shadow: inherit;
+    border: none;
+}
+
+#workspaces button.active {
+    background: inherit;
+    background-color: @foreground;
+    color: @background;
+}
+
+
+#window {
+    padding-left: 12px;
+}
+
+#tray,
+#battery,
+#network,
+#clock,
+#cpu,
+#memory,
+#backlight,
+#wireplumber,
+#temperature {
+    padding: 0 12px;
+}
+
+#window {
+    font-size: 18px;
+}
+
+#custom-divider,
+#custom-volumeup,
+#custom-volume-down {
+    padding: 0 18px;
+}
+
+#custom-divider {
+    color: @color4;
+}
+
+#clock {
+    color: @primary;
+}
+
+#battery {
+    color: @green;
+}
+
+#battery.critical:not(.charging) {
+    color: @red;
+}
+
+#battery.warning:not(.charging) {
+    color: @yellow;
+}

@@ -1,0 +1,136 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 42,
+    "margin-left": 20,
+    "margin-right": 20,
+    "margin-top": 20,
+    "modules-left": [
+        "wlr/workspaces",
+        "custom/divider",
+        "cpu",
+        "temperature",
+        "memory",
+        "gpu",
+        "custom/divider",
+        "network"
+    ],
+    "modules-center": [
+        "hyprland/window"
+    ],
+    "modules-right": [
+        "backlight",
+        "battery",
+        // media controls
+        "wireplumber",
+        // "custom/volumeup", "custom/volumedown", 
+        "custom/divider",
+        "clock",
+        "tray"
+    ],
+    "wlr/workspaces": {
+        "on-click": "activate"
+    },
+    "hyprland/window": {
+        "max-length": 200,
+        "separate-outputs": true
+    },
+    "tray": {
+        "icon-size": 24,
+        "spacing": 8
+    },
+    "wireplumber": {
+        "format": "{icon} {volume}%",
+        "format-icons": [
+            "󰕿",
+            "󰖀",
+            "󰕾"
+        ],
+        "format-bluetooth": "󰥰 {volume}%",
+        "format-muted": "󰝟 {volume}%"
+    },
+    "backlight": {
+        "format": "{icon} {percent}%",
+        "format-icons": [
+            "󰃛",
+            "󰃜",
+            "󰃝",
+            "󰃞",
+            "󰃟",
+            "󰃠"
+        ]
+    },
+    "custom/divider": {
+        "format": "󰇙"
+    },
+    "custom/volumeup": {
+        "on-click": "amixer set Master 2%+",
+        "format": "󰝝",
+        "class": "volumeup",
+        "tooltip": false
+    },
+    "custom/volumedown": {
+        "on-click": "amixer set Master 2%-",
+        "format": "󰝞",
+        "class": "volumedown",
+        "tooltip": false
+    },
+    "battery": {
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{icon} {capacity}%",
+        "format-charging": " {capacity}%",
+        "format-plugged": " {capacity}%",
+        "format-alt": "{time} {icon}",
+        "format-icons": [
+            " ",
+            " ",
+            " ",
+            " ",
+            " "
+        ]
+    },
+    "network": {
+        "format-wifi": "{icon}  {essid}",
+        "format-icons": [
+            "󰤯",
+            "󰤟",
+            "󰤢",
+            "󰤥",
+            "󰤨"
+        ],
+        "tooltip-format-wifi": "{icon} {essid} ({signalStrength}%)\nIPv4: {ipaddr}/{cidr}\nGW: {gwaddr}",
+        "format-ethernet": "{ipaddr}/{cidr} ",
+        "tooltip-format": "{ifname} via {gwaddr} ",
+        "format-linked": "{ifname} (No IP) ",
+        "format-disconnected": "Disconnected ⚠",
+        "format-alt": "{ifname}: {ipaddr}/{cidr}"
+    },
+    "clock": {
+        // "timezone": "America/New_York",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "format-alt": "{:%H:%M}",
+        "format": "{:%I:%M:%S %p}",
+        "interval": 1
+    },
+    "cpu": {
+        "format": " {usage}%",
+        "tooltip": false
+    },
+    "memory": {
+        "format": " {percentage}%",
+        "tooltip-format": "{used:0.2f} GiB/{total:0.2f} GiB"
+    },
+    "temperature": {
+        "thermal_zone": 4,
+        "critical-threshold": 80,
+        "format": "{icon} {temperatureC}°C",
+        "format-icons": [
+            "",
+            "",
+            ""
+        ]
+    },
+}
