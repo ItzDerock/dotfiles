@@ -109,7 +109,7 @@
         "format-alt": "{ifname}: {ipaddr}/{cidr}"
     },
     "clock": {
-        // "timezone": "America/New_York",
+        "timezone": "America/Los_Angeles",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
         "format-alt": "{:%H:%M}",
         "format": "{:%I:%M:%S %p}",
