@@ -6,6 +6,7 @@ wal -n -i "$@"
 WALLPAPER="$@" envsubst < ~/.config/hypr/hyprpaper.conf.template > ~/.config/hypr/hyprpaper.conf
 killall hyprpaper || true
 hyprpaper > /dev/null 2>&1 &
+echo $@ > ~/.cache/active-wallpaper
 
 # Restart waybar
 killall waybar || true

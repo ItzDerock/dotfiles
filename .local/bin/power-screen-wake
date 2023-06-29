@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# Read the /tmp/brightness file and set the brightness to that value
+# If no file exists, set the brightness to 100%
+TARGET_BRIGHTNESS=$(cat /tmp/brightness 2>/dev/null || echo 100)
+
+# Set the brightness
+brightnessctl set $TARGET_BRIGHTNESS

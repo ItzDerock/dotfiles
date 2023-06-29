@@ -1,0 +1,35 @@
+#!/bin/bash
+# lock.sh: Lock the screen using swaylock
+
+# Load pywal colors
+source ~/.cache/wal/colors.sh
+
+# Lock the screen using swaylock
+swaylock \
+  --image $(cat ~/.cache/active-wallpaper) \
+  --indicator-radius 160 \
+  --indicator-thickness 20 \
+  --inside-color 00000088 \
+  --inside-clear-color 00000000 \
+  --inside-ver-color 00000000 \
+  --inside-wrong-color 00000000 \
+  --key-hl-color "$color1" \
+  --bs-hl-color "$color2" \
+  --ring-color "$background" \
+  --ring-clear-color "$color2" \
+  --ring-wrong-color "$color5" \
+  --ring-ver-color "$color3" \
+  --line-uses-ring \
+  --line-color 00000000 \
+  --font 'CaskaydiaCove NF' \
+  --separator-color 00000000 \
+  --effect-blur 7x5 \
+	--effect-vignette 0.5:0.5 \
+  --text-color "$color1" \
+  --text-clear-color 00000000 \
+  --text-wrong-color 00000000 \
+  --text-ver-color 00000000 \
+  --clock \
+  --indicator \
+  --daemonize \
+  --ignore-empty-password 

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Save the current brightness
+brightnessctl g > /tmp/brightness
+
+# Set brightness to 0
+brightnessctl s 0
+
+# Lock the screen
+~/.local/bin/lock
