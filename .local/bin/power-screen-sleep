@@ -7,4 +7,4 @@ brightnessctl g > /tmp/brightness
 brightnessctl s 0
 
 # Lock the screen
-~/.local/bin/lock
+# ~/.local/bin/lock
