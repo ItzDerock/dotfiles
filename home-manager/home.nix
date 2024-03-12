@@ -52,15 +52,19 @@
     # browser
     firefox 
 
+    # desktop apps
+    xfce.thunar
+    xfce.thunar-volman
+
     # misc
     # inputs.nixpkgs-unstable.legacyPackages."${pkgs.system}".obsidian
     ((import inputs.nixpkgs-unstable {
       system = "x86_64-linux";
       config.allowUnfree = true;
     }).obsidian) 
-
  
     # dev tools
+    nodejs_21
     vscode 
     arduino-core
     arduino-cli
@@ -83,6 +87,11 @@
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";
     };
+  };
+
+  programs.bash.enable = true;
+  programs.starship = {
+    enable = true;
   };
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion

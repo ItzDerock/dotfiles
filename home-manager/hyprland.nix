@@ -1,9 +1,15 @@
-{ inputs, pkgs, ... }:
+{ inputs, pkgs, config, ... }:
 {
-  home.packages = [ pkgs.swww ];
-  programs.kitty.enable = true;
+  home.packages = with pkgs; [ swww foot ];
   programs.waybar = {
     enable = true;
+  };
+
+  # footerm
+  home.file."${config.xdg.configHome}/foot/foot.ini" = {
+    text = ''
+      font=JetBrainsMono Nerd Font Mono:size=18
+    '';
   };
 
   wayland.windowManager.hyprland = { 
