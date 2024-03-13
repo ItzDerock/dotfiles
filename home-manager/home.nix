@@ -11,8 +11,8 @@
   imports = [
     ./hyprland.nix
     ./waybar.nix
-    ./git.nix
-    ./1password.nix
+    ./git.nix ./1password.nix
+    ./neovim.nix
   ];
 
   nixpkgs = {
@@ -66,6 +66,11 @@
     # dev tools
     nodejs_21
     vscode 
+    ((import inputs.nixpkgs-unstable {
+      system = "x86_64-linux";
+      config.allowUnfree = true;
+    }).arduino-ide)
+
     arduino-core
     arduino-cli
     imagemagick
