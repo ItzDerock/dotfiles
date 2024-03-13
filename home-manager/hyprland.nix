@@ -8,7 +8,7 @@
   # footerm
   home.file."${config.xdg.configHome}/foot/foot.ini" = {
     text = ''
-      font=JetBrainsMono Nerd Font Mono:size=18
+      font=JetBrainsMono Nerd Font:size=18
     '';
   };
 
