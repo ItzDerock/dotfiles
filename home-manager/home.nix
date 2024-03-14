@@ -61,7 +61,17 @@
     ((import inputs.nixpkgs-unstable {
       system = "x86_64-linux";
       config.allowUnfree = true;
-    }).obsidian) 
+    }).obsidian)
+
+    # social media 
+    ((import inputs.nixpkgs-unstable {
+      system = "x86_64-linux";
+      config.allowUnfree = true;
+    }).discord.override {
+      withOpenASAR = true;
+      withVencord = true;
+    })
+    # vesktop # screenshare audio 
  
     # dev tools
     nodejs_21
@@ -74,6 +84,7 @@
     arduino-core
     arduino-cli
     imagemagick
+    cura
   ];
 
   # my cfg stuff

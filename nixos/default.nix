@@ -20,6 +20,7 @@
 
   environment.systemPackages = with pkgs; [
     libgcc
+    nix-index
   ];
 
   # auto mount USBs
