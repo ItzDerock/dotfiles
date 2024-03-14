@@ -26,4 +26,17 @@
   # auto mount USBs
   services.devmon.enable = true;
   services.udisks2.enable = true;
+
+  # bluetooth
+  hardware.bluetooth = {
+    enable = true;
+    settings = {
+      General = {
+        Enable = "Source,Sink,Media,Socket";
+        Experiment = true;
+      };
+    };
+  };
+  hardware.bluetooth.powerOnBoot = true;
+  services.blueman.enable = true;
 }
