@@ -1,6 +1,6 @@
 { inputs, pkgs, config, ... }:
 {
-  home.packages = with pkgs; [ swww foot ];
+  home.packages = with pkgs; [ swww foot grimblast playerctl dunst ];
   programs.waybar = {
     enable = true;
   };
@@ -15,6 +15,7 @@
   wayland.windowManager.hyprland = { 
     enable = true;
     package = inputs.hyprland.packages."${pkgs.system}".hyprland;
+    # package = null; # use system hyprland
     settings = {
       "$mod" = "SUPER";
 
@@ -29,9 +30,10 @@
         "QT_SCALE_FACTOR,1.2"
         "QT_SCREEN_SCALE_FACTORS,1;1"
         "GTK_THEME,Adwaita:dark"
-        "BROWSER,vivaldi-stable"
+        "BROWSER,firefox"
         "SUDO_EDITOR,/usr/bin/nvim"
         "QT_QPA_PLATFORMTHEME,qt6ct"
+        "WLR_NO_HARDWARE_CURSORS,1"
 
         # iGPU for hyprland unless dGPU is needed
         # "WLR_DRM_DEVICES,/dev/dri/card0:/dev/dri/card1"
@@ -45,6 +47,15 @@
         "waybar"
         # TODO: not absolute path here
         "swww init && swww img ~/NixOS/assets/wallpapers/default.jpg"
+
+        "wl-paste -p --watch wl-copy -pc" # disable middle mouse paste
+        "playerctld" # music daemon
+        "dunst" # notifs
+      ];
+
+      bindm = [
+        "$mod, mouse:272, movewindow"
+        "$mod, mouse:273, resizewindow"
       ];
 
       bind = 
@@ -59,7 +70,31 @@
           "$mod, T, exec, foot" # terminal
           "$mod, C, killactive" # close window
 
+          # screenshot
+          "$mod_SHIFT, S, exec, grimblast copy area"
+          ",Print,exec, grimblast copy screen"
+
+          # "Alt Tab"
+          "ALT, Tab, cyclenext"
+          "ALT, Tab, bringactivetotop"
+
+          # Volume
+          ",XF86AudioRaiseVolume, exec, pamixer -i 5"
+          ",XF86AudioLowerVolume, exec, pamixer -d 5"
+
+          # Media controls
+          ",XF86AudioPlay, exec, playerctl play-pause"
+          ",XF86AudioStop, exec, playerctl stop"
+          ",XF86AudioNext, exec, playerctl next"
+          ",XF86AudioPrev, exec, playerctl previous"
+
+          # Brightness
+          ",XF86MonBrightnessUp, exec, brightnessctl set 5%+"
+          ",XF86MonBrightnessDown, exec, brighnessctl set 5%-"
+
+          # run dialog
           "$mod, SPACE, exec, wofi -S drun -I"
+          "$mod, R, exec, wofi -S run"
         ]
         ++ (
           # workspaces

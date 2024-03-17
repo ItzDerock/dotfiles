@@ -1,5 +1,4 @@
-{ config, pkgs, inputs, outputs, ... }:
-
+{ config, inputs, outputs, pkgs, lib, ... }:
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -9,17 +8,24 @@
     ];
 
   home-manager = {
-    extraSpecialArgs = { inherit inputs outputs; };
+    extraSpecialArgs = { 
+      inherit inputs outputs; 
+      host = "supernova";
+    };
+
     users = {
       derock = import ../../home-manager/home.nix;
     };
   };
 
+  # Experimental features
+  nix.settings.experimental-features = ["nix-command" "flakes" ];
+
   # Bootloader.
-  boot.initrd.luks.devices."luks-b2c00540-b801-4ae1-bb27-7f5dfaae4194".device = "/dev/disk/by-uuid/b2c00540-b801-4ae1-bb27-7f5dfaae4194";
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  networking.hostName = "derock-nix"; # Define your hostname.
+
+  networking.hostName = "derock-desktop"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -47,9 +53,6 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  # Experimental features
-  nix.settings.experimental-features = ["nix-command" "flakes" ];
-
   # Configure keymap in X11
   services.xserver = {
     layout = "us";
@@ -60,59 +63,67 @@
   users.users.derock = {
     isNormalUser = true;
     description = "Derock";
-    extraGroups = [ "networkmanager" "wheel" "dialout" "storage" ];
+    extraGroups = [ "networkmanager" "wheel" "dialout" ];
     packages = with pkgs; [];
   };
+
+  # Enable automatic login for the user.
+  services.getty.autologinUser = "derock";
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
   
   dm.lemurs.enable = true;
   wm.hyprland.enable = true;
-
   rockcfg = {
     power.enable = true;
-    laptop.enable = true;
-    wireplumber.enable = true; 
-    nvidia.enable = true;
+    laptop.enable = false;
+    wireplumber.enable = true;
+    nvidia = {
+      enable = true;
+      primary = true;
+    };
+  };
+
+  # drives
+  fileSystems."/mnt/LARGESHIT" = {
+   device = "/dev/disk/by-uuid/82542B4F542B44EF";
+   fsType = "ntfs";
+   options = ["users" "nofail" "x-gvfs-show"];
+  };
+
+  fileSystems."/mnt/speedy" = {
+    device = "/dev/disk/by-uuid/9856F4B056F48FEC";
+    fsType = "ntfs";
+    options = ["users" "nofail" "x-gvfs-show" "exec" "uid=1000" "gid=100" "dmask=007" "fmask=117"];
+    # options = ["nofail" "rw" "suid" "dev" "exec" "auto" "nouser" "async" "relatime"];
   };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    vim 
-    tmux
-    git
-    powertop
-    firefox
-    foot
-
-    # arduino
-    # libgcc
-    # libstdcxx5
-    libgccjit
-    #  wget
+  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+  #  wget
   ];
- 
+
+  # Some programs need SUID wrappers, can be configured further or are
+  # started in user sessions.
+  # programs.mtr.enable = true;
+  # programs.gnupg.agent = {
+  #   enable = true;
+  #   enableSSHSupport = true;
+  # };
+
+  # List services that you want to enable:
+
   # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
-
-  # battery stuff
-  powerManagement.enable = true;
-
-  # printers
-  services.printing.enable = true;
-  services.avahi = {
-    enable = true;
-    nssmdns = true;
-    openFirewall = true;
-  };
+  # services.openssh.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+  networking.firewall.enable = false;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

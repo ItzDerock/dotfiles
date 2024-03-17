@@ -68,6 +68,11 @@
           ./hosts/galaxy/configuration.nix
         ];
       };
+
+      supernova = nixpkgs.lib.nixosSystem {
+        specialArgs = {inherit inputs outputs;};
+        modules = [./hosts/supernova/configuration.nix];
+      };
     };
 
     # Standalone home-manager configuration entrypoint

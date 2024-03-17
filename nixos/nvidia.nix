@@ -1,10 +1,11 @@
 { lib, pkgs, config, inputs, ... }:
 with lib;
 let
-  cfg = config.nvidia;
+  cfg = config.rockcfg.nvidia;
 in {
-  options.nvidia = {
+  options.rockcfg.nvidia = {
     enable = mkEnableOption "Enables NVIDIA";
+    primary = mkEnableOption "Set as primary GPU";
   };
 
   config = mkIf cfg.enable { 
@@ -12,6 +13,12 @@ in {
       enable = true;
       driSupport = true;
       driSupport32Bit = true;
+
+      extraPackages = with pkgs; [nvidia-vaapi-driver];
+    };
+
+    envrionment.sessionVariables = mkIf cfg.primary {
+      LIBVA_DRIVER_NAME = "nvidia";
     };
 
     services.xserver.videoDrivers = ["nvidia"];
@@ -47,7 +54,7 @@ in {
       # Optionally, you may need to select the appropriate driver version for your specific GPU.
       package = config.boot.kernelPackages.nvidiaPackages.stable;
 
-      prime = {
+      prime = mkIf (!cfg.primary) {
         intelBusId = "PCI:0:2:0";
         nvidiaBusId = "PCI:1:0:0";
 

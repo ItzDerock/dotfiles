@@ -6,14 +6,16 @@
   lib,
   config,
   pkgs,
+  host,
   ...
-}: {
+}: { 
   imports = [
     ./hyprland.nix
     ./waybar.nix
-    ./git.nix ./1password.nix
+    ./git.nix 
+    ./1password.nix
     ./neovim.nix
-  ];
+  ] ++ (if host == "supernova" then [./overrides/supernova.nix] else []); 
 
   nixpkgs = {
     # You can add overlays here
@@ -71,6 +73,10 @@
       withOpenASAR = true;
       withVencord = true;
     })
+
+    # gaymin
+    steam
+
     # vesktop # screenshare audio 
  
     # dev tools
