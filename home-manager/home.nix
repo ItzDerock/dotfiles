@@ -76,6 +76,7 @@
     steam
     unstable.wine-wayland
     unstable.prismlauncher
+    unstable.gamescope
 
     unstable.vesktop # screenshare audio 
  
