@@ -76,6 +76,7 @@
   dm.lemurs.enable = true;
   wm.hyprland.enable = true;
   rockcfg = {
+    printing.enable = true;
     power.enable = true;
     laptop.enable = false;
     wireplumber.enable = true;

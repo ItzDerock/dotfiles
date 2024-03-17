@@ -9,7 +9,10 @@
     ];
 
   home-manager = {
-    extraSpecialArgs = { inherit inputs outputs; };
+    extraSpecialArgs = { 
+      inherit inputs outputs; 
+      host = "galaxy";
+    };
     users = {
       derock = import ../../home-manager/home.nix;
     };
@@ -71,6 +74,7 @@
   wm.hyprland.enable = true;
 
   rockcfg = {
+    printing.enable = true;
     power.enable = true;
     laptop.enable = true;
     wireplumber.enable = true; 
@@ -99,14 +103,6 @@
 
   # battery stuff
   powerManagement.enable = true;
-
-  # printers
-  services.printing.enable = true;
-  services.avahi = {
-    enable = true;
-    nssmdns = true;
-    openFirewall = true;
-  };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

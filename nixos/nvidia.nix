@@ -17,7 +17,7 @@ in {
       extraPackages = with pkgs; [nvidia-vaapi-driver];
     };
 
-    envrionment.sessionVariables = mkIf cfg.primary {
+    environment.sessionVariables = mkIf cfg.primary {
       LIBVA_DRIVER_NAME = "nvidia";
     };
 

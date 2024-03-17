@@ -7,6 +7,7 @@
     ./power.nix
     ./laptop.nix
     ./wireplumber.nix
+    ./printing.nix
   ];
 
   # global configuration regardless of system
