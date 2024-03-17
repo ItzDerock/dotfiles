@@ -52,7 +52,22 @@ in {
       nvidiaSettings = true;
 
       # Optionally, you may need to select the appropriate driver version for your specific GPU.
-      package = config.boot.kernelPackages.nvidiaPackages.stable;
+      # package = config.boot.kernelPackages.nvidiaPackages.beta; # nvidia is never stable lol 
+      package = config.boot.kernelPackages.nvidiaPackages.beta.overrideAttrs {
+        version = "550.54.14";
+        # the new driver
+        src = pkgs.fetchurl
+          {
+            url = "https://download.nvidia.com/XFree86/Linux-x86_64/550.40.07/NVIDIA-Linux-x86_64-550.40.07.run";
+            sha256 = "sha256-KYk2xye37v7ZW7h+uNJM/u8fNf7KyGTZjiaU03dJpK0=";
+          };
+
+        # src = pkgs.fetchurl
+        #     {
+        #       url = "https://us.download.nvidia.com/XFree86/Linux-x86_64/550.54.14/NVIDIA-Linux-x86_64-550.54.14.run";
+        #       sha256 = "sha256-jEl/8c/HwxD7h1FJvDD6pP0m0iN7LLps0uiweAFXz+M=";
+        #     };
+      };
 
       prime = mkIf (!cfg.primary) {
         intelBusId = "PCI:0:2:0";
