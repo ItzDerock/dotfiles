@@ -50,7 +50,12 @@
   };
 
   # Add stuff for your user as you see fit:
-  home.packages = with pkgs; [ 
+  home.packages = let 
+    unstable = (import inputs.nixpkgs-unstable {
+      system = "x86_64-linux";
+      config.allowUnfree = true;
+    });
+  in with pkgs; [ 
     # browser
     firefox 
 
@@ -59,38 +64,32 @@
     xfce.thunar-volman
 
     # misc
-    # inputs.nixpkgs-unstable.legacyPackages."${pkgs.system}".obsidian
-    ((import inputs.nixpkgs-unstable {
-      system = "x86_64-linux";
-      config.allowUnfree = true;
-    }).obsidian)
+    unstable.obsidian
 
     # social media 
-    ((import inputs.nixpkgs-unstable {
-      system = "x86_64-linux";
-      config.allowUnfree = true;
-    }).discord.override {
-      withOpenASAR = true;
-      withVencord = true;
-    })
+    # (unstable.discord.override {
+    #   withOpenASAR = true;
+    #   withVencord = true;
+    # })
 
     # gaymin
     steam
+    unstable.wine-wayland
+    unstable.prismlauncher
 
-    # vesktop # screenshare audio 
+    unstable.vesktop # screenshare audio 
  
     # dev tools
     nodejs_21
     vscode 
-    ((import inputs.nixpkgs-unstable {
-      system = "x86_64-linux";
-      config.allowUnfree = true;
-    }).arduino-ide)
+    unstable.arduino-ide
 
     arduino-core
     arduino-cli
     imagemagick
     cura
+    ffmpeg-full
+
   ];
 
   # my cfg stuff
