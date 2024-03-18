@@ -11,7 +11,7 @@ in {
 
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      pavucontrol ncpamixer
+      pavucontrol ncpamixer pamixer
     ];
 
     security.rtkit.enable = true;
