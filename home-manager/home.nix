@@ -77,8 +77,9 @@
     unstable.wine-wayland
     unstable.prismlauncher
     unstable.gamescope
+    bottles
 
-    unstable.vesktop # screenshare audio 
+    unstable.vesktop # screenshare audio
  
     # dev tools
     nodejs_21
