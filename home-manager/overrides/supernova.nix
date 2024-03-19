@@ -15,6 +15,14 @@
     # make DP-3 always wksp 1
     workspace = [
       "1,monitor:DP-3,default:true,persistent:true"
+      "name:screen-2,monitor:HDMI-A-1,default:true,persistent:true"
+      "name:screen-3,monitor:DP-1,default:true,persistent:true"
+    ];
+
+    bind = [
+      "$mod_SHIFT,1,workspace,1"
+      "$mod_SHIFT,2,workspace,name:screen-2"
+      "$mod_SHIFT,3,workspace,name:screen-3"
     ];
   };
 
