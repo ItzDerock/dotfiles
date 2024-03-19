@@ -9,6 +9,9 @@
   home.file."${config.xdg.configHome}/foot/foot.ini" = {
     text = ''
       font=JetBrainsMono Nerd Font:size=18
+
+      [colors]
+      alpha=0.8
     '';
   };
 
