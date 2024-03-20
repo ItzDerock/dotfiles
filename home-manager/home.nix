@@ -92,6 +92,8 @@
     cura
     ffmpeg-full
 
+    unzip
+
   ];
 
   # my cfg stuff
