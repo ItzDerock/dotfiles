@@ -22,6 +22,8 @@
   environment.systemPackages = with pkgs; [
     libgcc
     nix-index
+    libva vulkan-loader
+    vulkan-tools
   ];
 
   # auto mount USBs
