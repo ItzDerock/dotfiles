@@ -69,16 +69,23 @@
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
-  
+ 
+  services.tailscale.enable = true;
+
   dm.lemurs.enable = true;
   wm.hyprland.enable = true;
 
   rockcfg = {
     printing.enable = true;
     power.enable = true;
-    laptop.enable = true;
+    laptop = { 
+      enable = true;
+      soundFix = true;
+    };
     wireplumber.enable = true; 
     nvidia.enable = true;
+    vpn.wireguard.enable = true;
+    docker.enable = true;
   };
 
   # List packages installed in system profile. To search, run:

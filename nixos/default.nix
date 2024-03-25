@@ -8,6 +8,8 @@
     ./laptop.nix
     ./wireplumber.nix
     ./printing.nix
+    ./vpn.nix
+    ./docker.nix
   ];
 
   # global configuration regardless of system

@@ -93,7 +93,7 @@
     ffmpeg-full
 
     unzip
-
+    audacity
   ];
 
   # my cfg stuff

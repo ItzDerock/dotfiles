@@ -9,7 +9,7 @@ in {
     enable = mkEnableOption "Wireguard";
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf cfg.wireguard.enable {
     # nmcli con import type wireguard file <file>
     networking.firewall.checkReversePath = false;
   };
