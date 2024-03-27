@@ -38,6 +38,8 @@ in {
       # of just the bare essentials.
       powerManagement.enable = true;
 
+      dynamicBoost.enable = true;
+
       # Fine-grained power management. Turns off GPU when not in use.
       # Experimental and only works on modern Nvidia GPUs (Turing or newer).
       powerManagement.finegrained = true;
