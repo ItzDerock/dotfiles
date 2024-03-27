@@ -94,6 +94,8 @@
 
     unzip
     audacity
+    yt-dlp
+    obs-studio 
   ];
 
   # my cfg stuff

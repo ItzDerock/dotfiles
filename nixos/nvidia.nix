@@ -21,6 +21,14 @@ in {
         [libva vulkan-loader vulkan-tools vulkan-validation-layers];
     };
 
+    # cuda
+    nixpkgs.config.cudaSupport = true;
+    environment.systemPackages = with pkgs; [
+      cudaPackages.cudatoolkit
+      nv-codec-headers
+      libva
+    ];
+
     environment.sessionVariables = mkIf cfg.primary {
       LIBVA_DRIVER_NAME = "nvidia";
     };

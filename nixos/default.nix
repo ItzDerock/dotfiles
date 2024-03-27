@@ -1,5 +1,6 @@
 { pkgs, ... }: {
   imports = [
+    # /etc/nixos/cachix.nix
     ./lemurs.nix
     ./wm_hyprland.nix
     ./wayland.nix
@@ -22,6 +23,8 @@
   ];
 
   environment.systemPackages = with pkgs; [
+    cachix
+
     libgcc
     nix-index
     libva vulkan-loader
