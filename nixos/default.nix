@@ -11,6 +11,8 @@
     ./printing.nix
     ./vpn.nix
     ./docker.nix
+    ./instant-replay.nix
+    ./polkit.nix
   ];
 
   # global configuration regardless of system
@@ -29,6 +31,9 @@
     nix-index
     libva vulkan-loader
     vulkan-tools
+
+    jq # how am i supposed to do anythign without this amazing tool
+    psmisc
   ];
 
   # auto mount USBs

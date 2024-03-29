@@ -98,6 +98,7 @@
     audacity
     yt-dlp
     obs-studio 
+    blender
   ];
 
   # my cfg stuff

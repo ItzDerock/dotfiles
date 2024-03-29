@@ -45,8 +45,7 @@ in {
       # up from sleep. This fixes it by saving the entire VRAM memory to /tmp/ instead 
       # of just the bare essentials.
       powerManagement.enable = !cfg.primary;
-
-      dynamicBoost.enable = true;
+      dynamicBoost.enable = !cfg.primary;
 
       # Fine-grained power management. Turns off GPU when not in use.
       # Experimental and only works on modern Nvidia GPUs (Turing or newer).

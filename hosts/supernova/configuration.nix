@@ -80,6 +80,7 @@
     power.enable = true;
     laptop.enable = false;
     wireplumber.enable = true;
+    instantreplay.enable = true;
     nvidia = {
       enable = true;
       primary = true;
