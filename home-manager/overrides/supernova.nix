@@ -20,9 +20,9 @@
     ];
 
     bind = [
-      "$mod_SHIFT,1,workspace,1"
-      "$mod_SHIFT,2,workspace,name:screen-2"
-      "$mod_SHIFT,3,workspace,name:screen-3"
+      "$mod_ALT,1,workspace,1"
+      "$mod_ALT,2,workspace,name:screen-2"
+      "$mod_ALT,3,workspace,name:screen-3"
     ];
   };
 

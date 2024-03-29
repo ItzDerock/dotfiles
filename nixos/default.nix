@@ -47,4 +47,7 @@
   };
   hardware.bluetooth.powerOnBoot = true;
   services.blueman.enable = true;
+
+  # for some reason this is how you fix vulkan..
+  programs.steam.enable = true;
 }

@@ -80,7 +80,9 @@
     bottles
 
     unstable.vesktop # screenshare audio
- 
+
+    zoom-us
+
     # dev tools
     nodejs_21
     vscode 
@@ -117,6 +119,7 @@
   };
 
   programs.bash.enable = true;
+  programs.zoxide.enable = true;
   programs.starship = {
     enable = true;
   };
