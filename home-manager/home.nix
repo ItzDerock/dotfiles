@@ -99,6 +99,8 @@
     yt-dlp
     obs-studio 
     blender
+  
+    jetbrains.idea-ultimate
   ];
 
   # my cfg stuff

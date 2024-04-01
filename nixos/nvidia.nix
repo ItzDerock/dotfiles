@@ -9,6 +9,9 @@ in {
   };
 
   config = mkIf cfg.enable { 
+    programs.gamemode.enable = true;
+
+
     hardware.opengl = {
       enable = true;
       driSupport = true;

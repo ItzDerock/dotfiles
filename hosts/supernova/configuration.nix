@@ -77,7 +77,7 @@
   wm.hyprland.enable = true;
   rockcfg = {
     printing.enable = true;
-    power.enable = true;
+    power.enable = false;
     laptop.enable = false;
     wireplumber.enable = true;
     instantreplay.enable = true;
@@ -135,4 +135,7 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.11"; # Did you read the comment?
 
+  services.xserver.enable = true;
+  services.xserver.displayManager.sddm.enable = true;
+  services.xserver.desktopManager.plasma6.enable = true;
 }
