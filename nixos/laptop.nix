@@ -27,6 +27,10 @@ in {
       "snd-hda-intel"
     ];
 
+    hardware.firmware = mkIf cfg.soundFix [
+      pkgs.sof-firmware
+    ];
+
     hardware.opengl = {
       extraPackages = with pkgs; [ intel-media-driver ];
     };

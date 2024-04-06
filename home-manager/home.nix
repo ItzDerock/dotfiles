@@ -67,10 +67,10 @@
     unstable.obsidian
 
     # social media 
-    # (unstable.discord.override {
-    #   withOpenASAR = true;
-    #   withVencord = true;
-    # })
+    (unstable.discord.override {
+      withOpenASAR = true;
+      withVencord = true;
+    })
 
     # gaymin
     steam
@@ -79,7 +79,7 @@
     unstable.gamescope
     bottles
 
-    unstable.vesktop # screenshare audio
+    # unstable.vesktop # screenshare audio
 
     zoom-us
 

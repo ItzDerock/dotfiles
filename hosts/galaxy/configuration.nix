@@ -103,6 +103,8 @@
     # libstdcxx5
     libgccjit
     #  wget
+
+    mesa
   ];
  
   # Enable the OpenSSH daemon.
@@ -124,5 +126,6 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.11"; # Did you read the comment?
-
+  
+  boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linux_latest;
 }

@@ -23,11 +23,12 @@
         "passthrough" = false;
         "gtk-layer-shell" = true;
         height = 0;
+
         "modules-left" = [
           "clock"
           "custom/weather"
           "hyprland/workspaces"
-      ];
+        ];
         "modules-center" = ["hyprland/window"];
         "modules-right" = [
           "tray"
@@ -71,7 +72,7 @@
           "spacing" = 10;
         };
         "clock" = {
-          "format" = "{: %R   %d/%m}";
+          "format" = " {:%R   %d/%m}";
           "tooltip-format" = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
         };
         "backlight" = {

@@ -92,8 +92,8 @@
           ",XF86AudioPrev, exec, playerctl previous"
 
           # Brightness
-          ",XF86MonBrightnessUp, exec, brightnessctl set 5%+"
-          ",XF86MonBrightnessDown, exec, brighnessctl set 5%-"
+          ",XF86MonBrightnessUp, exec, brightnessctl set 5%+ &> ~/.cache/brightness.log"
+          ",XF86MonBrightnessDown, exec, brighnessctl set 5%- &> ~/.cache/brightness.log"
 
           # run dialog
           "$mod, SPACE, exec, wofi -S drun -I"
