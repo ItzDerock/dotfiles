@@ -72,7 +72,10 @@
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
-  
+ 
+  services.tailscale.enable = true;
+  services.tailscale.useRoutingFeatures = "client";
+ 
   dm.lemurs.enable = true;
   wm.hyprland.enable = true;
   rockcfg = {

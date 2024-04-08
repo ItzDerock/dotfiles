@@ -1,6 +1,22 @@
 { inputs, pkgs, config, ... }:
 {
-  home.packages = with pkgs; [ swww foot grimblast playerctl dunst ];
+  home.packages = with pkgs; [ 
+    swww 
+    foot 
+    grimblast 
+    playerctl 
+    dunst 
+    
+    # theme
+    libsForQt5.breeze-qt5 
+    libsForQt5.qtstyleplugin-kvantum 
+    hyprcursor # cursor
+    inputs.rose-pine-hyprcursor.packages.${pkgs.system}.default
+
+    cliphist # clipboard
+    hyprpicker # color picker + freeze screen
+  ];
+
   programs.waybar = {
     enable = true;
   };
@@ -14,6 +30,10 @@
       alpha=0.8
     '';
   };
+
+  # qt theme
+  qt.platformTheme = "qtct";
+  qt.style.name = "kvantum";
 
   wayland.windowManager.hyprland = { 
     enable = true;
@@ -35,8 +55,22 @@
         "GTK_THEME,Adwaita:dark"
         "BROWSER,firefox"
         "SUDO_EDITOR,/usr/bin/nvim"
-        "QT_QPA_PLATFORMTHEME,qt6ct"
         "WLR_NO_HARDWARE_CURSORS,1"
+
+        # enable wayland for stuff
+        "NIXOS_OZONE_WL,1"
+        "QT_QPA_PLATFORM,wayland;xcb"
+        "GDK_BACKEND,wayland"
+        "SDL_VIDEODRIVER,wayland"
+        "CLUTTER_BACKEND,wayland"
+
+        # Disable QT window decoration
+        "QT_WAYLAND_DISABLE_WINDOWDECORATION,1" 
+        "QT_QPA_PLATFORMTHEME,qt5ct"
+        "QT_STYLE_OVERRIDE=kvantum"
+
+        # cursor
+        "HYPRCURSOR_THEME,rose-pine-hyprcursor"
 
         # iGPU for hyprland unless dGPU is needed
         # "WLR_DRM_DEVICES,/dev/dri/card0:/dev/dri/card1"
@@ -54,6 +88,7 @@
         "wl-paste -p --watch wl-copy -pc" # disable middle mouse paste
         "playerctld" # music daemon
         "dunst" # notifs
+        "wl-paste --watch cliphist store" # clipboard
       ];
 
       bindm = [
@@ -73,31 +108,26 @@
           "$mod, T, exec, foot" # terminal
           "$mod, C, killactive" # close window
 
+          "$mod,., exec, wofi-emoji" # emoji picker
+
           # screenshot
           "$mod_SHIFT, S, exec, grimblast copy area"
           ",Print,exec, grimblast copy screen"
+
+          # pick color
+          "$mod_SHIFT, C, exec, hyprpicker -f hex -a -r"
 
           # "Alt Tab"
           "ALT, Tab, cyclenext"
           "ALT, Tab, bringactivetotop"
 
-          # Volume
-          ",XF86AudioRaiseVolume, exec, pamixer -i 5"
-          ",XF86AudioLowerVolume, exec, pamixer -d 5"
-
-          # Media controls
-          ",XF86AudioPlay, exec, playerctl play-pause"
-          ",XF86AudioStop, exec, playerctl stop"
-          ",XF86AudioNext, exec, playerctl next"
-          ",XF86AudioPrev, exec, playerctl previous"
-
-          # Brightness
-          ",XF86MonBrightnessUp, exec, brightnessctl set 5%+ &> ~/.cache/brightness.log"
-          ",XF86MonBrightnessDown, exec, brighnessctl set 5%- &> ~/.cache/brightness.log"
-
           # run dialog
           "$mod, SPACE, exec, wofi -S drun -I"
           "$mod, R, exec, wofi -S run"
+
+          # clipboard
+          "$mod, V, exec, cliphist list | wofi -dmenu | cliphist decode | wl-copy"
+          "$mod_SHIFT, D, exec, cliphist list | wofi -dmenu | cliphist delete"
         ]
         ++ (
           # workspaces
@@ -115,6 +145,23 @@
             )
             10)
         );
+
+      # e = repeat, l = ignore inhibitors
+      bindel = [
+        # Volume
+        ",XF86AudioRaiseVolume, exec, pamixer -i 5"
+        ",XF86AudioLowerVolume, exec, pamixer -d 5"
+
+        # Brightness
+        ",XF86MonBrightnessUp, exec, brightnessctl set 5%+ &> ~/.cache/brightness.log"
+        ",XF86MonBrightnessDown, exec, brighnessctl set 5%- &> ~/.cache/brightness.log"
+
+        # Media controls
+        ",XF86AudioPlay, exec, playerctl play-pause"
+        ",XF86AudioStop, exec, playerctl stop"
+        ",XF86AudioNext, exec, playerctl next"
+        ",XF86AudioPrev, exec, playerctl previous"
+      ];
 
       input = {
         touchpad = {

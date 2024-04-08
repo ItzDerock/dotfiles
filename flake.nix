@@ -31,6 +31,11 @@
     };
 
     hyprland.url = "github:hyprwm/Hyprland";
+
+    # cursor theme
+    rose-pine-hyprcursor.url = "github:ndom91/rose-pine-hyprcursor";
+    
+
     # nvchad.url = "github:NvChad/nix";
  
     # TODO: Add any other flake you might need

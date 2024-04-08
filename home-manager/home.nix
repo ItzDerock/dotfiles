@@ -15,6 +15,7 @@
     ./git.nix 
     ./1password.nix
     ./neovim.nix
+    ./xdg.nix
   ] ++ (if host == "supernova" then [./overrides/supernova.nix] else []); 
 
   nixpkgs = {
@@ -67,10 +68,11 @@
     unstable.obsidian
 
     # social media 
-    (unstable.discord.override {
-      withOpenASAR = true;
-      withVencord = true;
-    })
+    # using webcord over official discord and vesktop cus it just works flawlessly with wayland.
+    # normal discord just doesnt work (black screen)
+    # vesktop is buggy af (and no krisp support)
+    # this checks all the boxes
+    webcord 
 
     # gaymin
     steam
