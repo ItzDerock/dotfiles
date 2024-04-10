@@ -108,7 +108,7 @@
           "$mod, T, exec, foot" # terminal
           "$mod, C, killactive" # close window
 
-          "$mod,., exec, wofi-emoji" # emoji picker
+          "$mod, period, exec, wofi-emoji" # emoji picker
 
           # screenshot
           "$mod_SHIFT, S, exec, grimblast copy area"
@@ -154,7 +154,7 @@
 
         # Brightness
         ",XF86MonBrightnessUp, exec, brightnessctl set 5%+ &> ~/.cache/brightness.log"
-        ",XF86MonBrightnessDown, exec, brighnessctl set 5%- &> ~/.cache/brightness.log"
+        ",XF86MonBrightnessDown, exec, brightnessctl set 5%- &> ~/.cache/brightness.log"
 
         # Media controls
         ",XF86AudioPlay, exec, playerctl play-pause"
