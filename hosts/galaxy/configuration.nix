@@ -2,15 +2,16 @@
 
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [
+      # Include the results of the hardware scan.
       inputs.home-manager.nixosModules.home-manager
       ../../nixos
       ./hardware-configuration.nix
     ];
 
   home-manager = {
-    extraSpecialArgs = { 
-      inherit inputs outputs; 
+    extraSpecialArgs = {
+      inherit inputs outputs;
       host = "galaxy";
     };
     users = {
@@ -51,7 +52,7 @@
   };
 
   # Experimental features
-  nix.settings.experimental-features = ["nix-command" "flakes" ];
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Configure keymap in X11
   services.xserver = {
@@ -64,12 +65,12 @@
     isNormalUser = true;
     description = "Derock";
     extraGroups = [ "networkmanager" "wheel" "dialout" "storage" ];
-    packages = with pkgs; [];
+    packages = with pkgs; [ ];
   };
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
- 
+
   services.tailscale.enable = true;
 
   dm.lemurs.enable = true;
@@ -78,11 +79,11 @@
   rockcfg = {
     printing.enable = true;
     power.enable = true;
-    laptop = { 
+    laptop = {
       enable = true;
       soundFix = true;
     };
-    wireplumber.enable = true; 
+    wireplumber.enable = true;
     nvidia.enable = true;
     vpn.wireguard.enable = true;
     docker.enable = true;
@@ -91,7 +92,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    vim 
+    vim
     tmux
     git
     powertop
@@ -106,7 +107,7 @@
 
     mesa
   ];
- 
+
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
 
@@ -126,6 +127,50 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.11"; # Did you read the comment?
-  
+
   boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linux_latest;
+
+  # systemd stuff to fix hyprland
+  systemd.services.hyprland-suspend = {
+    description = "https://github.com/MysticBytes786/hyprland-suspend-fix";
+
+    wantedBy = [
+      "systemd-suspend.service"
+      "systemd-hibernate.service"
+    ];
+
+    before = [
+      "systemd-suspend.service"
+      "systemd-hibernate.service"
+      "nvidia-suspend.service"
+      "nvidia-hibernate.service"
+    ];
+
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "killall -STOP Hyprland";
+    };
+  };
+
+  systemd.services.hyprland-resume = {
+    description = "https://github.com/MysticBytes786/hyprland-suspend-fix";
+
+    wantedBy = [
+      "systemd-suspend.service"
+      "systemd-hibernate.service"
+    ];
+
+    after = [
+      "systemd-suspend.service"
+      "systemd-hibernate.service"
+      "nvidia-resume.service"
+    ];
+
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "killall -CONT Hyprland";
+    };
+  };
+
+
 }
