@@ -1,5 +1,10 @@
 { inputs, pkgs, config, ... }:
 {
+  programs.bash.profileExtra = ''
+    [ "$(tty)" = "/dev/tty1" ] && ! pgrep Hyprland >/dev/null && exec Hyprland &> /dev/null
+  '';
+
+
   home.packages = with pkgs; [ 
     swww 
     foot 

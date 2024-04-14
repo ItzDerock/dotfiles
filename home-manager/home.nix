@@ -1,22 +1,22 @@
 # This is your home-manager configuration file
 # Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
-{
-  inputs,
-  outputs,
-  lib,
-  config,
-  pkgs,
-  host,
-  ...
-}: { 
+{ inputs
+, outputs
+, lib
+, config
+, pkgs
+, host
+, ...
+}: {
   imports = [
     ./hyprland.nix
     ./waybar.nix
-    ./git.nix 
+    ./git.nix
     ./1password.nix
     ./neovim.nix
     ./xdg.nix
-  ] ++ (if host == "supernova" then [./overrides/supernova.nix] else []); 
+    ./wofi.nix
+  ] ++ (if host == "supernova" then [ ./overrides/supernova.nix ] else [ ]);
 
   nixpkgs = {
     # You can add overlays here
@@ -51,59 +51,61 @@
   };
 
   # Add stuff for your user as you see fit:
-  home.packages = let 
-    unstable = (import inputs.nixpkgs-unstable {
-      system = "x86_64-linux";
-      config.allowUnfree = true;
-    });
-  in with pkgs; [ 
-    # browser
-    firefox 
+  home.packages =
+    let
+      unstable = (import inputs.nixpkgs-unstable {
+        system = "x86_64-linux";
+        config.allowUnfree = true;
+      });
+    in
+    with pkgs; [
+      # browser
+      firefox
 
-    # desktop apps
-    xfce.thunar
-    xfce.thunar-volman
+      # desktop apps
+      xfce.thunar
+      xfce.thunar-volman
 
-    # misc
-    unstable.obsidian
+      # misc
+      unstable.obsidian
 
-    # social media 
-    # using webcord over official discord and vesktop cus it just works flawlessly with wayland.
-    # normal discord just doesnt work (black screen)
-    # vesktop is buggy af (and no krisp support)
-    # this checks all the boxes
-    webcord 
+      # social media 
+      # using webcord over official discord and vesktop cus it just works flawlessly with wayland.
+      # normal discord just doesnt work (black screen)
+      # vesktop is buggy af (and no krisp support)
+      # this checks all the boxes
+      webcord
 
-    # gaymin
-    steam
-    unstable.wine-wayland
-    unstable.prismlauncher
-    unstable.gamescope
-    bottles
+      # gaymin
+      steam
+      unstable.wine-wayland
+      unstable.prismlauncher
+      unstable.gamescope
+      bottles
 
-    # unstable.vesktop # screenshare audio
+      # unstable.vesktop # screenshare audio
 
-    zoom-us
+      zoom-us
 
-    # dev tools
-    nodejs_21
-    vscode 
-    unstable.arduino-ide
+      # dev tools
+      nodejs_21
+      vscode
+      unstable.arduino-ide
 
-    arduino-core
-    arduino-cli
-    imagemagick
-    cura
-    ffmpeg-full
+      arduino-core
+      arduino-cli
+      imagemagick
+      cura
+      ffmpeg-full
 
-    unzip
-    audacity
-    yt-dlp
-    obs-studio 
-    blender
-  
-    jetbrains.idea-ultimate
-  ];
+      unzip
+      audacity
+      yt-dlp
+      obs-studio
+      blender
+
+      jetbrains.idea-ultimate
+    ];
 
   # my cfg stuff
   rockcfg = {

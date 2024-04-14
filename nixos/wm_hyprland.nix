@@ -26,5 +26,50 @@ in {
     rockcfg = {
       wayland.enable = true;
     };
+
+    # fix hyprland sleep stuff 
+    systemd.services.hyprland-suspend = {
+      description = "https://github.com/MysticBytes786/hyprland-suspend-fix";
+      path = [ pkgs.toybox ];
+
+      wantedBy = [
+        "systemd-suspend.service"
+        "systemd-hibernate.service"
+      ];
+
+      before = [
+        "systemd-suspend.service"
+        "systemd-hibernate.service"
+        "nvidia-suspend.service"
+        "nvidia-hibernate.service"
+      ];
+
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${pkgs.toybox}/bin/pkill -STOP Hyprland";
+      };
+    };
+
+    systemd.services.hyprland-resume = {
+      description = "https://github.com/MysticBytes786/hyprland-suspend-fix";
+      path = [ pkgs.toybox ];
+
+      wantedBy = [
+        "systemd-suspend.service"
+        "systemd-hibernate.service"
+      ];
+
+      after = [
+        "systemd-suspend.service"
+        "systemd-hibernate.service"
+        "nvidia-resume.service"
+      ];
+
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${pkgs.toybox}/bin/pkill -CONT Hyprland";
+      };
+    };
+
   };
 }

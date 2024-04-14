@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+{ pkgs, config, ... }: {
   imports = [
     # /etc/nixos/cachix.nix
     ./lemurs.nix
@@ -18,10 +18,12 @@
   # global configuration regardless of system
   fonts.packages = with pkgs; [
     jetbrains-mono
-    (nerdfonts.override { fonts = [ 
-      "JetBrainsMono"
-      "Iosevka"
-    ]; })
+    (nerdfonts.override {
+      fonts = [
+        "JetBrainsMono"
+        "Iosevka"
+      ];
+    })
   ];
 
   environment.systemPackages = with pkgs; [
@@ -29,18 +31,27 @@
 
     libgcc
     nix-index
-    libva vulkan-loader
+    libva
+    vulkan-loader
     vulkan-tools
 
     jq # how am i supposed to do anythign without this amazing tool
     psmisc
-  
+
     appimage-run
   ];
 
   # auto mount USBs
-  services.devmon.enable = true;
-  services.udisks2.enable = true;
+  services.devmon.enable = false;
+  services.udisks2 = {
+    enable = true;
+    settings = {
+      "udisks2.conf" = {
+        defaults.defaults = "rw,exec";
+      };
+    };
+  };
+
 
   # bluetooth
   hardware.bluetooth = {

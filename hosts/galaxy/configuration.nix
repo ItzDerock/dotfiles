@@ -129,48 +129,4 @@
   system.stateVersion = "23.11"; # Did you read the comment?
 
   boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linux_latest;
-
-  # systemd stuff to fix hyprland
-  systemd.services.hyprland-suspend = {
-    description = "https://github.com/MysticBytes786/hyprland-suspend-fix";
-
-    wantedBy = [
-      "systemd-suspend.service"
-      "systemd-hibernate.service"
-    ];
-
-    before = [
-      "systemd-suspend.service"
-      "systemd-hibernate.service"
-      "nvidia-suspend.service"
-      "nvidia-hibernate.service"
-    ];
-
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = "killall -STOP Hyprland";
-    };
-  };
-
-  systemd.services.hyprland-resume = {
-    description = "https://github.com/MysticBytes786/hyprland-suspend-fix";
-
-    wantedBy = [
-      "systemd-suspend.service"
-      "systemd-hibernate.service"
-    ];
-
-    after = [
-      "systemd-suspend.service"
-      "systemd-hibernate.service"
-      "nvidia-resume.service"
-    ];
-
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = "killall -CONT Hyprland";
-    };
-  };
-
-
 }
