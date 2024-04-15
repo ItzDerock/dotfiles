@@ -13,5 +13,6 @@ in {
     # nmcli con import type wireguard file <file>
     virtualisation.docker.enable = true;
     users.extraGroups.docker.members = [ "derock" ]; 
+    virtualisation.docker.liveRestore = false;
   };
 }

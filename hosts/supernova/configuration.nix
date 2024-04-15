@@ -85,6 +85,7 @@
     laptop.enable = false;
     wireplumber.enable = true;
     instantreplay.enable = true;
+    docker.enable = true;
     nvidia = {
       enable = true;
       primary = true;
@@ -95,13 +96,13 @@
   fileSystems."/mnt/LARGESHIT" = {
    device = "/dev/disk/by-uuid/82542B4F542B44EF";
    fsType = "ntfs";
-   options = ["users" "nofail" "x-gvfs-show"];
+   options = ["users" "nofail" "x-gvfs-show" "exec"];
   };
 
   fileSystems."/mnt/speedy" = {
     device = "/dev/disk/by-uuid/9856F4B056F48FEC";
     fsType = "ntfs";
-    options = ["users" "nofail" "x-gvfs-show" "exec" "uid=1000" "gid=100" "dmask=007" "fmask=117"];
+    options = ["users" "nofail" "x-gvfs-show" "exec" "uid=1000" "gid=100" "dmask=002"];
     # options = ["nofail" "rw" "suid" "dev" "exec" "auto" "nouser" "async" "relatime"];
   };
 
@@ -110,6 +111,12 @@
   environment.systemPackages = with pkgs; [
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #  wget
+
+    liquidctl
+    lm_sensors
+    btop
+    nvtop
+
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -142,4 +149,8 @@
   services.xserver.enable = true;
   services.xserver.displayManager.sddm.enable = true;
   services.xserver.desktopManager.plasma6.enable = true;
+  programs.coolercontrol.enable = true;
+
+  boot.extraModulePackages = with config.boot.kernelPackages; [ nct6687d ];
+  boot.kernelModules = [ "nct6687" ];
 }

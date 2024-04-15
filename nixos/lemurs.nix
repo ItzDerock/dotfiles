@@ -33,9 +33,9 @@ in
       };
     };
 
-    services.xserver.displayManager.job = {
-      execCmd = "exec /run/current-system/sw/bin/lemurs";
-    };
+    # services.xserver.displayManager.job = {
+    #   execCmd = "exec /run/current-system/sw/bin/lemurs";
+    # };
 
     security.pam.services = {
       lemurs.text = ''
