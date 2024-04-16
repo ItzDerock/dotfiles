@@ -264,6 +264,6 @@
             border-right: 0px;
             margin-left: 0px;
         }
-  '';
+    '';
   };
 }

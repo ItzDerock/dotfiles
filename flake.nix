@@ -31,6 +31,7 @@
     };
 
     hyprland.url = "github:hyprwm/Hyprland";
+    hyprlock.url = "github:hyprwm/Hyprlock";
 
     # cursor theme
     rose-pine-hyprcursor.url = "github:ndom91/rose-pine-hyprcursor";
@@ -50,6 +51,7 @@
     self,
     nixpkgs,
     home-manager,
+    hyprlock,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -92,21 +94,9 @@
       };
 
       supernova = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs outputs;};
+        specialArgs = {inherit inputs outputs;}; 
         modules = [./hosts/supernova/configuration.nix];
       };
     };
-
-    # Standalone home-manager configuration entrypoint
-    # Available through 'home-manager --flake .#your-username@your-hostname'
-    # homeConfigurations = {
-      # derock = home-manager.lib.homeManagerConfiguration {
-        # pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-        # extraSpecialArgs = {inherit inputs outputs;};
-        # modules = [
-          # ./home-manager/home.nix
-        # ];
-      # };
-    # };
   };
 }

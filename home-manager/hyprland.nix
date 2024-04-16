@@ -1,9 +1,12 @@
 { inputs, pkgs, config, ... }:
 {
+  imports = [
+    inputs.hyprlock.homeManagerModules.hyprlock
+  ];
+
   programs.bash.profileExtra = ''
     [ "$(tty)" = "/dev/tty1" ] && ! pgrep Hyprland >/dev/null && exec Hyprland &> /dev/null
   '';
-
 
   home.packages = with pkgs; [ 
     swww 
@@ -21,6 +24,8 @@
     cliphist # clipboard
     hyprpicker # color picker + freeze screen
   ];
+
+  programs.hyprlock.enable = true;
 
   programs.waybar = {
     enable = true;

@@ -16,6 +16,7 @@
     ./neovim.nix
     ./xdg.nix
     ./wofi.nix
+    ./theme.nix
   ] ++ (if host == "supernova" then [ ./overrides/supernova.nix ] else [ ]);
 
   nixpkgs = {
