@@ -13,10 +13,12 @@ set_wallpaper() {
   fi
  
   # Set wallpaper using swww
-  swww img "$image_path" # --transition-type center
+  swww img "$image_path" --transition-type center
   
   # use pywal to create colors
   # wal -n -i "$image_path" 
+
+  rm "$current_wallpaper" || true
 
   # If is NOT PNG, use imagemagick to convert to PNG
   # This is for hyprlock as it only supports PNGs
@@ -26,7 +28,8 @@ set_wallpaper() {
     image_path="$current_wallpaper"
   else 
     # Symlink to current wallpaper (if PNG)
-    ln -sf "$image_path" "$current_wallpaper"
+    # ln -sf "$image_path" "$current_wallpaper"
+    cp -l "$image_path" "$current_wallpaper"
   fi
 }
 
@@ -37,7 +40,7 @@ case "$1" in
       echo "Error: Directory '$wallpaper_dir' does not exist."
       exit 1
     fi
-    selected_image=$(nsxiv -t -o "$wallpaper_dir"/* 2>/dev/null)
+    selected_image=$(nsxiv -z 300 -t -o "$wallpaper_dir"/* 2>/dev/null)
     if [[ -n "$selected_image" ]]; then
       set_wallpaper "$selected_image"
     fi
