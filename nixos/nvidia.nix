@@ -11,7 +11,6 @@ in {
   config = mkIf cfg.enable { 
     programs.gamemode.enable = true;
 
-
     hardware.opengl = {
       enable = true;
       driSupport = true;
@@ -92,6 +91,10 @@ in {
         };
       };
     };
+
+    boot.extraModprobeConfig = ''
+      options nvidia NVreg_PreserveVideoMemoryAllocations=1
+    '';
   };
 }
 

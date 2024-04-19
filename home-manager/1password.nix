@@ -15,10 +15,10 @@ in {
 
     programs.ssh = { 
       enable = true;
+      
+        # IdentitiesOnly yes
       extraConfig = ''
-        Host *
-          IdentitiesOnly=yes
-          IdentityAgent ~/.1password/agent.sock
+        IdentityAgent ~/.1password/agent.sock
       '';
     };
 

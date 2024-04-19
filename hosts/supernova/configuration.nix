@@ -153,4 +153,6 @@
 
   boot.extraModulePackages = with config.boot.kernelPackages; [ nct6687d ];
   boot.kernelModules = [ "nct6687" ];
+
+  virtualisation.docker.enableNvidia = true;
 }
