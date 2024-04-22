@@ -14,7 +14,8 @@
     grimblast 
     playerctl 
     dunst 
-    
+    libnotify
+
     # theme
     libsForQt5.breeze-qt5 
     libsForQt5.qtstyleplugin-kvantum 
@@ -92,13 +93,14 @@
 
       "exec-once" = [
         "waybar"
-        # TODO: not absolute path here
-        "swww init && swww img ~/NixOS/assets/wallpapers/default.jpg"
+        "swww init"
 
         "wl-paste -p --watch wl-copy -pc" # disable middle mouse paste
         "playerctld" # music daemon
         "dunst" # notifs
         "wl-paste --watch cliphist store" # clipboard
+
+        "1password --silent" # 1p daemon
       ];
 
       bindm = [
