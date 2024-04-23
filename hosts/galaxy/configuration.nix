@@ -78,6 +78,7 @@
 
   rockcfg = {
     onepass.enable = true;
+    syncthing.enable = true; 
     printing.enable = true;
     power.enable = true;
     laptop = {
