@@ -13,6 +13,7 @@
     ./docker.nix
     ./instant-replay.nix
     ./polkit.nix
+    ./syncthing.nix
   ];
 
   # global configuration regardless of system
@@ -39,6 +40,9 @@
     psmisc
 
     appimage-run
+
+    # https://github.com/NixOS/nixpkgs/issues/206378
+    alsa-oss
   ];
 
   # auto mount USBs

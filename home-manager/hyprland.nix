@@ -175,6 +175,10 @@
         ",XF86AudioPrev, exec, playerctl previous"
       ];
 
+      windowrulev2 = [
+        "opacity 0.85 override 0.85 override,class:(code-url-handler)"
+      ];
+
       input = {
         touchpad = {
           natural_scroll = false;

@@ -80,6 +80,7 @@
   dm.lemurs.enable = true;
   wm.hyprland.enable = true;
   rockcfg = {
+    syncthing.enable = true;
     printing.enable = true;
     power.enable = false;
     laptop.enable = false;

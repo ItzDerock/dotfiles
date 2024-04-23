@@ -83,6 +83,7 @@
       unstable.prismlauncher
       unstable.gamescope
       bottles
+      lutris
 
       # unstable.vesktop # screenshare audio
 
