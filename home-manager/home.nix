@@ -62,6 +62,8 @@
     with pkgs; [
       # browser
       firefox
+      vivaldi
+      vivaldi-ffmpeg-codecs
 
       # desktop apps
       xfce.thunar

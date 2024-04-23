@@ -7,12 +7,7 @@ in {
     enable = mkEnableOption "1password";
   };
 
-  config = mkIf cfg.enable {
-    home.packages = [
-      pkgs._1password-gui
-      pkgs._1password
-    ];
-
+  config = mkIf cfg.enable { 
     programs.ssh = { 
       enable = true;
       

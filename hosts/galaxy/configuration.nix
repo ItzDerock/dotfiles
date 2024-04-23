@@ -77,6 +77,7 @@
   wm.hyprland.enable = true;
 
   rockcfg = {
+    onepass.enable = true;
     printing.enable = true;
     power.enable = true;
     laptop = {

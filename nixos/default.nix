@@ -14,6 +14,7 @@
     ./instant-replay.nix
     ./polkit.nix
     ./syncthing.nix
+    ./1password.nix
   ];
 
   # global configuration regardless of system
