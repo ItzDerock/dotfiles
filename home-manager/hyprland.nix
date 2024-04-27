@@ -1,4 +1,7 @@
 { inputs, pkgs, config, ... }:
+let 
+  cursorTheme = inputs.rose-pine-hyprcursor.packages.${pkgs.system}.default;
+in
 {
   imports = [
     inputs.hyprlock.homeManagerModules.hyprlock
@@ -11,7 +14,9 @@
   home.packages = with pkgs; [ 
     swww 
     foot 
-    grimblast 
+    (grimblast.override {
+      hyprpicker = inputs.hyprpicker.packages.${pkgs.system}.hyprpicker;
+    }) 
     playerctl 
     dunst 
     libnotify
@@ -20,10 +25,10 @@
     libsForQt5.breeze-qt5 
     libsForQt5.qtstyleplugin-kvantum 
     hyprcursor # cursor
-    inputs.rose-pine-hyprcursor.packages.${pkgs.system}.default
+    cursorTheme
 
     cliphist # clipboard
-    hyprpicker # color picker + freeze screen
+    inputs.hyprpicker.packages.${pkgs.system}.hyprpicker # color picker + freeze screen
   ];
 
   programs.hyprlock.enable = true;
@@ -45,6 +50,9 @@
   # qt theme
   qt.platformTheme = "qtct";
   qt.style.name = "kvantum";
+
+  # cursor
+  home.file.".local/share/icons/rose-pine-hyprcursor".source = "${cursorTheme}/share/icons/rose-pine-hyprcursor/";
 
   wayland.windowManager.hyprland = { 
     enable = true;
@@ -82,6 +90,7 @@
 
         # cursor
         "HYPRCURSOR_THEME,rose-pine-hyprcursor"
+        "HYPRCURSOR_SIZE,34"
 
         # iGPU for hyprland unless dGPU is needed
         # "WLR_DRM_DEVICES,/dev/dri/card0:/dev/dri/card1"
@@ -127,7 +136,8 @@
           ",Print,exec, grimblast copy screen"
 
           # pick color
-          "$mod_SHIFT, C, exec, hyprpicker -f hex -a -r"
+          "$mod_SHIFT, C, exec, hyprpicker -f hex -a"
+          "$mod_ALT, C, exec, hyprpicker -f hex -a -r"
 
           # "Alt Tab"
           "ALT, Tab, cyclenext"

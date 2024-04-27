@@ -32,6 +32,7 @@
 
     hyprland.url = "github:hyprwm/Hyprland";
     hyprlock.url = "github:hyprwm/Hyprlock";
+    hyprpicker.url = "github:hyprwm/hyprpicker";
 
     # cursor theme
     rose-pine-hyprcursor.url = "github:ndom91/rose-pine-hyprcursor";
