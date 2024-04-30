@@ -92,7 +92,7 @@
       zoom-us
 
       # dev tools
-      nodejs_21
+      nodejs_20
       vscode
       unstable.arduino-ide
 

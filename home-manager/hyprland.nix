@@ -199,6 +199,10 @@ in
         sensitivity = 0.6;
         accel_profile = "flat";
       };
+
+      misc = {
+        disable_hyprland_logo = true;
+      };
     };
   };
 }

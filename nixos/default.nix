@@ -47,7 +47,7 @@
   ];
 
   # auto mount USBs
-  services.devmon.enable = false;
+  services.devmon.enable = true;
   services.udisks2 = {
     enable = true;
     settings = {
@@ -57,6 +57,8 @@
     };
   };
 
+  # dbus stuff
+  services.upower.enable = true;
 
   # bluetooth
   hardware.bluetooth = {

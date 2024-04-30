@@ -2,13 +2,14 @@
 with lib;
 let
   cfg = config.rockcfg.nvidia;
-in {
+in
+{
   options.rockcfg.nvidia = {
     enable = mkEnableOption "Enables NVIDIA";
     primary = mkEnableOption "Set as primary GPU";
   };
 
-  config = mkIf cfg.enable { 
+  config = mkIf cfg.enable {
     programs.gamemode.enable = true;
 
     hardware.opengl = {
@@ -16,11 +17,11 @@ in {
       driSupport = true;
       driSupport32Bit = true;
 
-      extraPackages = with pkgs; 
-        [nvidia-vaapi-driver libva vulkan-loader vulkan-tools vulkan-validation-layers];
-      
+      extraPackages = with pkgs;
+        [ nvidia-vaapi-driver libva vulkan-loader vulkan-tools vulkan-validation-layers ];
+
       extraPackages32 = with pkgs.pkgsi686Linux;
-        [libva vulkan-loader vulkan-tools vulkan-validation-layers];
+        [ libva vulkan-loader vulkan-tools vulkan-validation-layers ];
     };
 
     # cuda
@@ -35,7 +36,7 @@ in {
       LIBVA_DRIVER_NAME = "nvidia";
     };
 
-    services.xserver.videoDrivers = ["nvidia"];
+    services.xserver.videoDrivers = [ "nvidia" ];
 
     hardware.nvidia = {
 
@@ -46,7 +47,7 @@ in {
       # Enable this if you have graphical corruption issues or application crashes after waking
       # up from sleep. This fixes it by saving the entire VRAM memory to /tmp/ instead 
       # of just the bare essentials.
-      powerManagement.enable = true;#!cfg.primary;
+      powerManagement.enable = true; #!cfg.primary;
       dynamicBoost.enable = !cfg.primary;
 
       # Fine-grained power management. Turns off GPU when not in use.
@@ -64,22 +65,7 @@ in {
       nvidiaSettings = true;
 
       # Optionally, you may need to select the appropriate driver version for your specific GPU.
-      package = config.boot.kernelPackages.nvidiaPackages.beta; # nvidia is never stable lol 
-      # package = config.boot.kernelPackages.nvidiaPackages.beta.overrideAttrs {
-      #   version = "550.54.14";
-      #   # the new driver
-      #   # src = pkgs.fetchurl
-      #   #   {
-      #   #     url = "https://download.nvidia.com/XFree86/Linux-x86_64/550.40.07/NVIDIA-Linux-x86_64-550.40.07.run";
-      #   #     sha256 = "sha256-KYk2xye37v7ZW7h+uNJM/u8fNf7KyGTZjiaU03dJpK0=";
-      #   #   };
-
-      #   # src = pkgs.fetchurl
-      #   #     {
-      #   #       url = "https://us.download.nvidia.com/XFree86/Linux-x86_64/550.54.14/NVIDIA-Linux-x86_64-550.54.14.run";
-      #   #       sha256 = "sha256-jEl/8c/HwxD7h1FJvDD6pP0m0iN7LLps0uiweAFXz+M=";
-      #   #     };
-      # };
+      package = config.boot.kernelPackages.nvidiaPackages.stable; # nvidia is never stable lol 
 
       prime = mkIf (!cfg.primary) {
         intelBusId = "PCI:0:2:0";
@@ -92,9 +78,9 @@ in {
       };
     };
 
-    boot.extraModprobeConfig = ''
-      options nvidia NVreg_PreserveVideoMemoryAllocations=1
-    '';
+    # boot.extraModprobeConfig = ''
+    #   options nvidia NVreg_PreserveVideoMemoryAllocations=1 NVreg_DynamicPowerManagement=0x02
+    # '';
   };
 }
 
