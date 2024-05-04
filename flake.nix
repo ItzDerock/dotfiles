@@ -30,12 +30,23 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # - HYPRLAND STUFF
     hyprland.url = "github:hyprwm/Hyprland";
     hyprlock.url = "github:hyprwm/Hyprlock";
     hyprpicker.url = "github:hyprwm/hyprpicker";
 
     # cursor theme
     rose-pine-hyprcursor.url = "github:ndom91/rose-pine-hyprcursor";
+
+    split-monitor-workspaces = {
+      url = "github:Duckonaut/split-monitor-workspaces";
+      inputs.hyprland.follows = "hyprland"; 
+    };
+
+    Hyprspace = {
+      url = "github:KZDKM/Hyprspace";
+      inputs.hyprland.follows = "hyprland";
+    };
 
     # nixvim
     nixvim = {
@@ -50,11 +61,6 @@
     # Shameless plug: looking for a way to nixify your themes and make
     # everything match nicely? Try nix-colors!
     # nix-colors.url = "github:misterio77/nix-colors";
-
-    split-monitor-workspaces = {
-      url = "github:Duckonaut/split-monitor-workspaces";
-      inputs.hyprland.follows = "hyprland"; 
-    };
   };
 
   outputs =

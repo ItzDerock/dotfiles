@@ -61,16 +61,12 @@ in
     
     plugins = [
       inputs.split-monitor-workspaces.packages.${pkgs.system}.split-monitor-workspaces
+      inputs.Hyprspace.packages.${pkgs.system}.Hyprspace
     ];
 
     # package = null; # use system hyprland
     settings = {
       "$mod" = "SUPER";
-
-      monitor = [
-        # todo: configurable
-        "eDP-1,highrr,auto,1"
-      ];
 
       env = [
         "XCURSOR_SIZE,18"
@@ -157,6 +153,9 @@ in
           # clipboard
           "$mod, V, exec, cliphist list | wofi -dmenu | cliphist decode | wl-copy"
           "$mod_SHIFT, D, exec, cliphist list | wofi -dmenu | cliphist delete"
+
+          # hycov
+          "ALT, SPACE, overview:toggle"
         ]
         ++ (
           # workspaces
