@@ -16,17 +16,17 @@ in
     ];
   
     # make main always wksp 1
-    workspace = [
-      "1,monitor:${MAIN_DISPLAY},default:true,persistent:true"
-      "name:screen-2,monitor:HDMI-A-1,default:true,persistent:true"
-      "name:screen-3,monitor:DP-1,default:true,persistent:true"
-    ];
+    # workspace = [
+    #   "1,monitor:${MAIN_DISPLAY},default:true,persistent:true"
+    #   "name:screen-2,monitor:HDMI-A-1,default:true,persistent:true"
+    #   "name:screen-3,monitor:DP-1,default:true,persistent:true"
+    # ];
 
-    bind = [
-      "$mod_ALT,1,workspace,1"
-      "$mod_ALT,2,workspace,name:screen-2"
-      "$mod_ALT,3,workspace,name:screen-3"
-    ];
+    # bind = [
+    #   "$mod_ALT,1,workspace,1"
+    #   "$mod_ALT,2,workspace,name:screen-2"
+    #   "$mod_ALT,3,workspace,name:screen-3"
+    # ];
   };
 
 

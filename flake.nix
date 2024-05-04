@@ -1,8 +1,7 @@
 {
   description = "Your new nix config";
 
-  nixConfig = {
-    extra-substituters = [
+  nixConfig = { extra-substituters = [
       "https://nix-community.cachix.org"
       "https://hyprland.cachix.org"
       "https://cuda-maintainers.cachix.org"
@@ -41,7 +40,7 @@
     # nixvim
     nixvim = {
       url = "github:nix-community/nixvim";
-      input.nixpkgs.follows = "nixpkgs";
+      # input.nixpkgs.follows = "nixpkgs";
     };
     # nvchad.url = "github:NvChad/nix";
 
@@ -51,6 +50,11 @@
     # Shameless plug: looking for a way to nixify your themes and make
     # everything match nicely? Try nix-colors!
     # nix-colors.url = "github:misterio77/nix-colors";
+
+    split-monitor-workspaces = {
+      url = "github:Duckonaut/split-monitor-workspaces";
+      inputs.hyprland.follows = "hyprland"; 
+    };
   };
 
   outputs =

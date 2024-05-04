@@ -29,6 +29,7 @@ in
 
     cliphist # clipboard
     inputs.hyprpicker.packages.${pkgs.system}.hyprpicker # color picker + freeze screen
+    annotator # editor
   ];
 
   programs.hyprlock.enable = true;
@@ -57,6 +58,11 @@ in
   wayland.windowManager.hyprland = { 
     enable = true;
     package = inputs.hyprland.packages."${pkgs.system}".hyprland;
+    
+    plugins = [
+      inputs.split-monitor-workspaces.packages.${pkgs.system}.split-monitor-workspaces
+    ];
+
     # package = null; # use system hyprland
     settings = {
       "$mod" = "SUPER";
@@ -132,8 +138,9 @@ in
           "$mod, period, exec, wofi-emoji" # emoji picker
 
           # screenshot
-          "$mod_SHIFT, S, exec, grimblast copy area"
-          ",Print,exec, grimblast copy screen"
+          "$mod_SHIFT, S, exec, grimblast --freeze copy area"
+          ",Print,exec, grimblast --freeze copy screen && notify-send Screen copied"
+          "$mod_SHIFT,Print,exec, grimblast --freeze save area - | com.github.phase1geo.annotator -i"
 
           # pick color
           "$mod_SHIFT, C, exec, hyprpicker -f hex -a"
@@ -161,8 +168,9 @@ in
                 in
                   builtins.toString (x + 1 - (c * 10));
               in [
-                "$mod, ${ws}, workspace, ${toString (x + 1)}"
-                "$mod SHIFT, ${ws}, movetoworkspace, ${toString (x + 1)}"
+                "$mod, ${ws}, split-workspace, ${toString (x + 1)}"
+                "$mod SHIFT, ${ws}, split-movetoworkspace, ${toString (x + 1)}"
+                "$mod ALT, ${ws}, split-movetoworkspacesilent, ${toString (x + 1)}"
               ]
             )
             10)
@@ -183,6 +191,10 @@ in
         ",XF86AudioStop, exec, playerctl stop"
         ",XF86AudioNext, exec, playerctl next"
         ",XF86AudioPrev, exec, playerctl previous"
+
+        # muilti monitor stuff
+        # "$mod, H, split-changemonitor prev"
+        # "$mod, L, split-changemonitor next"
       ];
 
       windowrulev2 = [

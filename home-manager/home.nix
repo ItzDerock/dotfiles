@@ -17,7 +17,8 @@
     ./xdg.nix
     ./wofi.nix
     ./theme.nix
-  ] ++ (if host == "supernova" then [ ./overrides/supernova.nix ] else [ ]);
+  ] ++ (if host == "supernova" then [ ./overrides/supernova.nix ] else [])
+    ++ (if host == "galaxy" then [ ./overrides/galaxy.nix ] else []);
 
   nixpkgs = {
     # You can add overlays here
