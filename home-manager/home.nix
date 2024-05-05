@@ -7,7 +7,11 @@
 , pkgs
 , host
 , ...
-}: {
+}: 
+let
+  quick-record-script = pkgs.writeScriptBin "quick-record" (builtins.readFile ../assets/scripts/quick-record.sh); 
+in
+{
   imports = [
     ./hyprland.nix
     ./waybar.nix
@@ -110,6 +114,9 @@
       blender
 
       jetbrains.idea-ultimate
+      libsecret
+
+      quick-record-script
     ];
 
   # my cfg stuff

@@ -18,7 +18,9 @@ in
       hyprpicker = inputs.hyprpicker.packages.${pkgs.system}.hyprpicker;
     }) 
     playerctl 
-    dunst 
+
+    swaynotificationcenter 
+    gnome3.adwaita-icon-theme
     libnotify
 
     # theme
@@ -30,6 +32,7 @@ in
     cliphist # clipboard
     inputs.hyprpicker.packages.${pkgs.system}.hyprpicker # color picker + freeze screen
     annotator # editor
+    kooha # video recorder
   ];
 
   programs.hyprlock.enable = true;
@@ -108,7 +111,7 @@ in
 
         "wl-paste -p --watch wl-copy -pc" # disable middle mouse paste
         "playerctld" # music daemon
-        "dunst" # notifs
+        "swaync" # notifs
         "wl-paste --watch cliphist store" # clipboard
 
         "1password --silent" # 1p daemon
@@ -138,6 +141,9 @@ in
           ",Print,exec, grimblast --freeze copy screen && notify-send Screen copied"
           "$mod_SHIFT,Print,exec, grimblast --freeze save area - | com.github.phase1geo.annotator -i"
 
+          # screen record
+          "SHIFT, Print, exec, quick-record &> ~/.cache/quick-record.log"
+
           # pick color
           "$mod_SHIFT, C, exec, hyprpicker -f hex -a"
           "$mod_ALT, C, exec, hyprpicker -f hex -a -r"
@@ -156,6 +162,9 @@ in
 
           # hycov
           "ALT, SPACE, overview:toggle"
+
+          # notification center
+          "$mod, N, exec, swaync-client -t"
         ]
         ++ (
           # workspaces

@@ -13,256 +13,460 @@
 
     settings = {
       mainBar = {
-        margin-left = 10;
-        margin-right = 10;
-        
-        "layer" = "top";
-        "position" = "top";
-        "mod" = "dock";
-        "exclusive" = true;
-        "passthrough" = false;
-        "gtk-layer-shell" = true;
-        height = 0;
-
-        "modules-left" = [
-          "clock"
-          "custom/weather"
-          "hyprland/workspaces"
-        ];
-        "modules-center" = ["hyprland/window"];
-        "modules-right" = [
-          "tray"
-          # "custom/language"
-          "network"
-          "backlight"
-          "pulseaudio"
-          "battery"
-        ];
-
-        "network" = {
-          format-wifi = "{icon} {essid}";
-          format-icons = [
-            "󰤯"
-            "󰤟"
-            "󰤢"
-            "󰤥"
-            "󰤨"
-          ];
-
-        "tooltip-format-wifi" = "{icon} {essid} ({signalStrength}%)\nIPv4: {ipaddr}/{cidr}\nGW: {gwaddr}";
-        "format-ethernet" = "{ipaddr}/{cidr} ";
-        "tooltip-format" = "{ifname} via {gwaddr} ";
-        "format-linked" = "{ifname} (No IP) ";
-        "format-disconnected" = "Disconnected ⚠";
-        "format-alt" = "{ifname}: {ipaddr}/{cidr}";
-        };
-
-        "hyprland/window" = {
-          "format" = "{}";
-        };
-       "custom/weather"  = {
-          "tooltip"  = true;
-          "format"  = "{} °";
-          "interval"  = 3600;
-          "exec"  = "wttrbar --ampm --location Louisville --hide-conditions";
-          "return-type"  = "json";
-        };
-        "tray" = {
-          "icon-size" = 13;
-          "spacing" = 10;
-        };
-        "clock" = {
-          "format" = " {:%R   %d/%m}";
-          "tooltip-format" = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
-        };
-        "backlight" = {
-          "device" = "intel_backlight";
-          "format" = "{icon} {percent}%";
-          "format-icons" = ["" "" ""];
-          "on-scroll-up" = "brightnessctl set 1%+";
-          "on-scroll-down" = "brightnessctl set 1%-";
-          "min-length" = 6;
-        };
-        "battery" = {
-          "states" = {
-            "good" = 95;
-            "warning" = 30;
-            "critical" = 20;
-          };
-          "format" = "{icon} {capacity}%";
-          "format-charging" = " {capacity}%";
-          "format-plugged" = " {capacity}%";
-          "format-alt" = "{time} {icon}";
-          "format-icons" = ["" "" "" "" "" "" "" "" "" "" ""];
-        };
-        "pulseaudio" = {
-          "format" = "{icon} {volume}%";
-          "tooltip" = false;
-          "format-muted" = " Muted";
-          "on-click" = "pamixer -t";
-          "on-scroll-up" = "pamixer -i 5";
-          "on-scroll-down" = "pamixer -d 5";
-          "scroll-step" = 5;
-          "format-icons" = {
-            "headphone" = "";
-            "hands-free" = "";
-            "headset" = "";
-            "phone" = "";
-            "portable" = "";
-            "car" = "";
-            "default" = ["" "" ""];
-          };
-        };
-      };
+  "layer" = "top";
+  "position" = "bottom";
+  "mod" = "dock";
+  "height" = 31;
+  "exclusive" = true;
+  "passthrough" = true;
+  "gtk-layer-shell" = true;
+  "reload_style_on_change" = true;
+  "modules-left" = [ "custom/padd" "custom/l_end" "custom/power" "custom/cliphist" "custom/wbar" "custom/theme" "custom/wallchange" "custom/r_end" "custom/l_end" "wlr/taskbar" "custom/spotify" "custom/r_end" "" "custom/padd" ];
+  "modules-center" = [ "custom/padd" "custom/l_end" "idle_inhibitor" "clock" "custom/r_end" "custom/padd" ];
+  "modules-right" = [ "custom/padd" "custom/l_end" "tray" "battery" "custom/r_end" "custom/l_end" "backlight" "network" "pulseaudio" "pulseaudio#microphone" "custom/notifications" "custom/keybindhint" "custom/r_end" "custom/padd" ];
+  "custom_power" = {
+    "format" = "{}";
+    "rotate" = 0;
+    "exec" = "echo ; echo  logout";
+    "on-click" = "logoutlaunch.sh 2";
+    "on-click-right" = "logoutlaunch.sh 1";
+    "interval" = 86400;
+    "tooltip" = true;
+  };
+  "custom_cliphist" = {
+    "format" = "{}";
+    "rotate" = 0;
+    "exec" = "echo ; echo 󰅇 clipboard history";
+    "on-click" = "sleep 0.1 && cliphist.sh c";
+    "on-click-right" = "sleep 0.1 && cliphist.sh d";
+    "on-click-middle" = "sleep 0.1 && cliphist.sh w";
+    "interval" = 86400;
+    "tooltip" = true;
+  };
+ 
+  "custom_wbar" = {
+    "format" = "{}";
+    "rotate" = 0;
+    "exec" = "echo ; echo  switch bar";
+    "on-click" = "wbarconfgen.sh n";
+    "on-click-right" = "wbarconfgen.sh p";
+    "on-click-middle" = "sleep 0.1 && quickapps.sh kitty firefox spotify code dolphin";
+    "interval" = 86400;
+    "tooltip" = true;
+  };
+  "custom_theme" = {
+  "format" = "{}";
+  "rotate" = 0;
+  "exec" = "echo ; echo 󰟡 switch theme";
+  "on-click" = "themeswitch.sh -n";
+  "on-click-right" = "themeswitch.sh -p";
+  "on-click-middle" = "sleep 0.1 && themeselect.sh";
+  "interval" = 86400;
+  "tooltip" = true;
+};
+  "custom_wallchange" = {
+  "format" = "{}";
+  "rotate" = 0;
+  "exec" = "echo ; echo 󰆊 switch wallpaper";
+  "on-click" = "swwwallpaper.sh -n";
+  "on-click-right" = "swwwallpaper.sh -p";
+  "on-click-middle" = "sleep 0.1 && swwwallselect.sh";
+  "interval" = 86400;
+  "tooltip" = true;
+};
+  "wlr_taskbar" = {
+  "format" = "{icon}";
+  "rotate" = 0;
+  "icon-size" = 18;
+  "icon-theme" = "Tela-circle-dracula";
+  "spacing" = 0;
+  "tooltip-format" = "{title}";
+  "on-click" = "activate";
+  "on-click-middle" = "close";
+  "ignore-list" = [ "Alacritty" ];
+  "app_ids-mapping" = {
+  "firefoxdeveloperedition" = "firefox-developer-edition";
+};
+};
+  "custom_spotify" = {
+  "exec" = "mediaplayer.py --player spotify";
+  "format" = " {}";
+  "rotate" = 0;
+  "return-type" = "json";
+  "on-click" = "playerctl play-pause --player spotify";
+  "on-click-right" = "playerctl next --player spotify";
+  "on-click-middle" = "playerctl previous --player spotify";
+  "on-scroll-up" = "volumecontrol.sh -p spotify i";
+  "on-scroll-down" = "volumecontrol.sh -p spotify d";
+  "max-length" = 25;
+  "escape" = true;
+  "tooltip" = true;
+};
+  "idle_inhibitor" = {
+  "format" = "{icon}";
+  "rotate" = 0;
+  "format-icons" = {
+  "activated" = "󰥔";
+  "deactivated" = "";
+};
+};
+  "clock" = {
+  "format" = "{:%I:%M %p}";
+  "rotate" = 0;
+  "format-alt" = "{:%R 󰃭 %d·%m·%y}";
+  "tooltip-format" = "<tt>{calendar}</tt>";
+  "calendar" = {
+  "mode" = "month";
+  "mode-mon-col" = 3;
+  "on-scroll" = 1;
+  "on-click-right" = "mode";
+  "format" = {
+  "months" = "<span color='#ffead3'><b>{}</b></span>";
+  "weekdays" = "<span color='#ffcc66'><b>{}</b></span>";
+  "today" = "<span color='#ff6699'><b>{}</b></span>";
+};
+};
+  "actions" = {
+  "on-click-right" = "mode";
+  "on-click-forward" = "tz_up";
+  "on-click-backward" = "tz_down";
+  "on-scroll-up" = "shift_up";
+  "on-scroll-down" = "shift_down";
+};
+};
+  "tray" = {
+  "icon-size" = 18;
+  "rotate" = 0;
+  "spacing" = 5;
+};
+  "battery" = {
+  "states" = {
+  "good" = 95;
+  "warning" = 30;
+  "critical" = 20;
+};
+  "format" = "{icon} {capacity}%";
+  "rotate" = 0;
+  "format-charging" = " {capacity}%";
+  "format-plugged" = " {capacity}%";
+  "format-alt" = "{time} {icon}";
+  "format-icons" = [ "󰂎" "󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹" ];
+};
+  "backlight" = {
+  "device" = "intel_backlight";
+  "rotate" = 0;
+  "format" = "{icon} {percent}%";
+  "format-icons" = [ "" "" "" "" "" "" "" "" "" ];
+  "on-scroll-up" = "brightnessctl set 1%+";
+  "on-scroll-down" = "brightnessctl set 1%-";
+  "min-length" = 6;
+};
+  "network" = {
+  "tooltip" = true;
+  "format-wifi" = " ";
+  "rotate" = 0;
+  "format-ethernet" = "󰈀 ";
+  "tooltip-format" = "Network: <big><b>{essid}</b></big>
+Signal strength: <b>{signaldBm}dBm ({signalStrength}%)</b>
+Frequency: <b>{frequency}MHz</b>
+Interface: <b>{ifname}</b>
+IP: <b>{ipaddr}/{cidr}</b>
+Gateway: <b>{gwaddr}</b>
+Netmask: <b>{netmask}</b>";
+  "format-linked" = "󰈀 {ifname} (No IP)";
+  "format-disconnected" = "󰖪 ";
+  "tooltip-format-disconnected" = "Disconnected";
+  "format-alt" = "<span foreground='#99ffdd'> {bandwidthDownBytes}</span> <span foreground='#ffcc66'> {bandwidthUpBytes}</span>";
+  "interval" = 2;
+};
+  "pulseaudio" = {
+  "format" = "{icon} {volume}";
+  "rotate" = 0;
+  "format-muted" = "婢";
+  "on-click" = "pavucontrol -t 3";
+  "on-click-middle" = "volumecontrol.sh -o m";
+  "on-scroll-up" = "volumecontrol.sh -o i";
+  "on-scroll-down" = "volumecontrol.sh -o d";
+  "tooltip-format" = "{icon} {desc} ";
+  "scroll-step" = 5;
+  "format-icons" = {
+  "headphone" = "";
+  "hands-free" = "";
+  "headset" = "";
+  "phone" = "";
+  "portable" = "";
+  "car" = "";
+  "default" = [ "" "" "" ];
+};
+};
+  "pulseaudio#microphone" = {
+  "format" = "{format_source}";
+  "rotate" = 0;
+  "format-source" = "";
+  "format-source-muted" = "";
+  "on-click" = "pavucontrol -t 4";
+  "on-click-middle" = "volumecontrol.sh -i m";
+  "on-scroll-up" = "volumecontrol.sh -i i";
+  "on-scroll-down" = "volumecontrol.sh -i d";
+  "tooltip-format" = "{format_source} {source_desc} ";
+  "scroll-step" = 5;
+};
+  "custom_notifications" = {
+  "tooltip" = true;
+  "format" = "{icon} {}";
+  "rotate" = 0;
+  "format-icons" = {
+  "email-notification" = "<span foreground='white'><sup></sup></span>";
+  "chat-notification" = "󱋊<span foreground='white'><sup></sup></span>";
+  "warning-notification" = "󱨪<span foreground='yellow'><sup></sup></span>";
+  "error-notification" = "󱨪<span foreground='red'><sup></sup></span>";
+  "network-notification" = "󱂇<span foreground='white'><sup></sup></span>";
+  "battery-notification" = "󰁺<span foreground='white'><sup></sup></span>";
+  "update-notification" = "󰚰<span foreground='white'><sup></sup></span>";
+  "music-notification" = "󰝚<span foreground='white'><sup></sup></span>";
+  "volume-notification" = "󰕿<span foreground='white'><sup></sup></span>";
+  "notification" = "<span foreground='white'><sup></sup></span>";
+  "none" = "";
+};
+  "return-type" = "json";
+  "exec-if" = "which dunstctl";
+  "exec" = "notifications.py";
+  "on-click" = "sleep 0.1 && dunstctl history-pop";
+  "on-click-middle" = "dunstctl history-clear";
+  "on-click-right" = "dunstctl close-all";
+  "interval" = 1;
+  "escape" = true;
+};
+  "custom_keybindhint" = {
+  "format" = " ";
+  "rotate" = 0;
+  "on-click" = "keybinds_hint.sh";
+};
+  "custom_l_end" = {
+  "format" = " ";
+  "interval" = "once";
+  "tooltip" = false;
+};
+  "custom_r_end" = {
+  "format" = " ";
+  "interval" = "once";
+  "tooltip" = false;
+};
+  "custom_sl_end" = {
+  "format" = " ";
+  "interval" = "once";
+  "tooltip" = false;
+};
+  "custom_sr_end" = {
+  "format" = " ";
+  "interval" = "once";
+  "tooltip" = false;
+};
+  "custom_rl_end" = {
+  "format" = " ";
+  "interval" = "once";
+  "tooltip" = false;
+};
+  "custom_rr_end" = {
+  "format" = " ";
+  "interval" = "once";
+  "tooltip" = false;
+};
+  "custom_padd" = {
+  "format" = "  ";
+  "interval" = "once";
+  "tooltip" = false;
+};
+}
+;
     };
 
     style = ''
+      @define-color bar-bg rgba(0, 0, 0, 0);
+
+      @define-color main-bg #11111b;
+      @define-color main-fg #cdd6f4;
+
+      @define-color wb-act-bg #a6adc8;
+      @define-color wb-act-fg #313244;
+
+      @define-color wb-hvr-bg #f5c2e7;
+      @define-color wb-hvr-fg #313244;
+
         * {
             border: none;
-            border-radius: 0;
-            font-family: JetBrainsMono Nerd Font, monospace;
+            border-radius: 0px;
+            font-family: "JetBrainsMono Nerd Font";
             font-weight: bold;
-            font-size: 18px;
-            min-height: 0;
+            font-size: 10px;
+            min-height: 10px;
         }
 
+
         window#waybar {
-            background: rgba(21, 18, 27, 0);
-            color: #cdd6f4;
+            background: @bar-bg;
         }
 
         tooltip {
-            background: #1e1e2e;
-            border-radius: 10px;
-            border-width: 2px;
-            border-style: solid;
-            border-color: #11111b;
+            background: @main-bg;
+            color: @main-fg;
+            border-radius: 7px;
+            border-width: 0px;
         }
 
         #workspaces button {
-            padding: 5px;
-            color: #313244;
-            margin-right: 5px;
+            box-shadow: none;
+          text-shadow: none;
+            padding: 0px;
+            border-radius: 9px;
+            margin-top: 3px;
+            margin-bottom: 3px;
+            margin-left: 0px;
+            padding-left: 3px;
+            padding-right: 3px;
+            margin-right: 0px;
+            color: @main-fg;
+            animation: ws_normal 20s ease-in-out 1;
         }
 
         #workspaces button.active {
-            color: #a6adc8;
-        }
-
-        #workspaces button.focused {
-            color: #a6adc8;
-            background: #eba0ac;
-            border-radius: 10px;
-        }
-
-        #workspaces button.urgent {
-            color: #11111b;
-            background: #a6e3a1;
-            border-radius: 10px;
+            background: @wb-act-bg;
+            color: @wb-act-fg;
+            margin-left: 3px;
+            padding-left: 12px;
+            padding-right: 12px;
+            margin-right: 3px;
+            animation: ws_active 20s ease-in-out 1;
+            transition: all 0.4s cubic-bezier(.55,-0.68,.48,1.682);
         }
 
         #workspaces button:hover {
-            background: #11111b;
-            color: #cdd6f4;
-            border-radius: 10px;
+            background: @wb-hvr-bg;
+            color: @wb-hvr-fg;
+            animation: ws_hover 20s ease-in-out 1;
+            transition: all 0.3s cubic-bezier(.55,-0.68,.48,1.682);
         }
 
-        #custom-language,
-        #custom-updates,
-        #custom-caffeine,
-        #custom-weather,
-        #window,
-        #clock,
-        #battery,
-        #pulseaudio,
-        #network,
-        #workspaces,
-        #tray,
-        #backlight {
-            background: #1e1e2e;
-            padding: 0px 10px;
-            margin: 3px 0px;
-            margin-top: 10px;
-            border: 1px solid #181825;
-        }
-
-        #tray {
-            border-radius: 10px;
-            margin-right: 10px;
-        }
-
-        #workspaces {
-            background: #1e1e2e;
-            border-radius: 10px;
-            margin-left: 10px;
-            padding-right: 0px;
-            padding-left: 5px;
-        }
-
-        #custom-caffeine {
-            color: #89dceb;
-            border-radius: 10px 0px 0px 10px;
-            border-right: 0px;
-            margin-left: 10px;
-        }
-
-        #custom-language {
-            color: #f38ba8;
-            border-left: 0px;
-            border-right: 0px;
-        }
-
-        #custom-updates {
-            color: #f5c2e7;
-            border-radius: 10px 0px 0px 10px;
-            border-left: 0px;
-            border-right: 0px;
-        }
-
-        #window {
-            border-radius: 10px;
-            margin-left: 60px;
-            margin-right: 60px;
-        }
-
-        #clock {
-            color: #fab387;
-            border-radius: 10px 0px 0px 10px;
-            margin-left: 5px;
-            border-right: 0px;
-        }
-
-        #network {
-            color: #f9e2af;
-            border-left: 0px;
-            border-right: 0px;
-        }
-
-        #pulseaudio {
-            color: #89b4fa;
-            border-left: 0px;
-            border-right: 0px;
-        }
-
-        #pulseaudio.microphone {
-            color: #cba6f7;
-            border-radius: 0px 10px 10px 0px;
-            border-left: 0px;
-            border-right: 0px;
-            margin-right: 5px;
-        }
-
-        #battery {
-            color: #a6e3a1;
-            border-radius: 0 10px 10px 0;
-            margin-right: 10px;
-            border-left: 0px;
-        }
-
-        #custom-weather {
-            border-radius: 0px 10px 10px 0px;
-            border-right: 0px;
+        #taskbar button {
+            box-shadow: none;
+          text-shadow: none;
+            padding: 0px;
+            border-radius: 9px;
+            margin-top: 3px;
+            margin-bottom: 3px;
             margin-left: 0px;
+            padding-left: 3px;
+            padding-right: 3px;
+            margin-right: 0px;
+            color: @wb-color;
+            animation: tb_normal 20s ease-in-out 1;
+        }
+
+        #taskbar button.active {
+            background: @wb-act-bg;
+            color: @wb-act-color;
+            margin-left: 3px;
+            padding-left: 12px;
+            padding-right: 12px;
+            margin-right: 3px;
+            animation: tb_active 20s ease-in-out 1;
+            transition: all 0.4s cubic-bezier(.55,-0.68,.48,1.682);
+        }
+
+        #taskbar button:hover {
+            background: @wb-hvr-bg;
+            color: @wb-hvr-color;
+            animation: tb_hover 20s ease-in-out 1;
+            transition: all 0.3s cubic-bezier(.55,-0.68,.48,1.682);
+        }
+
+        #tray menu * {
+            min-height: 16px
+        }
+
+        #tray menu separator {
+            min-height: 10px
+        }
+
+        #backlight,
+        #battery,
+        #bluetooth,
+        #custom-cliphist,
+        #clock,
+        #custom-cpuinfo,
+        #cpu,
+        #custom-gpuinfo,
+        #idle_inhibitor,
+        #custom-keybindhint,
+        #language,
+        #memory,
+        #mpris,
+        #network,
+        #custom-notifications,
+        #custom-power,
+        #pulseaudio,
+        #custom-spotify,
+        #taskbar,
+        #custom-theme,
+        #tray,
+        #custom-updates,
+        #custom-wallchange,
+        #custom-wbar,
+        #window,
+        #workspaces,
+        #custom-l_end,
+        #custom-r_end,
+        #custom-sl_end,
+        #custom-sr_end,
+        #custom-rl_end,
+        #custom-rr_end {
+            color: @main-fg;
+            background: @main-bg;
+            opacity: 1;
+            margin: 4px 0px 4px 0px;
+            padding-left: 4px;
+            padding-right: 4px;
+        }
+
+        #workspaces,
+        #taskbar {
+            padding: 0px;
+        }
+
+        #custom-r_end {
+            border-radius: 0px 21px 21px 0px;
+            margin-right: 9px;
+            padding-right: 3px;
+        }
+
+        #custom-l_end {
+            border-radius: 21px 0px 0px 21px;
+            margin-left: 9px;
+            padding-left: 3px;
+        }
+
+        #custom-sr_end {
+            border-radius: 0px;
+            margin-right: 9px;
+            padding-right: 3px;
+        }
+
+        #custom-sl_end {
+            border-radius: 0px;
+            margin-left: 9px;
+            padding-left: 3px;
+        }
+
+        #custom-rr_end {
+            border-radius: 0px 7px 7px 0px;
+            margin-right: 9px;
+            padding-right: 3px;
+        }
+
+        #custom-rl_end {
+            border-radius: 7px 0px 0px 7px;
+            margin-left: 9px;
+            padding-left: 3px;
         }
     '';
   };
