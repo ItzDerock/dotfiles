@@ -1,4 +1,4 @@
-{ inputs, pkgs, config, ... }:
+{ inputs, pkgs, config, outputs, ... }:
 let 
   cursorTheme = inputs.rose-pine-hyprcursor.packages.${pkgs.system}.default;
 in
@@ -33,6 +33,10 @@ in
     inputs.hyprpicker.packages.${pkgs.system}.hyprpicker # color picker + freeze screen
     annotator # editor
     kooha # video recorder
+
+    # launcher
+    kickoff
+    outputs.packages.${pkgs.system}.kickoff-dot-desktop
   ];
 
   programs.hyprlock.enable = true;
@@ -153,8 +157,8 @@ in
           "ALT, Tab, bringactivetotop"
 
           # run dialog
-          "$mod, SPACE, exec, wofi -S drun -I"
-          "$mod, R, exec, wofi -S run"
+          "$mod, SPACE, exec, kickoff-dot-desktop | kickoff --from-stdin" # wofi -S drun -I
+          "$mod, R, exec, kickoff" # wofi -S run
 
           # clipboard
           "$mod, V, exec, cliphist list | wofi -dmenu | cliphist decode | wl-copy"
