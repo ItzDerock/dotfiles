@@ -22,6 +22,9 @@ RETURN_VALUE=$(notify-send \
   "Upload Video" "Select upload target for $LATEST_SAVED_VIDEO")
 
 FULL_PATH=$(realpath ~/Videos/Kooha/$LATEST_SAVED_VIDEO)
+FILE_MIME=$(file --mime-type -b "$FULL_PATH")
+
+echo "File mime: $FILE_MIME"
 
 case $RETURN_VALUE in 
   "nothing")
@@ -34,7 +37,7 @@ case $RETURN_VALUE in
 
     URL=$(curl -H "authorization: $API_KEY" \
       $ZIPLINE_URL \
-      -F file=@$FULL_PATH \
+      -F "file=@$FULL_PATH;type=$FILE_MIME" \
       -H "Content-Type: multipart/form-data" | jq -r '.files[0]' | tr -d '\n');
 
     wl-copy $URL
@@ -44,15 +47,9 @@ case $RETURN_VALUE in
     echo Uploading to Chibisafe...
     API_KEY=$(secret-tool lookup uploader chibisafe)
 
-    # URL=$(curl -H "x-api-key: $API_KEY" \
-    #   -X POST \
-    #   -F file=@$FULL_PATH \
-    #   -H "Content-Type: multipart/form-data" \
-    #   $CHIBISAFE_URL)
-    #
     URL=$(curl -H "x-api-key: $API_KEY" \
       -X POST \
-      -F file=@$FULL_PATH \
+      -F "file=@$FULL_PATH;type=$FILE_MIME" \
       $CHIBISAFE_URL | jq -r '.url' | tr -d '\n');
 
     wl-copy $URL
