@@ -75,7 +75,7 @@ in
       xfce.thunar-volman
 
       # misc
-      unstable.obsidian
+      obsidian
 
       # social media 
       # using webcord over official discord and vesktop cus it just works flawlessly with wayland.
@@ -86,26 +86,20 @@ in
 
       # gaymin
       steam
-      unstable.wine-wayland
-      unstable.prismlauncher
-      unstable.gamescope
+      wine-wayland
+      prismlauncher
+      gamescope
       bottles
       lutris
-
-      # unstable.vesktop # screenshare audio
-
-      zoom-us
 
       # dev tools
       nodejs_20
       vscode
-      unstable.arduino-ide
-
-      arduino-core
-      arduino-cli
+      zed-editor
       imagemagick
       cura
       ffmpeg-full
+      nodejs_20
 
       unzip
       audacity
