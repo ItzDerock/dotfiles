@@ -226,6 +226,9 @@ in
 
       misc = {
         disable_hyprland_logo = true;
+        enable_swallow = true;
+        swallow_regex = "^(kitty|foot*)$";
+        force_default_wallpaper = 0;
       };
     };
   };
