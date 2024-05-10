@@ -614,7 +614,8 @@
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nixvim": "nixvim",
         "rose-pine-hyprcursor": "rose-pine-hyprcursor",
-        "split-monitor-workspaces": "split-monitor-workspaces"
+        "split-monitor-workspaces": "split-monitor-workspaces",
+        "zed-editor": "zed-editor"
       }
     },
     "rose-pine-hyprcursor": {
@@ -828,6 +829,22 @@
       "original": {
         "owner": "hyprwm",
         "repo": "xdg-desktop-portal-hyprland",
+        "type": "github"
+      }
+    },
+    "zed-editor": {
+      "locked": {
+        "lastModified": 1715351980,
+        "narHash": "sha256-waGYXA3P81Cxb2Rtiy0uaawdMf4mkrt1YAInkC55nsc=",
+        "owner": "GaetanLepage",
+        "repo": "nixpkgs",
+        "rev": "e78520ec6bf90ca0824cad34394616146a318f38",
+        "type": "github"
+      },
+      "original": {
+        "owner": "GaetanLepage",
+        "ref": "zed",
+        "repo": "nixpkgs",
         "type": "github"
       }
     }

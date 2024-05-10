@@ -59,7 +59,7 @@ in
   # Add stuff for your user as you see fit:
   home.packages =
     let
-      unstable = (import inputs.nixpkgs-unstable {
+      zed-editor = (import inputs.zed-editor {
         system = "x86_64-linux";
         config.allowUnfree = true;
       });
@@ -95,7 +95,7 @@ in
       # dev tools
       nodejs_20
       vscode
-      zed-editor
+      zed-editor.zed-editor
       imagemagick
       cura
       ffmpeg-full
