@@ -44,6 +44,9 @@
 
     # https://github.com/NixOS/nixpkgs/issues/206378
     alsa-oss
+
+
+    blueberry
   ];
 
   # auto mount USBs
@@ -89,6 +92,10 @@
     magicOrExtension = ''\x7fELF....AI\x02'';
   };
 
+  # timezone
+  services.automatic-timezoned.enable = true;
+  location.provider = "geoclue2";
+  
   # home-manager.useGlobalPkgs = true;
   # home-manager.useUserPackages = true;
 }

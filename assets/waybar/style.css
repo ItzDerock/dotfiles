@@ -1,0 +1,154 @@
+/* @import '/home/derock/.config/waybar/wallust.css'; */
+@import 'wallust.css';
+
+* {
+  font-family: Iosevka Nerd Font;
+  font-size: 24px;
+}
+
+window#waybar {
+  background-color: @background; 
+  color: @color12;
+  border-radius: 32px;
+}
+
+window#waybar.hidden {
+  opacity: 0.1;
+}
+
+/* -- all cards -- */
+#custom-notifications,
+#clock,
+#pulseaudio,
+#tray,
+#bluetooth,
+#network,
+#pulseaudio,
+#custom-weather,
+#backlight {
+  background-color: @card;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding-left: 8px;
+  padding-right: 8px;
+
+  padding-top: 10px;
+}
+
+/* -- bottom elements -- */
+#custom-weather,
+#custom-notifications {
+  border-bottom-right-radius: 32px;
+  border-bottom-left-radius: 32px;
+  margin-bottom: 8px;
+  padding-bottom: 12px;
+}
+
+/** -- top elements -- */
+#tray,
+#custom-weather {
+  border-top-right-radius: 32px;
+  border-top-left-radius: 32px;
+  margin-top: 0px;
+  padding-top: 12px;
+}
+
+#custom-weather {
+  margin-top: 8px;
+  font-size: 22px;
+}
+
+#workspaces {
+}
+
+#workspaces button {
+  color: @color11;
+  box-shadow: inset 0 -3px transparent;
+  transition: all 0.5s cubic-bezier(0.55, -0.68, 0.48, 1.68);
+}
+
+#workspaces button.active {
+  color: @color9;
+  transition: all 0.5s cubic-bezier(0.55, -0.68, 0.48, 1.68);
+}
+
+/* If workspaces is the leftmost module, omit left margin */
+.modules-left > widget:first-child > #workspaces {
+  margin-left: 0;
+}
+
+/* If workspaces is the rightmost module, omit right margin */
+.modules-right > widget:last-child > #workspaces {
+  margin-right: 0;
+}
+
+#tray {
+}
+
+#tray > .passive {
+  -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+  -gtk-icon-effect: highlight;
+  background-color: #eb4d4b;
+}
+
+#network.disconnected {
+  color: @color11;
+}
+
+#pulseaudio.muted {
+    color: @color11;
+}
+
+#backlight {
+  margin-right: 3px;
+  padding-right: 8px;
+  color: @color13;
+  border-radius: 0 8px 8px 0;
+  border-left: none;
+}
+
+#battery {
+  color: @color9;
+  border-radius: 8px;
+  padding: 0 12px;
+}
+
+#battery.critical,
+#battery.warning,
+#battery.full,
+#battery.plugged {
+    color: @color15;
+}
+
+#clock {
+  color: @foreground;
+  font-weight: bold;
+}
+
+@keyframes blink {
+    to {
+        background-color: rgba(30, 34, 42, 0.5);
+        color: #abb2bf;
+    }
+}
+
+tooltip {
+  border-radius: 15px;
+  padding: 15px;
+  background-color: @background;
+  color: @foreground;
+  font-family: CartographCF Nerd Font;
+  font-size: 14px;
+}
+
+tooltip label {
+  padding: 5px;
+  color: @foreground;
+}
+
+label:focus {
+  background-color: @background;
+}

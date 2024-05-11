@@ -28,6 +28,7 @@ in
     libsForQt5.qtstyleplugin-kvantum 
     hyprcursor # cursor
     cursorTheme
+    rose-pine-cursor
 
     cliphist # clipboard
     inputs.hyprpicker.packages.${pkgs.system}.hyprpicker # color picker + freeze screen
@@ -76,7 +77,8 @@ in
       "$mod" = "SUPER";
 
       env = [
-        "XCURSOR_SIZE,18"
+        "XCURSOR_SIZE,34"
+        "XCURSOR_THEME,rose-pine-cursor"
         "GDK_SCALE,1"
         "QT_SCALE_FACTOR,1.2"
         "QT_SCREEN_SCALE_FACTORS,1;1"

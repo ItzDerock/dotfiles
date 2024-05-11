@@ -16,7 +16,7 @@ set_wallpaper() {
   swww img "$image_path" --transition-type center
   
   # use pywal to create colors
-  # wal -n -i "$image_path" 
+  wallust run -w "$image_path" 
 
   rm "$current_wallpaper" || true
 

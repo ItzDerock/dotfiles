@@ -1,12 +1,15 @@
 { pkgs, ... }:
 let
-  wallpaper-script = pkgs.writeScriptBin "wallpaper" (builtins.readFile ../assets/scripts/wallpaper.sh); 
+  wallpaper-script = pkgs.writeScriptBin "wallpaper" (builtins.readFile ../assets/scripts/wallpaper.sh);
+  wpaudiochanger = pkgs.writeScriptBin "wpaudiochanger" (builtins.readFile ../assets/scripts/wpaudiochange.py);
 in
 {
-  home.packages = [
+  home.packages = with pkgs; [
     wallpaper-script
-    pkgs.nsxiv
-    pkgs.file
+    wpaudiochanger
+    nsxiv
+    file
+    wallust # pywal was archived
   ];
 
   home.file.".config/sxiv/exec/image-info" = {
@@ -14,5 +17,13 @@ in
     source = ../assets/scripts/image-info.sh;
   };
 
-  programs.pywal.enable = true; 
+  home.file.".config/wallust/templates" = {
+    recursive = true;
+    source = ../assets/wallust/templates;
+  };
+
+  home.file.".config/wallust/wallust.toml" = {
+    recursive = true;
+    source = ../assets/wallust.toml;
+  };
 }

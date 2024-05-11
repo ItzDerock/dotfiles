@@ -1,0 +1,103 @@
+{
+  "layer": "top",
+  "position": "left",
+  "margin-left": 12,
+  "margin-top": 20,
+  "margin-bottom": 20,
+  "reload_style_on_change": true,
+  "modules-left": ["custom/weather"], 
+  "modules-center": ["hyprland/workspaces"],
+  "modules-right": [
+    "tray",
+    "bluetooth",
+    "network",
+    "pulseaudio",
+    "backlight",
+    "clock",
+    "custom/notifications"
+  ],
+  "hyprland/workspaces": {
+    "all-outputs": true,
+    "active-only": false,
+    "on-click": "activate",
+    "format": "{icon}",
+    "all-outputs": false,
+    "format-icons": {
+      "active": " ",
+      "urgent": "",
+      "default": " "
+    }
+  },
+  "tray": {
+    "spacing": 18,
+    "size": 18
+  },
+  "clock": {
+    "tooltip-format": "{:%a %d %b %H:%M}",
+    "format": "{:%OI\n%OM\n%p}"
+  },
+  "clock#date": {
+    "format": "{:%b \n %d}"
+  },
+  "bluetooth": {
+    "format": "",
+    "on-click": "blueberry"
+  },
+  "backlight": {
+    "device": "eDP-1",
+    "format": "{icon}",
+    "tooltip-format": "{percent}",
+    "format-icons": ["󱩎 ", "󱩏 ", "󱩐 ", "󱩑 ", "󱩒 ", "󱩓 ", "󱩔 ", "󱩕 ", "󱩖 ", "󰛨 "],
+    "on-scroll-up": "~/.config/waybar/scripts/brightness.sh --inc",
+    "on-scroll-down": "~/.config/waybar/scripts/brightness.sh --dec"
+  },
+  "network": {
+    "format-wifi": "{icon}",
+    "format-ethernet": " ",
+    "format-disconnected": "󰖪 ",
+    "tooltip-format": "{essid}",
+    "on-click": "foot nmtui",
+    "format-icons": ["󰤯 ", "󰤟 ", "󰤢 ", "󰤥 ", "󰤨 "]
+  },
+  "pulseaudio": {
+    "format": "{icon}",
+    "format-muted": "婢",
+    "format-icons": {
+      "default": ["", "", "󰕾"]
+    },
+    "on-click": "wpaudiochanger",
+    "on-click-right": "pavucontrol &",
+    "scroll-step": 5
+  },
+  "battery": {
+    "interval": 60,
+    "align": 0,
+    "rotate": 0,
+    "full-at": 100,
+    "design-capacity": false,
+    "states": {
+      "good": 95,
+      "warning": 30,
+      "critical": 15
+    },
+    "format": "{icon}  {capacity}%",
+    "format-charging": " {capacity}%",
+    "format-plugged": "  {capacity}%",
+    "format-full": "{icon}  Full",
+    "format-alt": "{icon}  {time}",
+    "format-icons": ["", "", "", "", ""],
+    "format-time": "{H}h {M}min",
+    "tooltip": true
+  },
+  "custom/notifications": {
+    "format": " ",
+    "on-click": "swaync-client -t"
+  }, 
+  "custom/weather": {
+    "format": "{}",
+    "tooltip": true,
+    "interval": 3600,
+    "exec": "wttrbar --vertical-view",
+    "return-type": "json"
+  }
+}
