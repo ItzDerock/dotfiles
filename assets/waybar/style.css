@@ -40,7 +40,7 @@ window#waybar.hidden {
 #custom-notifications {
   border-bottom-right-radius: 32px;
   border-bottom-left-radius: 32px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   padding-bottom: 12px;
 }
 
@@ -54,7 +54,7 @@ window#waybar.hidden {
 }
 
 #custom-weather {
-  margin-top: 8px;
+  margin-top: 10px;
   font-size: 22px;
 }
 
