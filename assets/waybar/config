@@ -13,6 +13,7 @@
     "network",
     "pulseaudio",
     "backlight",
+    "battery",
     "clock",
     "custom/notifications"
   ],
@@ -80,11 +81,11 @@
       "warning": 30,
       "critical": 15
     },
-    "format": "{icon}  {capacity}%",
-    "format-charging": " {capacity}%",
-    "format-plugged": "  {capacity}%",
-    "format-full": "{icon}  Full",
-    "format-alt": "{icon}  {time}",
+    "format": "{icon}\n{capacity}",
+    "format-charging": "\n{capacity}",
+    "format-plugged": " \n{capacity}",
+    "format-full": "{icon}",
+    "format-alt": "{icon}",
     "format-icons": ["", "", "", "", ""],
     "format-time": "{H}h {M}min",
     "tooltip": true

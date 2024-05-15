@@ -24,6 +24,7 @@ window#waybar.hidden {
 #bluetooth,
 #network,
 #pulseaudio,
+#battery,
 #custom-weather,
 #backlight {
   background-color: @card;
@@ -102,25 +103,11 @@ window#waybar.hidden {
     color: @color11;
 }
 
-#backlight {
-  margin-right: 3px;
-  padding-right: 8px;
-  color: @color13;
-  border-radius: 0 8px 8px 0;
-  border-left: none;
-}
-
-#battery {
-  color: @color9;
-  border-radius: 8px;
-  padding: 0 12px;
-}
-
 #battery.critical,
 #battery.warning,
 #battery.full,
 #battery.plugged {
-    color: @color15;
+  color: @color15;
 }
 
 #clock {
