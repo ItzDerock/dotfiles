@@ -133,6 +133,9 @@ in
 
   programs.bash = {
     enable = true;
+    shellAliases = {
+      "☕" = "ssh terminal.shop";
+    };
   };
 
   programs.zoxide = {
