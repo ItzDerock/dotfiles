@@ -65,7 +65,9 @@ in
       });
     in
     with pkgs; [
-      # browser
+      # browser (i am indecisive)
+      floorp
+      google-chrome
       firefox
       vivaldi
       vivaldi-ffmpeg-codecs
