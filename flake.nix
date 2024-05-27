@@ -20,8 +20,7 @@
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable"; # we live on the edge B)
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable"; # for old modules i wrote that need this
-
-    zed-editor.url = "github:GaetanLepage/nixpkgs/zed";
+    nixpkgs-master.url = "github:nixos/nixpkgs/master";
 
     # Home manager
     # home-manager.url = "github:nix-community/home-manager/release-23.11";
@@ -34,7 +33,7 @@
 
     # - HYPRLAND STUFF
     hyprland.url = "github:hyprwm/Hyprland";
-    hyprlock.url = "github:hyprwm/Hyprlock";
+    # hyprlock.url = "github:hyprwm/Hyprlock";
     hyprpicker.url = "github:hyprwm/hyprpicker";
 
     # cursor theme
@@ -69,7 +68,6 @@
     { self
     , nixpkgs
     , home-manager
-    , hyprlock
     , ...
     } @ inputs:
     let

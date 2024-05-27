@@ -3,10 +3,6 @@ let
   cursorTheme = inputs.rose-pine-hyprcursor.packages.${pkgs.system}.default;
 in
 {
-  imports = [
-    inputs.hyprlock.homeManagerModules.hyprlock
-  ];
-
   programs.bash.profileExtra = ''
     [ "$(tty)" = "/dev/tty1" ] && ! pgrep Hyprland >/dev/null && exec Hyprland &> /dev/null
   '';
@@ -40,7 +36,7 @@ in
     outputs.packages.${pkgs.system}.kickoff-dot-desktop
   ];
 
-  programs.hyprlock.enable = true;
+  # programs.hyprlock.enable = true;
 
   programs.waybar = {
     enable = true;
@@ -69,7 +65,12 @@ in
     
     plugins = [
       inputs.split-monitor-workspaces.packages.${pkgs.system}.split-monitor-workspaces
-      inputs.Hyprspace.packages.${pkgs.system}.Hyprspace
+      # all of these fail to build...
+      # inputs.hyprland-plugins.packages.${pkgs.system}.hyprexpo
+      # inputs.Hyprspace.packages.${pkgs.system}.Hyprspace
+      # (inputs.Hyprspace.packages.${pkgs.system}.Hyprspace.overrideAttrs {
+      #   dontUseCmakeConfigure = true;
+      # })
     ];
 
     # package = null; # use system hyprland
@@ -160,6 +161,7 @@ in
 
           # run dialog
           "$mod, SPACE, exec, kickoff-dot-desktop | kickoff --from-stdin" # wofi -S drun -I
+          # "$mod, SPACE, exec, wofi -S drun -I"
           "$mod, R, exec, kickoff" # wofi -S run
 
           # clipboard
@@ -167,7 +169,8 @@ in
           "$mod_SHIFT, D, exec, cliphist list | wofi -dmenu | cliphist delete"
 
           # hycov
-          "ALT, SPACE, overview:toggle"
+          # "ALT, SPACE, overview:toggle"
+          # "$mod, TAB, hyprexpo:expo, toggle"
 
           # notification center
           "$mod, N, exec, swaync-client -t"

@@ -59,7 +59,7 @@ in
   # Add stuff for your user as you see fit:
   home.packages =
     let
-      zed-editor = (import inputs.zed-editor {
+      nixpkgs-master = (import inputs.nixpkgs-master {
         system = "x86_64-linux";
         config.allowUnfree = true;
       });
@@ -97,7 +97,7 @@ in
       # dev tools
       nodejs_20
       vscode
-      zed-editor.zed-editor
+      nixpkgs-master.zed-editor
       imagemagick
       cura
       ffmpeg-full
@@ -113,6 +113,7 @@ in
       libsecret
 
       quick-record-script
+      zoom-us
     ];
 
   # my cfg stuff
@@ -138,6 +139,8 @@ in
     shellAliases = {
       "☕" = "ssh terminal.shop";
     };
+
+    bashrcExtra = builtins.readFile ../assets/.bashrc;
   };
 
   programs.zoxide = {

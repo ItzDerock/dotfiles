@@ -32,6 +32,9 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
+  boot.kernel.sysctl = {
+    "net.ipv4.tcp_mtu_probing" = 1;
+  };
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
