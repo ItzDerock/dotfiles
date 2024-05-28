@@ -35,10 +35,14 @@ case $RETURN_VALUE in
     # retrieve zipline api key
     API_KEY=$(secret-tool lookup uploader zipline)
 
-    URL=$(curl -H "authorization: $API_KEY" \
+    OUTPUT=$(curl -H "authorization: $API_KEY" \
       $ZIPLINE_URL \
       -F "file=@$FULL_PATH;type=$FILE_MIME" \
-      -H "Content-Type: multipart/form-data" | jq -r '.files[0]' | tr -d '\n');
+      -H "Content-Type: multipart/form-data");
+
+    echo $OUTPUT
+
+    URL=$(echo $OUTPUT | jq -r '.files[0]' | tr -d '\n')
 
     wl-copy $URL
     notify-send "Upload Successful" "Uploaded to zipline at $URL"

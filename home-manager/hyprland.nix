@@ -2,9 +2,7 @@
 let 
   cursorTheme = inputs.rose-pine-hyprcursor.packages.${pkgs.system}.default;
 in
-{
-  programs.bash.profileExtra = ''
-    [ "$(tty)" = "/dev/tty1" ] && ! pgrep Hyprland >/dev/null && exec Hyprland &> /dev/null
+{ programs.bash.profileExtra = '' [ "$(tty)" = "/dev/tty1" ] && ! pgrep Hyprland >/dev/null && exec Hyprland &> /dev/null
   '';
 
   home.packages = with pkgs; [ 
@@ -161,7 +159,7 @@ in
 
           # run dialog
           "$mod, SPACE, exec, kickoff-dot-desktop | kickoff --from-stdin" # wofi -S drun -I
-          # "$mod, SPACE, exec, wofi -S drun -I"
+          "$mod_SHIFT, SPACE, exec, wofi -S drun -I"
           "$mod, R, exec, kickoff" # wofi -S run
 
           # clipboard

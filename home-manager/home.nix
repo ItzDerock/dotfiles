@@ -71,6 +71,7 @@ in
       firefox
       vivaldi
       vivaldi-ffmpeg-codecs
+      brave
 
       # desktop apps
       xfce.thunar
@@ -88,9 +89,9 @@ in
 
       # gaymin
       steam
-      wine-wayland
+      nixpkgs-master.wine-wayland
       prismlauncher
-      gamescope
+      nixpkgs-master.gamescope
       bottles
       lutris
 

@@ -19,6 +19,7 @@ in {
         text = ''
           vivaldi-bin
           floorp
+          brave
         '';
         mode = "0755";
       };
