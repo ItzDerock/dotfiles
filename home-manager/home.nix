@@ -115,6 +115,7 @@ in
 
       quick-record-script
       zoom-us
+      vmware-workstation
     ];
 
   # my cfg stuff
