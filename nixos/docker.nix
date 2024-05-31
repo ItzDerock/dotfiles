@@ -7,12 +7,13 @@ let
 in {
   options.rockcfg.docker =  {
     enable = mkEnableOption "Docker";
+    nvidia = mkEnableOption "NVIDIA containers";
   };
 
   config = mkIf cfg.enable {
-    # nmcli con import type wireguard file <file>
     virtualisation.docker.enable = true;
     users.extraGroups.docker.members = [ "derock" ]; 
     virtualisation.docker.liveRestore = false;
+    virtualisation.docker.enableNvidia = cfg.nvidia;
   };
 }

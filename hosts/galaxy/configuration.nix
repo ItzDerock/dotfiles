@@ -88,7 +88,10 @@
     wireplumber.enable = true;
     nvidia.enable = true;
     vpn.wireguard.enable = true;
-    docker.enable = true;
+    docker = {
+      enable = true;
+      nvidia = true;
+    };
   };
 
   # List packages installed in system profile. To search, run:
@@ -130,5 +133,17 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.11"; # Did you read the comment?
 
-  boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linux_latest;
+  boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linux_zen;
+  boot.kernelParams = [
+    # https://wiki.archlinux.org/title/Intel_graphics#Crash/freeze_on_low_power_Intel_CPUs
+    "ahci.mobile_lpm_policy=1" 
+  ];
+  # boot.crashDump.enable = true;
+  boot.extraModulePackages = 
+    let 
+      sgbextras = config.boot.kernelPackages.callPackage ../../pkgs/samsung-galaxybook-extras.nix { };
+    in
+    [ sgbextras ];
+
+  boot.kernelModules = ["samsung-galaxybook"];
 }

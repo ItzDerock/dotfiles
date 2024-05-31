@@ -115,7 +115,7 @@ in
 
       quick-record-script
       zoom-us
-      vmware-workstation
+      # nixpkgs-master.vmware-workstation
     ];
 
   # my cfg stuff
