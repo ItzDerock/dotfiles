@@ -103,6 +103,7 @@ in
       cura
       ffmpeg-full
       nodejs_20
+      devenv
 
       unzip
       audacity
