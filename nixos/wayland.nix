@@ -14,6 +14,7 @@ in {
       pkgs.wofi
       pkgs.wofi-emoji
       pkgs.wl-clipboard
+      pkgs.qt6.qtwayland
     ];
   };
 }

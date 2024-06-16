@@ -19,13 +19,13 @@ in {
       alsa-tools
     ] else []);
 
-    boot.extraModprobeConfig = mkIf cfg.soundFix ''
-      options snd slots=snd_soc_skl_hda_dsp
-    '';
+    # boot.extraModprobeConfig = mkIf cfg.soundFix ''
+    #   options snd slots=snd_soc_skl_hda_dsp
+    # '';
 
-    boot.blacklistedKernelModules = mkIf cfg.soundFix [
-      "snd-hda-intel"
-    ];
+    # boot.blacklistedKernelModules = mkIf cfg.soundFix [
+    #   "snd-hda-intel"
+    # ];
 
     hardware.firmware = mkIf cfg.soundFix [
       pkgs.sof-firmware

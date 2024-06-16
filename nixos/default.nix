@@ -44,9 +44,18 @@
 
     # https://github.com/NixOS/nixpkgs/issues/206378
     alsa-oss
-
-
     blueberry
+
+    # additional tumbler support
+    webp-pixbuf-loader # webp
+    poppler_gi # adobe pdf
+    evince # pdf
+    ffmpegthumbnailer # videos
+    ftgl # font
+    libgsf # .odf
+    nufraw-thumbnailer # .raw
+    gnome-epub-thumbnailer # .epub, .mobi
+    f3d
   ];
 
   # auto mount USBs
@@ -62,6 +71,8 @@
 
   # dbus stuff
   services.upower.enable = true;
+  services.gvfs.enable = true;
+  services.tumbler.enable = true;
 
   # bluetooth
   hardware.bluetooth = {
@@ -95,7 +106,4 @@
   # timezone
   services.automatic-timezoned.enable = true;
   location.provider = "geoclue2";
-  
-  # home-manager.useGlobalPkgs = true;
-  # home-manager.useUserPackages = true;
 }

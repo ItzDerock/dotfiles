@@ -138,12 +138,22 @@
     # https://wiki.archlinux.org/title/Intel_graphics#Crash/freeze_on_low_power_Intel_CPUs
     "ahci.mobile_lpm_policy=1" 
   ];
-  # boot.crashDump.enable = true;
+  boot.crashDump.enable = true;
   boot.extraModulePackages = 
     let 
       sgbextras = config.boot.kernelPackages.callPackage ../../pkgs/samsung-galaxybook-extras.nix { };
+      # intel-ipu6 = config.boot.kernelPackages.callPackage ../../pkgs/intel-ipu6.nix { };
     in
     [ sgbextras ];
+    # intel-ipu6 ];
 
   boot.kernelModules = ["samsung-galaxybook"];
+  boot.kernelPatches = [
+    {
+      name = "samsung-galaxy-sound";
+      patch = ../../assets/kernel/samsung-galaxy-audio.patch;
+    }
+  ];
+
+  boot.kernel.sysctl."kernel.sysrq" = 438;
 }

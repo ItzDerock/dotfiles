@@ -73,12 +73,18 @@ in
       vivaldi-ffmpeg-codecs
       brave
 
-      # desktop apps
+      # file browser 
       xfce.thunar
       xfce.thunar-volman
+      xfce.thunar-archive-plugin # unzip
+      xfce.thunar-media-tags-plugin
+      xfce.tumbler # dbus thumbnailer
 
-      # misc
+      # other apps
+      mpv
       obsidian
+      inkscape-with-extensions
+      leela
 
       # social media 
       # using webcord over official discord and vesktop cus it just works flawlessly with wayland.
@@ -86,6 +92,7 @@ in
       # vesktop is buggy af (and no krisp support)
       # this checks all the boxes
       webcord
+      discord
 
       # gaymin
       steam
