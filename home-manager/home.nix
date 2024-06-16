@@ -96,7 +96,7 @@ in
 
       # gaymin
       steam
-      nixpkgs-master.wine-wayland
+      nixpkgs-master.wineWowPackages.waylandFull
       prismlauncher
       nixpkgs-master.gamescope
       bottles
