@@ -3,7 +3,8 @@ let
   imageTypes = ["png" "jpeg" "heic" "bmp" "gif"];
   
   associations = {
-    "inode/directory" = ["thunar.desktop"];
+    "inode/directory" = ["nemo.desktop"];
+    "application/zip" = ["ark.desktop"];
   } // builtins.listToAttrs (
     map (imageType: { name = "image/${imageType}"; value = ["org.nomacs.ImageLounge.desktop"]; }) imageTypes
   );

@@ -58,6 +58,9 @@
     f3d
   ];
 
+
+  home-manager.backupFileExtension = "bak";
+
   # auto mount USBs
   services.devmon.enable = true;
   services.udisks2 = {

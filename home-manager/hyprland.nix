@@ -18,8 +18,6 @@ in
     libnotify
 
     # theme
-    libsForQt5.breeze-qt5 
-    libsForQt5.qtstyleplugin-kvantum 
     hyprcursor # cursor
     cursorTheme
     rose-pine-cursor
@@ -49,10 +47,6 @@ in
       alpha=0.8
     '';
   };
-
-  # qt theme
-  qt.platformTheme = "qtct";
-  qt.style.name = "kvantum";
 
   # cursor
   home.file.".local/share/icons/rose-pine-hyprcursor".source = "${cursorTheme}/share/icons/rose-pine-hyprcursor/";
