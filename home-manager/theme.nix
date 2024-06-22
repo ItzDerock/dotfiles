@@ -62,21 +62,21 @@ in
         accent = "lavender";
       };
     };
-    cursorTheme = {
-      name = "Catppuccin-Mocha-Dark-Cursors";
-      package = pkgs.catppuccin-cursors.mochaDark;
-    };
+    # cursorTheme = {
+    #   name = "Catppuccin-Mocha-Dark-Cursors";
+    #   package = pkgs.catppuccin-cursors.mochaDark;
+    # };
     gtk3 = {
       extraConfig.gtk-application-prefer-dark-theme = true;
     };
   };
 
-  home.pointerCursor = {
-    gtk.enable = true;
-    name = "Catppuccin-Mocha-Dark-Cursors";
-    package = pkgs.catppuccin-cursors.mochaDark;
-    size = 16;
-  };
+  # home.pointerCursor = {
+  #   gtk.enable = true;
+  #   name = "Catppuccin-Mocha-Dark-Cursors";
+  #   package = pkgs.catppuccin-cursors.mochaDark;
+  #   size = 16;
+  # };
 
   dconf.settings = {
     "org/gnome/desktop/interface" = {
