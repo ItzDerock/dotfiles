@@ -32,8 +32,7 @@
     };
 
     # - HYPRLAND STUFF
-    hyprland.url = "github:hyprwm/Hyprland";
-    # hyprlock.url = "github:hyprwm/Hyprlock";
+    hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
     hyprpicker.url = "github:hyprwm/hyprpicker";
 
     # cursor theme

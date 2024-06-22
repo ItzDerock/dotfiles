@@ -14,8 +14,8 @@ in
 
     hardware.opengl = {
       enable = true;
-      driSupport = true;
-      driSupport32Bit = true;
+      # driSupport = true;
+      # driSupport32Bit = true;
 
       extraPackages = with pkgs;
         [ nvidia-vaapi-driver libva vulkan-loader vulkan-tools vulkan-validation-layers ];
@@ -65,7 +65,7 @@ in
       nvidiaSettings = true;
 
       # Optionally, you may need to select the appropriate driver version for your specific GPU.
-      package = config.boot.kernelPackages.nvidiaPackages.stable; # nvidia is never stable lol 
+      package = config.boot.kernelPackages.nvidiaPackages.beta; # nvidia is never stable lol 
 
       prime = mkIf (!cfg.primary) {
         intelBusId = "PCI:0:2:0";
