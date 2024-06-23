@@ -108,7 +108,7 @@ in
         "waybar"
         "swww init"
 
-        "wl-paste -p --watch wl-copy -pc" # disable middle mouse paste
+        # "wl-paste -p --watch wl-copy -pc" # disable middle mouse paste
         "playerctld" # music daemon
         "swaync" # notifs
         "wl-paste --watch cliphist store" # clipboard
@@ -159,6 +159,7 @@ in
           # clipboard
           "$mod, V, exec, cliphist list | wofi -dmenu | cliphist decode | wl-copy"
           "$mod_SHIFT, D, exec, cliphist list | wofi -dmenu | cliphist delete"
+          ",mouse:274,exec," # disable middle mouse paste
 
           # hycov
           # "ALT, SPACE, overview:toggle"
