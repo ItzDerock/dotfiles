@@ -21,6 +21,7 @@ in
     ./xdg.nix
     ./wofi.nix
     ./theme.nix
+    ./audio.nix
   ] ++ (if host == "supernova" then [ ./overrides/supernova.nix ] else [])
     ++ (if host == "galaxy" then [ ./overrides/galaxy.nix ] else []);
 

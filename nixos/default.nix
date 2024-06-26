@@ -77,19 +77,6 @@
   services.gvfs.enable = true;
   services.tumbler.enable = true;
 
-  # bluetooth
-  hardware.bluetooth = {
-    enable = true;
-    settings = {
-      General = {
-        Enable = "Source,Sink,Media,Socket";
-        Experiment = true;
-      };
-    };
-  };
-  hardware.bluetooth.powerOnBoot = true;
-  services.blueman.enable = true;
-
   # for some reason this is how you fix vulkan..
   programs.steam = {
     enable = true;
