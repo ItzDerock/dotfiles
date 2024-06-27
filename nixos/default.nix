@@ -96,4 +96,7 @@
   # timezone
   services.automatic-timezoned.enable = true;
   location.provider = "geoclue2";
+
+  # trusted users
+  nix.settings.trusted-users = [ "root" "@wheel" ];
 }
