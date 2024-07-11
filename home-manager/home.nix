@@ -66,7 +66,7 @@ in
     in
     with pkgs; [
       # browser (i am indecisive)
-      floorp
+      # floorp
       google-chrome
       firefox
       vivaldi
@@ -110,7 +110,7 @@ in
       vscode
       nixpkgs-master.zed-editor
       imagemagick
-      cura
+      # cura
       ffmpeg-full
       nodejs_20
       devenv
