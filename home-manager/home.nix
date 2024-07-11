@@ -87,6 +87,7 @@ in
       obsidian
       inkscape-with-extensions
       leela
+      handbrake
 
       # social media 
       # using webcord over official discord and vesktop cus it just works flawlessly with wayland.
