@@ -88,10 +88,11 @@
     wireplumber.enable = true;
     nvidia.enable = true;
     vpn.wireguard.enable = true;
-    # docker = {
-    #   enable = true;
-    #   nvidia = true;
-    # };
+    instantreplay.enable = true;
+    docker = {
+      enable = true;
+      nvidia = true;
+    };
   };
 
   # List packages installed in system profile. To search, run:
