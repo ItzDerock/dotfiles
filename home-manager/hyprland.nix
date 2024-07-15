@@ -1,19 +1,20 @@
 { inputs, pkgs, config, outputs, ... }:
-let 
+let
   cursorTheme = inputs.rose-pine-hyprcursor.packages.${pkgs.system}.default;
 in
-{ programs.bash.profileExtra = '' [ "$(tty)" = "/dev/tty1" ] && ! pgrep Hyprland >/dev/null && exec Hyprland &> /dev/null
+{
+  programs.bash.profileExtra = '' [ "$(tty)" = "/dev/tty1" ] && ! pgrep Hyprland >/dev/null && exec Hyprland &> /dev/null
   '';
 
-  home.packages = with pkgs; [ 
-    swww 
-    foot 
+  home.packages = with pkgs; [
+    swww
+    foot
     (grimblast.override {
       hyprpicker = inputs.hyprpicker.packages.${pkgs.system}.hyprpicker;
-    }) 
-    playerctl 
+    })
+    playerctl
 
-    swaynotificationcenter 
+    swaynotificationcenter
     gnome3.adwaita-icon-theme
     libnotify
 
@@ -51,10 +52,10 @@ in
   # cursor
   home.file.".local/share/icons/rose-pine-hyprcursor".source = "${cursorTheme}/share/icons/rose-pine-hyprcursor/";
 
-  wayland.windowManager.hyprland = { 
+  wayland.windowManager.hyprland = {
     enable = true;
     package = inputs.hyprland.packages."${pkgs.system}".hyprland;
-    
+
     plugins = [
       inputs.split-monitor-workspaces.packages.${pkgs.system}.split-monitor-workspaces
       # all of these fail to build...
@@ -88,7 +89,7 @@ in
         "CLUTTER_BACKEND,wayland"
 
         # Disable QT window decoration
-        "QT_WAYLAND_DISABLE_WINDOWDECORATION,1" 
+        "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
         "QT_QPA_PLATFORMTHEME,qt5ct"
         "QT_STYLE_OVERRIDE=kvantum"
 
@@ -121,14 +122,14 @@ in
         "$mod, mouse:273, resizewindow"
       ];
 
-      bind = 
+      bind =
         [
           # Basic controls
           "$mod, P, togglefloating,"
           "$mod, F, fullscreen,1"
           "$mod_SHIFT, F, fullscreen,2"
           "$mod, E, fullscreen,0"
-    
+
           "$mod, I, exec, firefox" # browser
           "$mod, T, exec, foot" # terminal
           "$mod, C, killactive" # close window
@@ -159,7 +160,6 @@ in
           # clipboard
           "$mod, V, exec, cliphist list | wofi -dmenu | cliphist decode | wl-copy"
           "$mod_SHIFT, D, exec, cliphist list | wofi -dmenu | cliphist delete"
-          ",mouse:274,exec," # disable middle mouse paste
 
           # hycov
           # "ALT, SPACE, overview:toggle"
@@ -171,13 +171,17 @@ in
         ++ (
           # workspaces
           # binds $mod + [shift +] {1..10} to [move to] workspace {1..10}
-          builtins.concatLists (builtins.genList (
-              x: let
-                ws = let
-                  c = (x + 1) / 10;
-                in
+          builtins.concatLists (builtins.genList
+            (
+              x:
+              let
+                ws =
+                  let
+                    c = (x + 1) / 10;
+                  in
                   builtins.toString (x + 1 - (c * 10));
-              in [
+              in
+              [
                 "$mod, ${ws}, split-workspace, ${toString (x + 1)}"
                 "$mod SHIFT, ${ws}, split-movetoworkspace, ${toString (x + 1)}"
                 "$mod ALT, ${ws}, split-movetoworkspacesilent, ${toString (x + 1)}"
@@ -227,6 +231,8 @@ in
         enable_swallow = true;
         swallow_regex = "^(kitty|foot*)$";
         force_default_wallpaper = 0;
+        middle_click_paste = false;
+        vfr = true;
       };
     };
   };
