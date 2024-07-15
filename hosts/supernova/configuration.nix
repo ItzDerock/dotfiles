@@ -93,9 +93,9 @@
 
   # drives
   fileSystems."/mnt/LARGESHIT" = {
-   device = "/dev/disk/by-uuid/82542B4F542B44EF";
-   fsType = "ntfs";
-   options = ["users" "nofail" "x-gvfs-show" "exec"];
+    device = "/dev/disk/by-uuid/82542B4F542B44EF";
+    fsType = "ntfs";
+    options = ["users" "nofail" "x-gvfs-show" "exec" "uid=1000" "gid=100" "dmask=002"];
   };
 
   fileSystems."/mnt/speedy" = {

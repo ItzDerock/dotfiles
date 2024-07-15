@@ -100,6 +100,7 @@ in
 
       # gaymin
       steam
+      mangohud
       nixpkgs-master.wineWowPackages.waylandFull
       prismlauncher
       nixpkgs-master.gamescope
