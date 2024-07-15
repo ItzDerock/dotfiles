@@ -14,6 +14,7 @@ in
 {
   imports = [
     ./hyprland.nix
+    ./hypridle.nix
     ./waybar.nix
     ./git.nix
     ./1password.nix
