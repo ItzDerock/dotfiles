@@ -9,13 +9,13 @@ in {
 
   config = mkIf cfg.enable { 
     powerManagement.enable = true;
-    services.thermald.enable = true;
+    services.thermald.enable = false; # borken
     services.tlp = {
       enable = true;
       settings = {
         CPU_SCALING_GOVERNOR_ON_AC = "performance";
         CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
-	CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
+	      # CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
         # CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
         CPU_ENERGY_PERF_POLICY_ON_AC = "balance_power";
         PLATFORM_PROFILE_ON_BAT = "low-power";
