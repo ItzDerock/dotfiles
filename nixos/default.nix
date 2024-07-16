@@ -1,6 +1,5 @@
 { pkgs, config, ... }: {
   imports = [
-    # /etc/nixos/cachix.nix
     ./lemurs.nix
     ./wm_hyprland.nix
     ./wayland.nix
@@ -15,6 +14,7 @@
     ./polkit.nix
     ./syncthing.nix
     ./1password.nix
+    ./garbage.nix
   ];
 
   # global configuration regardless of system
@@ -37,8 +37,15 @@
     vulkan-loader
     vulkan-tools
 
-    jq # how am i supposed to do anythign without this amazing tool
-    psmisc
+    # basic sysadmin stuff
+    jq # json parsing
+    psmisc # processes
+    btop # system
+    nload # network
+    wavemon # wifi
+    ncdu # storage
+    gparted # disks
+    nvtop # gpu
 
     appimage-run
 

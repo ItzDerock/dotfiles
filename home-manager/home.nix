@@ -7,9 +7,9 @@
 , pkgs
 , host
 , ...
-}: 
+}:
 let
-  quick-record-script = pkgs.writeScriptBin "quick-record" (builtins.readFile ../assets/scripts/quick-record.sh); 
+  quick-record-script = pkgs.writeScriptBin "quick-record" (builtins.readFile ../assets/scripts/quick-record.sh);
 in
 {
   imports = [
@@ -22,8 +22,9 @@ in
     ./xdg.nix
     ./wofi.nix
     ./theme.nix
-  ] ++ (if host == "supernova" then [ ./overrides/supernova.nix ] else [])
-    ++ (if host == "galaxy" then [ ./overrides/galaxy.nix ] else []);
+    ./development.nix
+  ] ++ (if host == "supernova" then [ ./overrides/supernova.nix ] else [ ])
+  ++ (if host == "galaxy" then [ ./overrides/galaxy.nix ] else [ ]);
 
   nixpkgs = {
     # You can add overlays here
@@ -67,7 +68,6 @@ in
     in
     with pkgs; [
       # browser (i am indecisive)
-      # floorp
       google-chrome
       firefox
       vivaldi
@@ -107,24 +107,11 @@ in
       bottles
       lutris
 
-      # dev tools
-      nodejs_20
-      vscode
-      nixpkgs-master.zed-editor
-      imagemagick
-      # cura
-      ffmpeg-full
-      nodejs_20
-      devenv
-
       unzip
       audacity
       yt-dlp
       obs-studio
       blender
-
-      jetbrains.idea-ultimate
-      libsecret
 
       quick-record-script
       zoom-us
@@ -147,24 +134,6 @@ in
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";
     };
-  };
-
-  programs.bash = {
-    enable = true;
-    shellAliases = {
-      "☕" = "ssh terminal.shop";
-    };
-
-    bashrcExtra = builtins.readFile ../assets/.bashrc;
-  };
-
-  programs.zoxide = {
-    enable = true;
-    enableBashIntegration = true;
-    options = ["--cmd cd"];
-  };
-  programs.starship = {
-    enable = true;
   };
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
