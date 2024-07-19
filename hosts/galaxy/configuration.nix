@@ -78,7 +78,7 @@
 
   rockcfg = {
     onepass.enable = true;
-    syncthing.enable = true; 
+    syncthing.enable = true;
     printing.enable = true;
     power.enable = true;
     laptop = {
@@ -137,18 +137,18 @@
   boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linux_zen;
   boot.kernelParams = [
     # https://wiki.archlinux.org/title/Intel_graphics#Crash/freeze_on_low_power_Intel_CPUs
-    "ahci.mobile_lpm_policy=1" 
+    "ahci.mobile_lpm_policy=1"
   ];
   boot.crashDump.enable = true;
-  boot.extraModulePackages = 
-    let 
+  boot.extraModulePackages =
+    let
       sgbextras = config.boot.kernelPackages.callPackage ../../pkgs/samsung-galaxybook-extras.nix { };
       # intel-ipu6 = config.boot.kernelPackages.callPackage ../../pkgs/intel-ipu6.nix { };
     in
     [ sgbextras ];
-    # intel-ipu6 ];
+  # intel-ipu6 ];
 
-  boot.kernelModules = ["samsung-galaxybook"];
+  boot.kernelModules = [ "samsung-galaxybook" ];
   boot.kernelPatches = [
     {
       name = "samsung-galaxy-sound";

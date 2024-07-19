@@ -11,7 +11,7 @@ in {
     powerManagement.enable = true;
     services.thermald.enable = false; # borken
     services.tlp = {
-      enable = true;
+      enable = false;
       settings = {
         CPU_SCALING_GOVERNOR_ON_AC = "performance";
         CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
@@ -24,5 +24,17 @@ in {
         WIFI_PWR_ON_BAT = "on";
       };
     };
+
+		services.auto-cpufreq.enable = true;
+		services.auto-cpufreq.settings = {
+			battery = {
+				 governor = "powersave";
+				 turbo = "never";
+			};
+			charger = {
+				 governor = "performance";
+				 turbo = "auto";
+			};
+		};
   };
 }

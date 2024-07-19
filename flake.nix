@@ -1,7 +1,8 @@
 {
   description = "Your new nix config";
 
-  nixConfig = { extra-substituters = [
+  nixConfig = {
+    extra-substituters = [
       "https://nix-community.cachix.org"
       "https://hyprland.cachix.org"
       "https://cuda-maintainers.cachix.org"
@@ -40,7 +41,7 @@
 
     split-monitor-workspaces = {
       url = "github:Duckonaut/split-monitor-workspaces";
-      inputs.hyprland.follows = "hyprland"; 
+      inputs.hyprland.follows = "hyprland";
     };
 
     Hyprspace = {
@@ -113,6 +114,15 @@
         supernova = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [ ./hosts/supernova/configuration.nix ];
+        };
+
+        nebula = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = { inherit inputs outputs; };
+          modules = [
+            ./hosts/nebula/configuration.nix
+            "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
+          ];
         };
       };
     };
