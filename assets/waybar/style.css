@@ -1,15 +1,15 @@
-/* @import '/home/derock/.config/waybar/wallust.css'; */
-@import 'wallust.css';
+@import '/home/derock/.config/waybar/wallust.css';
+/* @import 'wallust.css'; */
 
 * {
-  font-family: Iosevka Nerd Font;
+  font-family: Iosevka, "Font Awesome 6 Free Solid";
   font-size: 24px;
 }
 
 window#waybar {
   background-color: @background; 
   color: @color12;
-  border-radius: 32px;
+  border-radius: 0px 32px 32px 0px;
 }
 
 window#waybar.hidden {
@@ -27,13 +27,29 @@ window#waybar.hidden {
 #battery,
 #custom-weather,
 #backlight {
-  background-color: @card;
+  /* background-color: @card; */
   margin-left: 10px;
   margin-right: 10px;
   padding-left: 8px;
   padding-right: 8px;
 
   padding-top: 10px;
+}
+
+#pulseaudio {
+  margin-left: 0px; 
+  margin-right: 0px;
+  font-size: 24px;
+}
+
+#battery {
+  margin-left: 11px;
+  margin-right: 0px;
+}
+
+#backlight {
+  margin-left: 2px;
+  margin-right: 0px;
 }
 
 /* -- bottom elements -- */
@@ -52,6 +68,10 @@ window#waybar.hidden {
   border-top-left-radius: 32px;
   margin-top: 0px;
   padding-top: 12px;
+}
+
+#tray {
+  margin-bottom: 10px;
 }
 
 #custom-weather {

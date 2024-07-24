@@ -19,6 +19,8 @@
 
   # global configuration regardless of system
   fonts.packages = with pkgs; [
+    iosevka
+    font-awesome
     jetbrains-mono
     (nerdfonts.override {
       fonts = [

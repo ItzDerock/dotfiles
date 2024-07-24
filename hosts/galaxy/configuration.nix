@@ -24,11 +24,6 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   networking.hostName = "derock-nix"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Enable networking
   networking.networkmanager.enable = true;
@@ -120,6 +115,10 @@
   # battery stuff
   powerManagement.enable = true;
 
+  # webcam
+  # hardware.ipu6.enable = true;
+  # hardware.ipu6.platform = "ipu6ep";
+
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
@@ -135,10 +134,10 @@
   system.stateVersion = "23.11"; # Did you read the comment?
 
   boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linux_zen;
-  boot.kernelParams = [
-    # https://wiki.archlinux.org/title/Intel_graphics#Crash/freeze_on_low_power_Intel_CPUs
-    "ahci.mobile_lpm_policy=1"
-  ];
+  # boot.kernelParams = [
+  # https://wiki.archlinux.org/title/Intel_graphics#Crash/freeze_on_low_power_Intel_CPUs
+  # "ahci.mobile_lpm_policy=1"
+  # ];
   boot.crashDump.enable = true;
   boot.extraModulePackages =
     let
@@ -157,4 +156,8 @@
   ];
 
   boot.kernel.sysctl."kernel.sysrq" = 438;
+
+  # Auto reboot if system locks up
+  boot.kernel.sysctl."kernel.panic" = 60;
+  systemd.watchdog.runtimeTime = "30s";
 }

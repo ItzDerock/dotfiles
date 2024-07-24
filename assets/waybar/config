@@ -1,7 +1,7 @@
 {
   "layer": "top",
   "position": "left",
-  "margin-left": 12,
+  "margin-left": 0,
   "margin-top": 20,
   "margin-bottom": 20,
   "reload_style_on_change": true,
@@ -25,8 +25,8 @@
     "all-outputs": false,
     "format-icons": {
       "active": " ",
-      "urgent": "",
-      "default": " "
+      "urgent": " ",
+      "default": " " 
     }
   },
   "tray": {
@@ -35,7 +35,8 @@
   },
   "clock": {
     "tooltip-format": "{:%a %d %b %H:%M}",
-    "format": "{:%OI\n%OM\n%p}"
+    "format": "{:%OI\n%OM\n%p}",
+    "timezone": "America/Chicago"
   },
   "clock#date": {
     "format": "{:%b \n %d}"
@@ -91,7 +92,7 @@
     "tooltip": true
   },
   "custom/notifications": {
-    "format": " ",
+    "format": "",
     "on-click": "swaync-client -t"
   }, 
   "custom/weather": {

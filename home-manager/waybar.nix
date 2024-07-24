@@ -1,8 +1,8 @@
 { config, pkgs, inputs, ... }:
 {
   # waybar wttr
-  home.packages = with pkgs; [ 
-     wttrbar
+  home.packages = with pkgs; [
+    wttrbar
   ];
 
   programs.waybar = {
@@ -10,6 +10,7 @@
     settings = {
       mainBar = builtins.fromJSON (builtins.readFile ../assets/waybar/config);
     };
+
     style = builtins.readFile ../assets/waybar/style.css;
   };
 
