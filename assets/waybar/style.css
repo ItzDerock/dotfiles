@@ -149,7 +149,7 @@ label:focus {
   background-color: @base04;
 }
 
-.modules-left #workspaces button.active {
+.modules-center #workspaces button.active {
   border-bottom: 0px solid transparent;
   border-color: transparent;
 }
