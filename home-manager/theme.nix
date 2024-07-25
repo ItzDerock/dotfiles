@@ -37,31 +37,31 @@ in
 
   qt = {
     enable = true;
-    style.name = "kvantum";
-    platformTheme = "qtct";
+    # style.name = "kvantum";
+    # platformTheme = "qtct";
   };
 
-  xdg.configFile."Kvantum/kvantum.kvconfig".source = (pkgs.formats.ini { }).generate "kvantum.kvconfig" {
-    General.theme = "Catppuccin-Mocha-Lavender";
-  }; 
+  # xdg.configFile."Kvantum/kvantum.kvconfig".source = (pkgs.formats.ini { }).generate "kvantum.kvconfig" {
+  #   General.theme = "Catppuccin-Mocha-Lavender";
+  # };
 
   gtk = {
     enable = true;
-    theme = {
-      name = "Catppuccin-Mocha-Standard-Lavender-Dark";
-      package = pkgs.catppuccin-gtk.override {
-        accents = [ "lavender" ];
-        size = "standard";
-        variant = "mocha";
-      };
-    };
-    iconTheme = {
-      name = "Papirus-Dark";
-      package = pkgs.catppuccin-papirus-folders.override {
-        flavor = "mocha";
-        accent = "lavender";
-      };
-    };
+    # theme = {
+    #   name = "Catppuccin-Mocha-Standard-Lavender-Dark";
+    #   package = pkgs.catppuccin-gtk.override {
+    #     accents = [ "lavender" ];
+    #     size = "standard";
+    #     variant = "mocha";
+    #   };
+    # };
+    # iconTheme = {
+    #   name = "Papirus-Dark";
+    #   package = pkgs.catppuccin-papirus-folders.override {
+    #     flavor = "mocha";
+    #     accent = "lavender";
+    #   };
+    # };
     # cursorTheme = {
     #   name = "Catppuccin-Mocha-Dark-Cursors";
     #   package = pkgs.catppuccin-cursors.mochaDark;
@@ -78,15 +78,15 @@ in
   #   size = 16;
   # };
 
-  dconf.settings = {
-    "org/gnome/desktop/interface" = {
-      gtk-theme = "Catppuccin-Mocha-Standard-Lavender-Dark";
-      color-scheme = "prefer-dark";
-    };
-
-    # For Gnome shell
-    "org/gnome/shell/extensions/user-theme" = {
-      name = "Catppuccin-Mocha-Standard-Lavender-Dark";
-    };
-  };
+  # dconf.settings = {
+  #   "org/gnome/desktop/interface" = {
+  #     gtk-theme = "Catppuccin-Mocha-Standard-Lavender-Dark";
+  #     color-scheme = "prefer-dark";
+  #   };
+  #
+  #   # For Gnome shell
+  #   "org/gnome/shell/extensions/user-theme" = {
+  #     name = "Catppuccin-Mocha-Standard-Lavender-Dark";
+  #   };
+  # };
 }

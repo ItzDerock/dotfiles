@@ -15,6 +15,7 @@
     ./syncthing.nix
     ./1password.nix
     ./garbage.nix
+    ./theme.nix
   ];
 
   # global configuration regardless of system

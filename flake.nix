@@ -24,8 +24,6 @@
     nixpkgs-master.url = "github:nixos/nixpkgs/master";
 
     # Home manager
-    # home-manager.url = "github:nix-community/home-manager/release-23.11";
-    # home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager = {
       # unstable
       url = "github:nix-community/home-manager";
@@ -54,6 +52,8 @@
       url = "github:nix-community/nixvim";
       # input.nixpkgs.follows = "nixpkgs";
     };
+
+    stylix.url = "github:danth/stylix";
     # nvchad.url = "github:NvChad/nix";
 
     # TODO: Add any other flake you might need
@@ -108,12 +108,16 @@
           specialArgs = { inherit inputs outputs; };
           modules = [
             ./hosts/galaxy/configuration.nix
+            inputs.stylix.nixosModules.stylix
           ];
         };
 
         supernova = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
-          modules = [ ./hosts/supernova/configuration.nix ];
+          modules = [
+            ./hosts/supernova/configuration.nix
+            inputs.stylix.nixosModules.stylix
+          ];
         };
 
         nebula = nixpkgs.lib.nixosSystem {
@@ -122,6 +126,7 @@
           modules = [
             ./hosts/nebula/configuration.nix
             "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
+            inputs.stylix.nixosModules.stylix
           ];
         };
       };

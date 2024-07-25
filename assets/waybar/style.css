@@ -1,4 +1,4 @@
-@import '/home/derock/.config/waybar/wallust.css';
+/* @import '/home/derock/.config/waybar/wallust.css'; */
 /* @import 'wallust.css'; */
 
 * {
@@ -7,8 +7,8 @@
 }
 
 window#waybar {
-  background-color: @background; 
-  color: @color12;
+  background-color: alpha(@base00, 0.8); 
+  color: @base05;
   border-radius: 0px 32px 32px 0px;
 }
 
@@ -27,7 +27,6 @@ window#waybar.hidden {
 #battery,
 #custom-weather,
 #backlight {
-  /* background-color: @card; */
   margin-left: 10px;
   margin-right: 10px;
   padding-left: 8px;
@@ -83,14 +82,11 @@ window#waybar.hidden {
 }
 
 #workspaces button {
-  color: @color11;
-  box-shadow: inset 0 -3px transparent;
-  transition: all 0.5s cubic-bezier(0.55, -0.68, 0.48, 1.68);
+  color: @color02;
 }
 
 #workspaces button.active {
-  color: @color9;
-  transition: all 0.5s cubic-bezier(0.55, -0.68, 0.48, 1.68);
+  color: @color03;
 }
 
 /* If workspaces is the leftmost module, omit left margin */
@@ -112,26 +108,22 @@ window#waybar.hidden {
 
 #tray > .needs-attention {
   -gtk-icon-effect: highlight;
-  background-color: #eb4d4b;
+  background-color: @base07;
 }
 
 #network.disconnected {
-  color: @color11;
-}
-
-#pulseaudio.muted {
-    color: @color11;
+  color: @color07;
 }
 
 #battery.critical,
 #battery.warning,
 #battery.full,
 #battery.plugged {
-  color: @color15;
+  color: @color07;
 }
 
 #clock {
-  color: @foreground;
+  color: @base06;
   font-weight: bold;
 }
 
@@ -145,17 +137,19 @@ window#waybar.hidden {
 tooltip {
   border-radius: 15px;
   padding: 15px;
-  background-color: @background;
-  color: @foreground;
   font-family: CartographCF Nerd Font;
   font-size: 14px;
 }
 
 tooltip label {
   padding: 5px;
-  color: @foreground;
 }
 
 label:focus {
-  background-color: @background;
+  background-color: @base04;
+}
+
+.modules-left #workspaces button.active {
+  border-bottom: 0px solid transparent;
+  border-color: transparent;
 }

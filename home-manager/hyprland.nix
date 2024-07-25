@@ -76,7 +76,6 @@ in
         "GDK_SCALE,1"
         "QT_SCALE_FACTOR,1.2"
         "QT_SCREEN_SCALE_FACTORS,1;1"
-        "GTK_THEME,Adwaita:dark"
         "BROWSER,firefox"
         "SUDO_EDITOR,/usr/bin/nvim"
         "WLR_NO_HARDWARE_CURSORS,1"
@@ -90,19 +89,10 @@ in
 
         # Disable QT window decoration
         "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
-        "QT_QPA_PLATFORMTHEME,qt5ct"
-        "QT_STYLE_OVERRIDE=kvantum"
 
         # cursor
         "HYPRCURSOR_THEME,rose-pine-hyprcursor"
         "HYPRCURSOR_SIZE,34"
-
-        # iGPU for hyprland unless dGPU is needed
-        # "WLR_DRM_DEVICES,/dev/dri/card0:/dev/dri/card1"
-        # "__EGL_VENDOR_LIBRARY_FILENAMES,/usr/share/glvnd/egl_vendor.d/50_mesa.json"
-        # "__GLX_VENDOR_LIBRARY_NAME,mesa"
-        # "WLR_RENDERER,vulkan"
-        # "LIBVA_DRIVER_NAME,iHD"
       ];
 
       "exec-once" = [
