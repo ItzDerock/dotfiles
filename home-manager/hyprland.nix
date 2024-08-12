@@ -224,10 +224,6 @@ in
         middle_click_paste = false;
         vfr = true;
       };
-
-      experimental = {
-        explicit_sync = true;
-      }; 
     };
   };
 }
