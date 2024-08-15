@@ -5,10 +5,10 @@ stdenv.mkDerivation rec {
   version = "0.1";
 
   src = fetchFromGitHub {
-    owner = "joshuagrisham";
+    owner = "itzderock";
     repo = "samsung-galaxybook-extras";
-    rev = "d1543077d9d4d064030de4702ca0c67bbd2b2c13";
-    sha256 = "sha256-O65ikBPW+ZIewT+z0alXqxk/wTeCa+dM0OmUZcpe8E0=";
+    rev = "b98fd03c4653a5bd7ca4d0c82dd1cf33f5793151";
+    sha256 = "sha256-gUNx1jFgLv/SOcOm2TSAfSZrPbysyyQZ/ud1vtrcabU=";
   };
 
   sourceRoot = "source/driver";
