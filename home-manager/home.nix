@@ -91,12 +91,7 @@ in
       handbrake
 
       # social media 
-      # using webcord over official discord and vesktop cus it just works flawlessly with wayland.
-      # normal discord just doesnt work (black screen)
-      # vesktop is buggy af (and no krisp support)
-      # this checks all the boxes
-      webcord
-      discord
+      vesktop
 
       # gaymin
       steam
