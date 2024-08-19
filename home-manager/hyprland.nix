@@ -203,6 +203,7 @@ in
 
       windowrulev2 = [
         "opacity 0.85 override 0.85 override,class:(code-url-handler)"
+	"float, class:(xdg-desktop-portal-gtk)"
       ];
 
       input = {
