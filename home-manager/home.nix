@@ -83,6 +83,10 @@ in
       cinnamon.nemo-with-extensions
       kdePackages.ark # zip
 
+      # basic desktop apps
+      kdePackages.kate
+      kdePackages.gwenview
+
       # other apps
       mpv
       obsidian
@@ -121,6 +125,7 @@ in
 
   # Enable home-manager and git
   programs.home-manager.enable = true;
+  services.kdeconnect.enable = true;
 
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
