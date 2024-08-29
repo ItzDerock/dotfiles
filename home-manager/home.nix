@@ -73,6 +73,7 @@ in
       vivaldi
       vivaldi-ffmpeg-codecs
       brave
+      opera
 
       # file browser 
       xfce.thunar
