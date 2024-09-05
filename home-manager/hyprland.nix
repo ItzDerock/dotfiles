@@ -142,6 +142,17 @@ in
           "ALT, Tab, cyclenext"
           "ALT, Tab, bringactivetotop"
 
+          # L/R between desktops
+          "$mod_SHIFT, W, workspace, e-1"
+          "$mod_SHIFT, E, workspace, e+1"
+
+          # Pin a window (shows on all wkspcs)
+          "$mod_SHIFT, P, pin"
+
+          # Change the split mode (dwindle)
+          "$mod, J, togglesplit"
+          "$mod_SHIFT, J, swapsplit"
+
           # run dialog
           "$mod, SPACE, exec, kickoff-dot-desktop | kickoff --from-stdin" # wofi -S drun -I
           "$mod_SHIFT, SPACE, exec, wofi -S drun -I"
@@ -203,7 +214,7 @@ in
 
       windowrulev2 = [
         "opacity 0.85 override 0.85 override,class:(code-url-handler)"
-	"float, class:(xdg-desktop-portal-gtk)"
+        "float, class:(xdg-desktop-portal-gtk)"
       ];
 
       input = {
@@ -225,6 +236,50 @@ in
         middle_click_paste = false;
         vfr = true;
       };
+
+      dwindle = {
+        smart_split = true;
+      };
     };
+
+    extraConfig = ''
+      # window resize
+      bind = $mod, S, submap, resize
+
+      submap = resize
+      binde = , H, resizeactive, -10 0
+      binde = , L, resizeactive, 10 0
+      binde = , J, resizeactive, 0 -10
+      binde = , K, resizeactive, 0 10
+      bind = , catchall, submap, reset
+      submap = reset
+
+      # dwindle stuff
+      bind = $mod, A, submap, dwindle
+
+      submap = resize
+      binde = , H, layoutmsg, preselect l
+      binde = , H, submap, reset
+      binde = , J, layoutmsg, preselect d
+      binde = , J, submap, reset
+      binde = , K, layoutmsg, preselect u
+      binde = , K, submap, reset
+      binde = , L, layoutmsg, preselect r
+      binde = , L, submap, reset
+      bind = , catchall, submap, reset
+      submap = reset
+
+
+      # QWER through windows (similar to HJKL, but one handed)
+      bind = $mod, W, submap, cycle
+
+      submap = cycle
+      binde = , Q, movefocus, l
+      binde = , W, movefocus, d
+      binde = , E, movefocus, u
+      binde = , R, movefocus, r
+      bind = , catchall, submap, reset
+      submap = reset
+    '';
   };
 }
