@@ -57,8 +57,7 @@
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.derock = {
-    isNormalUser = true;
-    description = "Derock";
+    isNormalUser = true; description = "Derock";
     extraGroups = [ "networkmanager" "wheel" "dialout" "storage" ];
     packages = with pkgs; [ ];
   };
@@ -109,6 +108,7 @@
     mesa
   ];
 
+  virtualisation.waydroid.enable = true;
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
 
@@ -133,31 +133,34 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.11"; # Did you read the comment?
 
-  boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linux_zen;
-  # boot.kernelParams = [
-  # https://wiki.archlinux.org/title/Intel_graphics#Crash/freeze_on_low_power_Intel_CPUs
-  # "ahci.mobile_lpm_policy=1"
-  # ];
-  boot.crashDump.enable = true;
+  # boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linux_zen;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.extraModulePackages =
     let
       sgbextras = config.boot.kernelPackages.callPackage ../../pkgs/samsung-galaxybook-extras.nix { };
       # intel-ipu6 = config.boot.kernelPackages.callPackage ../../pkgs/intel-ipu6.nix { };
     in
     [ sgbextras ];
-  # intel-ipu6 ];
 
   boot.kernelModules = [ "samsung-galaxybook" ];
-  boot.kernelPatches = [
-    {
-      name = "samsung-galaxy-sound";
-      patch = ../../assets/kernel/samsung-galaxy-audio.patch;
-    }
-  ];
+  # boot.kernelPatches = [
+  #   {
+  #     name = "samsung-galaxy-sound";
+  #     patch = ../../assets/kernel/samsung-galaxy-audio.patch;
+  #   }
+  # ];
 
   boot.kernel.sysctl."kernel.sysrq" = 438;
 
   # Auto reboot if system locks up
   boot.kernel.sysctl."kernel.panic" = 60;
   systemd.watchdog.runtimeTime = "30s";
+
+  # more intel stuff
+  hardware.graphics = {
+    extraPackages = with pkgs; [
+      mesa.drivers
+      intel-ocl
+    ];
+  };
 }

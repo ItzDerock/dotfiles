@@ -11,7 +11,6 @@ in {
   };
 
   config = mkIf cfg.enable {
-    # programs.lemurs.enable = true;
     environment.systemPackages = with pkgs; [ 
       brightnessctl
     ] ++ (if cfg.soundFix then [
@@ -31,8 +30,9 @@ in {
       pkgs.sof-firmware
     ];
 
-    hardware.opengl = {
+    hardware.graphics = {
       extraPackages = with pkgs; [ intel-media-driver ];
+      extraPackages32 = with pkgs.pkgsi686Linux; [ intel-media-driver ];
     };
 
     environment.sessionVariables = {

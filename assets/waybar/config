@@ -36,7 +36,7 @@
   "clock": {
     "tooltip-format": "{:%a %d %b %H:%M}",
     "format": "{:%OI\n%OM\n%p}",
-    "timezone": "America/Chicago"
+    "timezone": "America/Kentucky/Louisville"
   },
   "clock#date": {
     "format": "{:%b \n %d}"

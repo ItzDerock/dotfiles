@@ -2,7 +2,7 @@
 {
   stylix = {
     enable = true;
-    image = ../assets/wallpapers/dresdenpainting.jpg;
+    image = ../assets/wallpapers/Makima-Landscape.jpg;
     autoEnable = true;
     polarity = "dark";
   };

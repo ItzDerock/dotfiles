@@ -73,7 +73,16 @@ in
       vivaldi
       vivaldi-ffmpeg-codecs
       brave
-      opera
+      (pkgs.symlinkJoin {
+        name = "opera";
+        paths = [
+	  (pkgs.writeShellScriptBin "opera" ''
+	    export LD_LIBRARY_PATH=${pkgs.libGL}/lib
+            exec ${pkgs.opera}/bin/opera
+	  '')
+          (opera.override { proprietaryCodecs = true; })
+	];
+      })
 
       # file browser 
       xfce.thunar
