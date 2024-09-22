@@ -73,6 +73,7 @@ in
       vivaldi
       vivaldi-ffmpeg-codecs
       brave
+      microsoft-edge
       (pkgs.symlinkJoin {
         name = "opera";
         paths = [
