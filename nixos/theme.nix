@@ -2,7 +2,7 @@
 {
   stylix = {
     enable = true;
-    image = ../assets/wallpapers/Makima-Landscape.jpg;
+    image = ../assets/wallpapers/river-valley-lush-cliffs.jpg;
     autoEnable = true;
     polarity = "dark";
   };

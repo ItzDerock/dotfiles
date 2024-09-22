@@ -15,7 +15,7 @@
 
       # code editors
       vscode
-      nixpkgs-master.zed-editor
+      nixpkgs-master.zed-editor.fhs
       jetbrains.idea-ultimate
 
       # cli tools
