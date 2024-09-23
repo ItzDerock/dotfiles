@@ -121,4 +121,7 @@
   location.provider = "geoclue2";
 
   nix.settings.trusted-users = [ "root" "@wheel" ];
+  nix.extraOptions = ''
+    builders-use-substitutes = true
+  '';
 }
