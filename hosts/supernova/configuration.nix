@@ -84,7 +84,11 @@
     laptop.enable = false;
     wireplumber.enable = true;
     instantreplay.enable = true;
-    docker.enable = true;
+    docker = {
+      enable = true;
+      nvidia = true;
+    };
+
     nvidia = {
       enable = true;
       primary = true;

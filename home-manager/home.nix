@@ -121,7 +121,7 @@ in
       audacity
       yt-dlp
       obs-studio
-      blender
+      (blender.override { cudaSupport = true; })
 
       quick-record-script
       zoom-us
