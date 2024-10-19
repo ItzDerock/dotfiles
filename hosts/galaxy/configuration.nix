@@ -1,5 +1,11 @@
 { config, pkgs, inputs, outputs, ... }:
-
+let
+    quartusPrime = ../../assets/quartus;
+    quartusEnv = pkgs.buildEnv {
+      name = "quartus-prime-lite-env";
+      paths = [ pkgs.quartus-prime-lite quartusPrime ];
+    };
+  in 
 {
   imports =
     [
@@ -106,6 +112,9 @@
     #  wget
 
     mesa
+
+    # FPGA stuff
+    quartusEnv
   ];
 
   virtualisation.waydroid.enable = true;
@@ -134,7 +143,7 @@
   system.stateVersion = "23.11"; # Did you read the comment?
 
   # boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linux_zen;
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+boot.kernelPackages = pkgs.linuxPackages_6_10;
   boot.extraModulePackages =
     let
       sgbextras = config.boot.kernelPackages.callPackage ../../pkgs/samsung-galaxybook-extras.nix { };
@@ -163,4 +172,26 @@
       intel-ocl
     ];
   };
+
+  #-- stuff for FPGA dev
+  services.udev.extraRules = ''
+# Arrow-USB-Programmer
+ SUBSYSTEM=="usb",\
+ ENV{DEVTYPE}=="usb_device",\
+ ATTR{idVendor}=="0403",\
+ ATTR{idProduct}=="6010",\
+ MODE="0666",\
+ NAME="bus/usb/$env{BUSNUM}/$env{DEVNUM}",\
+ RUN+="/bin/sh -c chmod 0666 %c"
+ 
+# Interface number zero is a JTAG.
+ SUBSYSTEM=="usb",\
+ ATTRS{idVendor}=="0403",\
+ ATTRS{idProduct}=="6010",\
+ ATTR{interface}=="Arrow USB Blaster*",\
+ ATTR{bInterfaceNumber}=="00",\
+ RUN="/bin/sh -c 'echo $kernel > /sys/bus/usb/drivers/ftdi_sio/unbind'"
+  '';
+
+
 }

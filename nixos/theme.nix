@@ -2,7 +2,7 @@
 {
   stylix = {
     enable = true;
-    image = ../assets/wallpapers/river-valley-lush-cliffs.jpg;
+    image = ../assets/wallpapers/007.jpg;
     autoEnable = true;
     polarity = "dark";
   };
