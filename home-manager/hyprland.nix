@@ -15,7 +15,7 @@ in
     playerctl
 
     swaynotificationcenter
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     libnotify
 
     # theme
@@ -94,6 +94,14 @@ in
         "HYPRCURSOR_THEME,rose-pine-hyprcursor"
         "HYPRCURSOR_SIZE,34"
       ];
+
+      general = {
+	border_size = 0;
+	gaps_in = 1;
+	gaps_out = 0;
+      };
+
+      animations.enabled = false;
 
       "exec-once" = [
         "waybar"

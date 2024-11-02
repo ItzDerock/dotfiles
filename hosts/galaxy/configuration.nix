@@ -73,7 +73,7 @@ let
 
   services.tailscale.enable = true;
 
-  dm.lemurs.enable = true;
+  # dm.lemurs.enable = true;
   wm.hyprland.enable = true;
 
   rockcfg = {
@@ -114,7 +114,9 @@ let
     mesa
 
     # FPGA stuff
-    quartusEnv
+    # quartusEnv
+
+    linuxPackages.v4l2loopback
   ];
 
   virtualisation.waydroid.enable = true;
@@ -142,8 +144,8 @@ let
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.11"; # Did you read the comment?
 
-  # boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linux_zen;
-boot.kernelPackages = pkgs.linuxPackages_6_10;
+  boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linux_zen;
+# boot.kernelPackages = pkgs.linuxPackages_6_10;
   boot.extraModulePackages =
     let
       sgbextras = config.boot.kernelPackages.callPackage ../../pkgs/samsung-galaxybook-extras.nix { };
@@ -151,7 +153,11 @@ boot.kernelPackages = pkgs.linuxPackages_6_10;
     in
     [ sgbextras ];
 
-  boot.kernelModules = [ "samsung-galaxybook" ];
+  boot.kernelModules = [ "samsung-galaxybook" "v4l2loopback" ];
+  
+  # Temporary fix - linux-surface/linux-surface #1516
+  boot.blacklistedKernelModules = [ "intel-ipu6" "intel-ipu6-isys" ];
+
   # boot.kernelPatches = [
   #   {
   #     name = "samsung-galaxy-sound";
@@ -192,6 +198,8 @@ boot.kernelPackages = pkgs.linuxPackages_6_10;
  ATTR{bInterfaceNumber}=="00",\
  RUN="/bin/sh -c 'echo $kernel > /sys/bus/usb/drivers/ftdi_sio/unbind'"
   '';
+
+  #-- 
 
 
 }

@@ -9,7 +9,8 @@
 window#waybar {
   background-color: alpha(@base00, 0.8); 
   color: @base05;
-  border-radius: 0px 32px 32px 0px;
+  border-radius: 0px;
+  /* border-radius: 0px 32px 32px 0px; */
 }
 
 window#waybar.hidden {

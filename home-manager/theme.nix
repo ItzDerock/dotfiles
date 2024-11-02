@@ -15,8 +15,8 @@ in
     qt6Packages.qtstyleplugin-kvantum
     ayu-theme-gtk
     (catppuccin-kvantum.override {
-      accent = "Lavender";
-      variant = "Mocha";
+      accent = "lavender";
+      variant = "mocha";
     })
   ];
 

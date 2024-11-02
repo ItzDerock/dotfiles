@@ -74,7 +74,7 @@
   services.tailscale.enable = true;
   services.tailscale.useRoutingFeatures = "client";
  
-  dm.lemurs.enable = true;
+  # dm.lemurs.enable = true;
   wm.hyprland.enable = true;
   rockcfg = {
     onepass.enable = true;

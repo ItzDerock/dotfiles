@@ -1,7 +1,6 @@
 { pkgs, ... }:
 {
-  home.packages = with pkgs; [ ripgrep ripgrep-all lunarvim ];
-
+  home.packages = with pkgs; [ ripgrep ripgrep-all ];
 
   programs.neovim = {
     enable = true;
