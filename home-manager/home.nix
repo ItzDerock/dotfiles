@@ -10,6 +10,14 @@
 }:
 let
   quick-record-script = pkgs.writeScriptBin "quick-record" (builtins.readFile ../assets/scripts/quick-record.sh);
+
+  # vesktop fork with replaced shaggy.gif so its not weird
+  customVesktop = pkgs.vesktop.overrideAttrs (oldAttrs: {
+    postPatch = ''
+      ${oldAttrs.postPatch or ""}
+      cp ${../assets/vesktop/loading.gif} static/shiggy.gif
+    '';
+  });
 in
 {
   imports = [
@@ -106,7 +114,7 @@ in
       handbrake
 
       # social media 
-      vesktop
+      customVesktop
 
       # gaymin
       steam
