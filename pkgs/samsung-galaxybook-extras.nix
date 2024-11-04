@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "samsung-galaxybook-extras-${version}-${kernel.version}";
-  version = "0.1";
+  version = "1.0";
 
   src = fetchFromGitHub {
     owner = "itzderock";
     repo = "samsung-galaxybook-extras";
-    rev = "b98fd03c4653a5bd7ca4d0c82dd1cf33f5793151";
-    sha256 = "sha256-gUNx1jFgLv/SOcOm2TSAfSZrPbysyyQZ/ud1vtrcabU=";
+    rev = "feab69614ad0ce7d605ef83af77328bec407afab";
+    sha256 = "sha256-GVSIIZaPLs3PCjsmNlqN4fVSseX1VypgtdXPg+dr33I=";
   };
 
-  sourceRoot = "source/driver";
+  # sourceRoot = "source/driver";
   hardeningDisable = [ "pic" "format" ];                                             # 1
   nativeBuildInputs = kernel.moduleBuildDependencies;                       # 2
 
