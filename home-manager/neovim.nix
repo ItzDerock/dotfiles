@@ -1,16 +1,28 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 {
-  home.packages = with pkgs; [ ripgrep ripgrep-all ];
+  imports = [
+    inputs.nvchad4nix.homeManagerModule
+  ];
 
-  programs.neovim = {
+  home.packages = with pkgs; [ 
+    ripgrep 
+    ripgrep-all 
+    # inputs.nvchad4nix.packages."${pkgs.system}".nvchad;
+  ];
+
+  programs.nvchad = {
     enable = true;
-    defaultEditor = true;
+    extraPackages = with pkgs; [
+      nodePackages.bash-language-server
+      nixd
+      (python3.withPackages(ps: with ps; [
+        python-lsp-server
+	flake8
+      ]))
+    ];
+
+    hm-activation = true;
+    backup = true;
   };
 
-  # programs.nixvim = {
-  #   enable = true;
-  #   defaultEditor = true;
-  #
-  # }; 
 }
-

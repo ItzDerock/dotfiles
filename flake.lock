@@ -928,6 +928,44 @@
         "type": "github"
       }
     },
+    "nvchad-starter": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1728129783,
+        "narHash": "sha256-SVpep7lVX0isYsUtscvgA7Ga3YXt/2jwQQCYkYadjiM=",
+        "owner": "NvChad",
+        "repo": "starter",
+        "rev": "d0c602f5f155d4d1261609219e9b8a61e936d681",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NvChad",
+        "ref": "main",
+        "repo": "starter",
+        "type": "github"
+      }
+    },
+    "nvchad4nix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "nvchad-starter": "nvchad-starter"
+      },
+      "locked": {
+        "lastModified": 1730782222,
+        "narHash": "sha256-81X0sVnao2/LswiQt+W3unOWkDWZIJjzcBNzA6quQew=",
+        "owner": "nix-community",
+        "repo": "nix4nvchad",
+        "rev": "7b02bf0df00a3a9a3d660e7e7bb9dd381d959f49",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "nix4nvchad",
+        "type": "github"
+      }
+    },
     "pre-commit-hooks": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -962,6 +1000,7 @@
         "nixpkgs-master": "nixpkgs-master",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nixvim": "nixvim",
+        "nvchad4nix": "nvchad4nix",
         "rose-pine-hyprcursor": "rose-pine-hyprcursor",
         "split-monitor-workspaces": "split-monitor-workspaces",
         "stylix": "stylix"
