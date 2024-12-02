@@ -262,7 +262,7 @@ in
       # dwindle stuff
       bind = $mod, A, submap, dwindle
 
-      submap = resize
+      submap = dwindle 
       binde = , H, layoutmsg, preselect l
       binde = , H, submap, reset
       binde = , J, layoutmsg, preselect d
