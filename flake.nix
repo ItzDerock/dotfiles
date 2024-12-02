@@ -33,9 +33,10 @@
     # - HYPRLAND STUFF
     hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
     hyprpicker.url = "github:hyprwm/hyprpicker";
-
-    # cursor theme
-    rose-pine-hyprcursor.url = "github:ndom91/rose-pine-hyprcursor";
+    hyprland-plugins = {
+      url = "github:hyprwm/hyprland-plugins";
+      inputs.hyprland.follows = "hyprland";
+    };
 
     split-monitor-workspaces = {
       url = "github:Duckonaut/split-monitor-workspaces";
@@ -46,6 +47,9 @@
       url = "github:KZDKM/Hyprspace";
       inputs.hyprland.follows = "hyprland";
     };
+
+    # cursor theme
+    rose-pine-hyprcursor.url = "github:ndom91/rose-pine-hyprcursor";
 
     # nixvim
     nixvim = {

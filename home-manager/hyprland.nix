@@ -15,7 +15,7 @@ in
     playerctl
 
     swaynotificationcenter
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     libnotify
 
     # theme
@@ -59,11 +59,8 @@ in
     plugins = [
       inputs.split-monitor-workspaces.packages.${pkgs.system}.split-monitor-workspaces
       # all of these fail to build...
-      # inputs.hyprland-plugins.packages.${pkgs.system}.hyprexpo
+      inputs.hyprland-plugins.packages.${pkgs.system}.hyprexpo
       # inputs.Hyprspace.packages.${pkgs.system}.Hyprspace
-      # (inputs.Hyprspace.packages.${pkgs.system}.Hyprspace.overrideAttrs {
-      #   dontUseCmakeConfigure = true;
-      # })
     ];
 
     # package = null; # use system hyprland
@@ -96,9 +93,9 @@ in
       ];
 
       general = {
-	border_size = 0;
-	gaps_in = 1;
-	gaps_out = 0;
+       	border_size = 0;
+       	gaps_in = 1;
+       	gaps_out = 0;
       };
 
       animations.enabled = false;
@@ -165,15 +162,14 @@ in
           "$mod, SPACE, exec, kickoff-dot-desktop | kickoff --from-stdin" # wofi -S drun -I
           "$mod_SHIFT, SPACE, exec, wofi -S drun -I"
           "$mod, R, exec, kickoff" # wofi -S run
-	  "$mod_ALT, SPACE, exec, 1password --quick-access"
+          "$mod_ALT, SPACE, exec, 1password --quick-access"
 
           # clipboard
           "$mod, V, exec, cliphist list | wofi -dmenu | cliphist decode | wl-copy"
           "$mod_SHIFT, D, exec, cliphist list | wofi -dmenu | cliphist delete"
 
-          # hycov
           # "ALT, SPACE, overview:toggle"
-          # "$mod, TAB, hyprexpo:expo, toggle"
+          "$mod, TAB, hyprexpo:expo, toggle"
 
           # notification center
           "$mod, N, exec, swaync-client -t"

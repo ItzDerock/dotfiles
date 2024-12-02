@@ -99,7 +99,7 @@ in
       xfce.thunar-archive-plugin # unzip
       xfce.thunar-media-tags-plugin
       xfce.tumbler # dbus thumbnailer
-      cinnamon.nemo-with-extensions
+      nemo-with-extensions
       kdePackages.ark # zip
 
       # basic desktop apps

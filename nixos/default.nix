@@ -23,12 +23,8 @@
     iosevka
     font-awesome
     jetbrains-mono
-    (nerdfonts.override {
-      fonts = [
-        "JetBrainsMono"
-        "Iosevka"
-      ];
-    })
+    nerd-fonts.jetbrains-mono
+    nerd-fonts.iosevka
   ];
 
   environment.systemPackages = with pkgs; [
