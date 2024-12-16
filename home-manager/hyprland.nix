@@ -3,8 +3,7 @@ let
   cursorTheme = inputs.rose-pine-hyprcursor.packages.${pkgs.system}.default;
 in
 {
-  programs.bash.profileExtra = '' [ "$(tty)" = "/dev/tty1" ] && ! pgrep Hyprland >/dev/null && exec Hyprland &> /dev/null
-  '';
+  programs.bash.profileExtra = '' [ "$(tty)" = "/dev/tty1" ] && ! pgrep Hyprland >/dev/null && exec Hyprland &> /dev/null'';
 
   home.packages = with pkgs; [
     swww
@@ -31,6 +30,9 @@ in
     # launcher
     kickoff
     outputs.packages.${pkgs.system}.kickoff-dot-desktop
+
+    # display window
+    nwg-displays
   ];
 
   # programs.hyprlock.enable = true;
@@ -99,6 +101,10 @@ in
       };
 
       animations.enabled = false;
+
+      source = [
+        "~/.config/hypr/monitors.conf"
+      ];
 
       "exec-once" = [
         "waybar"
