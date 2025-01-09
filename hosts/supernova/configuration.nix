@@ -98,14 +98,14 @@
   # drives
   fileSystems."/mnt/LARGESHIT" = {
     device = "/dev/disk/by-uuid/82542B4F542B44EF";
-    fsType = "ntfs";
+    fsType = "ntfs3";
     options = ["users" "nofail" "x-gvfs-show" "exec" "uid=1000" "gid=100" "dmask=002"];
   };
 
   fileSystems."/mnt/speedy" = {
     device = "/dev/disk/by-uuid/9856F4B056F48FEC";
-    fsType = "ntfs";
-    options = ["users" "nofail" "x-gvfs-show" "exec" "uid=1000" "gid=100" "dmask=002"];
+    fsType = "ntfs3";
+    options = ["users" "rw" "nofail" "x-gvfs-show" "exec" "uid=1000" "gid=100" "dmask=002" "acl"];
     # options = ["nofail" "rw" "suid" "dev" "exec" "auto" "nouser" "async" "relatime"];
   };
 
