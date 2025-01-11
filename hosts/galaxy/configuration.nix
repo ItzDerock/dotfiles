@@ -93,6 +93,7 @@ let
       enable = true;
       nvidia = true;
     };
+    network-shares.enable = true;
   };
 
   # List packages installed in system profile. To search, run:

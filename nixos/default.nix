@@ -16,6 +16,7 @@
     ./1password.nix
     ./garbage.nix
     ./theme.nix
+    ./network-shares.nix
   ];
 
   # global configuration regardless of system
