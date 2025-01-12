@@ -164,13 +164,13 @@ let
   #     name = "samsung-galaxy-sound";
   #     patch = ../../assets/kernel/samsung-galaxy-audio.patch;
   #   }
-    {
-      name = "intel-ipu6-fix";
-      patch = builtins.fetchurl {
-      	url = "https://lore.kernel.org/linux-media/20241031102321.409454-1-stanislaw.gruszka@linux.intel.com/raw";
-	sha256 = "sha256:00kgjfzjns5b26nbk5pk48ywssbpz9xpfmqi4plc1g2xd0x8bva2";
-      };
-    }
+	#    {
+	#      name = "intel-ipu6-fix";
+	#      patch = builtins.fetchurl {
+	#      	url = "https://lore.kernel.org/linux-media/20241031102321.409454-1-stanislaw.gruszka@linux.intel.com/raw";
+	# sha256 = "sha256:00kgjfzjns5b26nbk5pk48ywssbpz9xpfmqi4plc1g2xd0x8bva2";
+	#      };
+	#    }
   ];
 
   boot.kernel.sysctl."kernel.sysrq" = 438;
