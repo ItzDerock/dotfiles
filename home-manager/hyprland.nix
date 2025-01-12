@@ -75,7 +75,7 @@ in
         "GDK_SCALE,1"
         "QT_SCALE_FACTOR,1.2"
         "QT_SCREEN_SCALE_FACTORS,1;1"
-        "BROWSER,firefox"
+        "BROWSER,microsoft-edge"
         "SUDO_EDITOR,/usr/bin/nvim"
         "WLR_NO_HARDWARE_CURSORS,1"
 
@@ -131,7 +131,7 @@ in
           "$mod_SHIFT, F, fullscreen,2"
           "$mod, E, fullscreen,0"
 
-          "$mod, I, exec, firefox" # browser
+          "$mod, I, exec, microsoft-edge" # browser
           "$mod, T, exec, foot" # terminal
           "$mod, C, killactive" # close window
 

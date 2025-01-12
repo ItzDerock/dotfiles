@@ -1,11 +1,11 @@
 { config, pkgs, inputs, outputs, ... }:
-let
-    quartusPrime = ../../assets/quartus;
-    quartusEnv = pkgs.buildEnv {
-      name = "quartus-prime-lite-env";
-      paths = [ pkgs.quartus-prime-lite quartusPrime ];
-    };
-  in 
+# let
+#     quartusPrime = ../../assets/quartus;
+#     quartusEnv = pkgs.buildEnv {
+#       name = "quartus-prime-lite-env";
+#       paths = [ pkgs.quartus-prime-lite quartusPrime ];
+#     };
+#   in 
 {
   imports =
     [
@@ -27,8 +27,6 @@ let
 
   # Bootloader.
   boot.initrd.luks.devices."luks-b2c00540-b801-4ae1-bb27-7f5dfaae4194".device = "/dev/disk/by-uuid/b2c00540-b801-4ae1-bb27-7f5dfaae4194";
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
   networking.hostName = "derock-nix"; # Define your hostname.
 
   # Enable networking
@@ -105,37 +103,13 @@ let
     powertop
     firefox
     foot
-
-    # arduino
-    # libgcc
-    # libstdcxx5
     libgccjit
-    #  wget
-
     mesa
-
-    # FPGA stuff
-    # quartusEnv
-
     linuxPackages.v4l2loopback
   ];
 
   virtualisation.waydroid.enable = true;
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  # battery stuff
   powerManagement.enable = true;
-
-  # webcam
-  # hardware.ipu6.enable = true;
-  # hardware.ipu6.platform = "ipu6ep";
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
@@ -146,11 +120,9 @@ let
   system.stateVersion = "23.11"; # Did you read the comment?
 
   boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linux_zen;
-# boot.kernelPackages = pkgs.linuxPackages_6_10;
   boot.extraModulePackages =
     let
       sgbextras = config.boot.kernelPackages.callPackage ../../pkgs/samsung-galaxybook-extras.nix { };
-      # intel-ipu6 = config.boot.kernelPackages.callPackage ../../pkgs/intel-ipu6.nix { };
     in
     [ sgbextras ];
 
@@ -164,13 +136,13 @@ let
   #     name = "samsung-galaxy-sound";
   #     patch = ../../assets/kernel/samsung-galaxy-audio.patch;
   #   }
-	#    {
-	#      name = "intel-ipu6-fix";
-	#      patch = builtins.fetchurl {
-	#      	url = "https://lore.kernel.org/linux-media/20241031102321.409454-1-stanislaw.gruszka@linux.intel.com/raw";
-	# sha256 = "sha256:00kgjfzjns5b26nbk5pk48ywssbpz9xpfmqi4plc1g2xd0x8bva2";
-	#      };
-	#    }
+	  {
+	    name = "intel-ipu6-fix";
+      patch = builtins.fetchurl {
+        url = "https://lore.kernel.org/stable/20241209175416.59433-1-stanislaw.gruszka@linux.intel.com/raw";
+        sha256 = "sha256:0h8gnmr029mknp7fv001hbq6cjdmsrmk18khqry4iv7xaw7nhjcy";
+	    };
+    }
   ];
 
   boot.kernel.sysctl."kernel.sysrq" = 438;
@@ -187,27 +159,13 @@ let
     ];
   };
 
-  #-- stuff for FPGA dev
-  services.udev.extraRules = ''
-# Arrow-USB-Programmer
- SUBSYSTEM=="usb",\
- ENV{DEVTYPE}=="usb_device",\
- ATTR{idVendor}=="0403",\
- ATTR{idProduct}=="6010",\
- MODE="0666",\
- NAME="bus/usb/$env{BUSNUM}/$env{DEVNUM}",\
- RUN+="/bin/sh -c chmod 0666 %c"
- 
-# Interface number zero is a JTAG.
- SUBSYSTEM=="usb",\
- ATTRS{idVendor}=="0403",\
- ATTRS{idProduct}=="6010",\
- ATTR{interface}=="Arrow USB Blaster*",\
- ATTR{bInterfaceNumber}=="00",\
- RUN="/bin/sh -c 'echo $kernel > /sys/bus/usb/drivers/ftdi_sio/unbind'"
-  '';
-
-  #-- 
-
-
+  boot.loader = {
+    systemd-boot.enable = false;
+    grub.enable = true;
+    grub.device = "nodev";
+    grub.useOSProber = true;
+    grub.efiSupport = true;
+    efi.canTouchEfiVariables = true;
+    efi.efiSysMountPoint = "/boot";
+  };
 }
