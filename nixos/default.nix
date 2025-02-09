@@ -1,5 +1,6 @@
 { pkgs, config, ... }: {
-  imports = [
+  imports = [ 
+    ./embedded-dev.nix
     ./lemurs.nix
     ./wm_hyprland.nix
     ./wayland.nix

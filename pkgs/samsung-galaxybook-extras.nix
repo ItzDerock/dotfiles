@@ -5,10 +5,16 @@ stdenv.mkDerivation rec {
   version = "1.0";
 
   src = fetchFromGitHub {
-    owner = "joshuagrisham";
+    # owner = "joshuagrisham";
+    # repo = "samsung-galaxybook-extras";
+    # rev = "8e3087a06b8bdcdfdd081367af4b744a56cc4ee9";
+    # sha256 = "sha256-srCGcmUI5ZKjndIWhSptG3hVkAo0dvDjJ4NoUkutaIA=";
+
+    # patch to fix kernel >= 6.13.0 builds
+    owner = "itzderock";
     repo = "samsung-galaxybook-extras";
-    rev = "8e3087a06b8bdcdfdd081367af4b744a56cc4ee9";
-    sha256 = "sha256-srCGcmUI5ZKjndIWhSptG3hVkAo0dvDjJ4NoUkutaIA=";
+    rev = "721d6557c49b10693177947ec81f8be8bcbcb218";
+    sha256 = "sha256-hOcMcwswJrPsjNFQq6R4lJeQco15YmsIz2evr6daCyw=";
   };
 
   hardeningDisable = [ "pic" "format" ];                                             # 1
