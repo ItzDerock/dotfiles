@@ -31,6 +31,7 @@ in
     ./wofi.nix
     ./theme.nix
     ./development.nix
+    ./hwaccel.nix
   ] ++ (if host == "supernova" then [ ./overrides/supernova.nix ] else [ ])
   ++ (if host == "galaxy" then [ ./overrides/galaxy.nix ] else [ ]);
 

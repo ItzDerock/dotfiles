@@ -121,7 +121,6 @@
   environment.plasma6.excludePackages = with pkgs.kdePackages; [
     plasma-browser-integration
     konsole
-    oxygen
   ];
 
   # This value determines the NixOS release from which the default

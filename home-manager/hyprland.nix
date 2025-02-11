@@ -59,10 +59,17 @@ in
     package = inputs.hyprland.packages."${pkgs.system}".hyprland;
 
     plugins = [
-      inputs.split-monitor-workspaces.packages.${pkgs.system}.split-monitor-workspaces
-      # all of these fail to build...
+      # Separate workspaces per monitor
+      inputs.hyprsplit.packages.${pkgs.system}.hyprsplit
+
+      # WIN + TAB, show all workspaces
       inputs.hyprland-plugins.packages.${pkgs.system}.hyprexpo
-      # inputs.Hyprspace.packages.${pkgs.system}.Hyprspace
+
+      # i3 stuff like sub-workspaces
+      inputs.hy3.packages.${pkgs.system}.hy3
+
+      # workspace overview
+      # inputs.Hyprspace.packages.${pkgs.system}.Hyprspace 
     ];
 
     # package = null; # use system hyprland
@@ -77,6 +84,7 @@ in
         "QT_SCREEN_SCALE_FACTORS,1;1"
         "BROWSER,microsoft-edge"
         "SUDO_EDITOR,/usr/bin/nvim"
+        "EDITOR,/usr/bin/nvim"
         "WLR_NO_HARDWARE_CURSORS,1"
 
         # enable wayland for stuff
@@ -119,7 +127,7 @@ in
       ];
 
       bindm = [
-        "$mod, mouse:272, movewindow"
+        "$mod, mouse:272, hy3:movewindow"
         "$mod, mouse:273, resizewindow"
       ];
 
@@ -131,7 +139,7 @@ in
           "$mod_SHIFT, F, fullscreen,2"
           "$mod, E, fullscreen,0"
 
-          "$mod, I, exec, microsoft-edge" # browser
+          "$mod, I, exec, firefox" # browser
           "$mod, T, exec, foot" # terminal
           "$mod, C, killactive" # close window
 
@@ -179,6 +187,13 @@ in
 
           # notification center
           "$mod, N, exec, swaync-client -t"
+
+          # Pulls all windows from unplugged monitors into current wksp (hyprsplit)
+          "$mod, G, split:grabroguewindows"
+
+          # hy3
+          # Make a split
+          "$mod, S, hy3:makegroup"
         ]
         ++ (
           # workspaces
@@ -194,9 +209,9 @@ in
                   builtins.toString (x + 1 - (c * 10));
               in
               [
-                "$mod, ${ws}, split-workspace, ${toString (x + 1)}"
-                "$mod SHIFT, ${ws}, split-movetoworkspace, ${toString (x + 1)}"
-                "$mod ALT, ${ws}, split-movetoworkspacesilent, ${toString (x + 1)}"
+                "$mod, ${ws}, split:workspace, ${toString (x + 1)}"
+                "$mod SHIFT, ${ws}, split:movetoworkspace, ${toString (x + 1)}"
+                "$mod ALT, ${ws}, split:movetoworkspacesilent, ${toString (x + 1)}"
               ]
             )
             10)
@@ -285,10 +300,10 @@ in
       bind = $mod, W, submap, cycle
 
       submap = cycle
-      binde = , Q, movefocus, l
-      binde = , W, movefocus, d
-      binde = , E, movefocus, u
-      binde = , R, movefocus, r
+      binde = , Q, hy3:movefocus, l
+      binde = , W, hy3:movefocus, d
+      binde = , E, hy3:movefocus, u
+      binde = , R, hy3:movefocus, r
       bind = , catchall, submap, reset
       submap = reset
     '';

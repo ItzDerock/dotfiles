@@ -477,6 +477,27 @@
         "type": "github"
       }
     },
+    "hy3": {
+      "inputs": {
+        "hyprland": [
+          "hyprland"
+        ]
+      },
+      "locked": {
+        "lastModified": 1738927658,
+        "narHash": "sha256-fkYjCOyZ9z3mjId/RrXH5FjML7ULFyCNv1EQXhv0Kgo=",
+        "owner": "outfoxxed",
+        "repo": "hy3",
+        "rev": "3b1ac202c11fe5a2ef7b404e0d132e94db4f6637",
+        "type": "github"
+      },
+      "original": {
+        "owner": "outfoxxed",
+        "ref": "hl0.47.0-1",
+        "repo": "hy3",
+        "type": "github"
+      }
+    },
     "hyprcursor": {
       "inputs": {
         "hyprlang": [
@@ -758,6 +779,26 @@
       "original": {
         "owner": "hyprwm",
         "repo": "hyprpicker",
+        "type": "github"
+      }
+    },
+    "hyprsplit": {
+      "inputs": {
+        "hyprland": [
+          "hyprland"
+        ]
+      },
+      "locked": {
+        "lastModified": 1738616954,
+        "narHash": "sha256-zxA+ad1meC19xwyIOcvwd2Ej4FytY3wC3LI6iTQ74bw=",
+        "owner": "shezdy",
+        "repo": "hyprsplit",
+        "rev": "ae21754c90f1eaa839cc20b4981f8c9556c866bc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shezdy",
+        "repo": "hyprsplit",
         "type": "github"
       }
     },
@@ -1167,9 +1208,11 @@
       "inputs": {
         "Hyprspace": "Hyprspace",
         "home-manager": "home-manager",
+        "hy3": "hy3",
         "hyprland": "hyprland",
         "hyprland-plugins": "hyprland-plugins",
         "hyprpicker": "hyprpicker",
+        "hyprsplit": "hyprsplit",
         "nixpkgs": "nixpkgs_3",
         "nixpkgs-master": "nixpkgs-master",
         "nixpkgs-unstable": "nixpkgs-unstable",

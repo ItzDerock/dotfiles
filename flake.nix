@@ -48,6 +48,16 @@
       inputs.hyprland.follows = "hyprland";
     };
 
+    hy3 = {
+      url = "github:outfoxxed/hy3?ref=hl0.47.0-1";
+      inputs.hyprland.follows = "hyprland";
+    };
+
+    hyprsplit =  {
+      url = "github:shezdy/hyprsplit";
+      inputs.hyprland.follows = "hyprland";
+    };
+
     # cursor theme
     rose-pine-hyprcursor.url = "github:ndom91/rose-pine-hyprcursor";
 
