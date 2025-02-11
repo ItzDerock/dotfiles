@@ -3,7 +3,7 @@ let
   cursorTheme = inputs.rose-pine-hyprcursor.packages.${pkgs.system}.default;
 in
 {
-  programs.bash.profileExtra = '' [ "$(tty)" = "/dev/tty1" ] && ! pgrep Hyprland >/dev/null && exec Hyprland &> /dev/null'';
+  # programs.bash.profileExtra = '' [ "$(tty)" = "/dev/tty1" ] && ! pgrep Hyprland >/dev/null && exec Hyprland &> /dev/null'';
 
   home.packages = with pkgs; [
     swww
@@ -127,7 +127,7 @@ in
       ];
 
       bindm = [
-        "$mod, mouse:272, hy3:movewindow"
+        "$mod, mouse:272, movewindow"
         "$mod, mouse:273, resizewindow"
       ];
 
@@ -168,9 +168,50 @@ in
           # Pin a window (shows on all wkspcs)
           "$mod_SHIFT, P, pin"
 
-          # Change the split mode (dwindle)
-          "$mod, J, togglesplit"
-          "$mod_SHIFT, J, swapsplit"
+          # Change the split mode (dwidnle,hy3)
+          "$mod, D, togglesplit"
+
+          # Move a window up/down/left/right, 
+          # only moving to neighboring group, without moving into subgroups
+          "$mod_SHIFT, h, hy3:movewindow, l,once"
+          "$mod_SHIFT, h, hy3:movewindow, l, once"
+          "$mod_SHIFT, j, hy3:movewindow, d, once"
+          "$mod_SHIFT, k, hy3:movewindow, u, once"
+          "$mod_SHIFT, l, hy3:movewindow, r, once"
+          "$mod_SHIFT, left, hy3:movewindow, l, once"
+          "$mod_SHIFT, down, hy3:movewindow, d, once"
+          "$mod_SHIFT, up, hy3:movewindow, u, once"
+          "$mod_SHIFT, right, hy3:movewindow, r, once"
+
+          # Only moves between visibile nodes, not hidden
+          "$mod_CONTROL_SHIFT, h, hy3:movewindow, l, once, visible"
+          "$mod_CONTROL_SHIFT, j, hy3:movewindow, d, once, visible"
+          "$mod_CONTROL_SHIFT, k, hy3:movewindow, u, once, visible"
+          "$mod_CONTROL_SHIFT, l, hy3:movewindow, r, once, visible"
+          "$mod_CONTROL_SHIFT, left, hy3:movewindow, l, once, visible"
+          "$mod_CONTROL_SHIFT, down, hy3:movewindow, d, once, visible"
+          "$mod_CONTROL_SHIFT, up, hy3:movewindow, u, once, visible"
+          "$mod_CONTROL_SHIFT, right, hy3:movewindow, r, once, visible"
+
+          # move focus
+          "$mod, h, hy3:movefocus, l"
+          "$mod, j, hy3:movefocus, d"
+          "$mod, k, hy3:movefocus, u"
+          "$mod, l, hy3:movefocus, r"
+          "$mod, left, hy3:movefocus, l"
+          "$mod, down, hy3:movefocus, d"
+          "$mod, up, hy3:movefocus, u"
+          "$mod, right, hy3:movefocus, r"
+
+          # Move focus on only visible, without warping mouse
+          "$mod_CONTROL, h, hy3:movefocus, l, visible, nowarp"
+          "$mod_CONTROL, j, hy3:movefocus, d, visible, nowarp"
+          "$mod_CONTROL, k, hy3:movefocus, u, visible, nowarp"
+          "$mod_CONTROL, l, hy3:movefocus, r, visible, nowarp"
+          "$mod_CONTROL, left, hy3:movefocus, l, visible, nowarp"
+          "$mod_CONTROL, down, hy3:movefocus, d, visible, nowarp"
+          "$mod_CONTROL, up, hy3:movefocus, u, visible, nowarp"
+          "$mod_CONTROL, right, hy3:movefocus, r, visible, nowarp"
 
           # run dialog
           "$mod, SPACE, exec, kickoff-dot-desktop | kickoff --from-stdin" # wofi -S drun -I
@@ -182,7 +223,6 @@ in
           "$mod, V, exec, cliphist list | wofi -dmenu | cliphist decode | wl-copy"
           "$mod_SHIFT, D, exec, cliphist list | wofi -dmenu | cliphist delete"
 
-          # "ALT, SPACE, overview:toggle"
           "$mod, TAB, hyprexpo:expo, toggle"
 
           # notification center
@@ -193,7 +233,7 @@ in
 
           # hy3
           # Make a split
-          "$mod, S, hy3:makegroup"
+          "$mod, S, hy3:makegroup, v"
         ]
         ++ (
           # workspaces
@@ -212,6 +252,7 @@ in
                 "$mod, ${ws}, split:workspace, ${toString (x + 1)}"
                 "$mod SHIFT, ${ws}, split:movetoworkspace, ${toString (x + 1)}"
                 "$mod ALT, ${ws}, split:movetoworkspacesilent, ${toString (x + 1)}"
+                "$mod $mod_CONTROL, ${ws}, hy3:focustab, index, ${toString (x + 1)}"
               ]
             )
             10)
