@@ -23,6 +23,7 @@
       ffmpeg-full
       nodejs_20
       libsecret
+      inshellisense
 
       direnv
       devenv
@@ -46,6 +47,23 @@
   programs.starship = {
     enable = true;
   };
+
+  # inshellisense
+  xdg.configFile."inshellisense/rc.toml".text = ''
+    [bindings.acceptSuggestion]
+    key = "tab"
+
+    [bindings.nextSuggestion]    
+    key = "j"
+    ctrl = true
+
+    [bindings.previousSuggestion]
+    key = "k"
+    ctrl = true
+
+    [bindings.dismissSuggestions]
+    key = "escape"
+  '';
 
   # devenv
   services.lorri.enable = true;

@@ -113,6 +113,17 @@
   virtualisation.waydroid.enable = true;
   powerManagement.enable = true;
 
+  # enable plasma6 de
+  services.xserver.enable = true;
+  services.displayManager.sddm.enable = lib.mkForce false;
+  services.desktopManager.plasma6.enable = true;
+  services.power-profiles-daemon.enable = lib.mkForce false; # tlp/autocpufreq already configured
+  environment.plasma6.excludePackages = with pkgs.kdePackages; [
+    plasma-browser-integration
+    konsole
+    oxygen
+  ];
+
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
