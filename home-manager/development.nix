@@ -1,8 +1,8 @@
 { pkgs, inputs, ... }: let
   bash_preexec = pkgs.fetchurl {
     url = "https://raw.githubusercontent.com/rcaloras/bash-preexec/refs/heads/master/bash-preexec.sh";
-    sha256 = "1zbh2r8rx2qg1lwv7mmnycxnp5hq51hyr6rszr0l99cj7d9gxyv2";
-    postFetch = "chmod +x '$out'";
+    sha256 = "NF3hp2fF+rEp4tOhuPpAD4lW2AS+xdd/agN9965AZa8=";
+    executable = true;
   };
 in {
   home.packages =
