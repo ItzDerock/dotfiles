@@ -17,12 +17,22 @@
       nixd
       (python3.withPackages(ps: with ps; [
         python-lsp-server
-	flake8
+      	flake8
       ]))
     ];
 
     hm-activation = true;
     backup = true;
+
+    extraConfig = ''
+      vim.opt.relativenumber = true
+    '';
+
+    chadrcConfig = ''
+      local M = {}
+      M.base46.transparency = true
+      return M
+    '';
   };
 
 }

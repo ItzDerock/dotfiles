@@ -234,6 +234,9 @@ in
           # hy3
           # Make a split
           "$mod, S, hy3:makegroup, v"
+
+          # toggle window swallowing
+          "$mod_CONTROL_SHIFT, s, toggleswallow"
         ]
         ++ (
           # workspaces

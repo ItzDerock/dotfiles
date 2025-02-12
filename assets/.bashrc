@@ -15,6 +15,11 @@ osc7_cwd() {
 
 PROMPT_COMMAND=${PROMPT_COMMAND:+$PROMPT_COMMAND; }osc7_cwd
 
+# Sets the terminal title to the command name
+function preexec {
+  echo -e "\e]0;foot - $1\e\\"
+}
+
 eval "$(direnv hook bash)"
 mkcd() { mkdir -p "$@" && cd "$@"; }
 

@@ -1,4 +1,10 @@
-{ pkgs, inputs, ... }: {
+{ pkgs, inputs, ... }: let
+  bash_preexec = pkgs.fetchurl {
+    url = "https://raw.githubusercontent.com/rcaloras/bash-preexec/refs/heads/master/bash-preexec.sh";
+    sha256 = "1zbh2r8rx2qg1lwv7mmnycxnp5hq51hyr6rszr0l99cj7d9gxyv2";
+    postFetch = "chmod +x '$out'";
+  };
+in {
   home.packages =
     let
       nixpkgs-master = (import inputs.nixpkgs-master {
@@ -33,9 +39,13 @@
     enable = true;
     shellAliases = {
       "☕" = "ssh terminal.shop";
+      "zed" = "zeditor -n";
     };
 
-    bashrcExtra = builtins.readFile ../assets/.bashrc;
+    bashrcExtra = (builtins.readFile ../assets/.bashrc) + ''
+      # bash-preexec
+      source ${bash_preexec}
+    '';
   };
 
   programs.zoxide = {
@@ -53,7 +63,7 @@
     [bindings.acceptSuggestion]
     key = "tab"
 
-    [bindings.nextSuggestion]    
+    [bindings.nextSuggestion]
     key = "j"
     ctrl = true
 
@@ -67,6 +77,4 @@
 
   # devenv
   services.lorri.enable = true;
-
 }
-
