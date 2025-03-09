@@ -7,9 +7,12 @@
   # You can change versions, add patches, set compilation flags, anything really.
   # https://nixos.wiki/wiki/Overlays
   modifications = final: prev: {
-    # example = prev.example.overrideAttrs (oldAttrs: rec {
-    # ...
-    # });
+    openssh = prev.openssh.overrideAttrs (old: {
+      # Disable "bad permission" checking in openssh
+      # Home-manager issue #322
+      patches = (old.patches or []) ++ [../assets/openssh/no-check-permission.patch];
+      doCheck = false;
+    });
   };
 
   # When applied, the unstable nixpkgs set (declared in the flake inputs) will
