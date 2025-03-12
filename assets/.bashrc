@@ -22,5 +22,3 @@ function preexec {
 
 eval "$(direnv hook bash)"
 mkcd() { mkdir -p "$@" && cd "$@"; }
-
-[ -f ~/.inshellisense/bash/init.sh ] && source ~/.inshellisense/bash/init.sh

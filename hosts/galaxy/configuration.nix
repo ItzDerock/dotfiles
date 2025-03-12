@@ -30,7 +30,15 @@
   networking.hostName = "derock-nix"; # Define your hostname.
 
   # Enable networking
-  networking.networkmanager.enable = true;
+  hardware.enableAllFirmware = true;
+  networking.networkmanager = {
+    enable = true;
+    wifi = {
+      powersave = false;
+      # backend = "iwd";
+    }; 
+  };
+
   boot.kernel.sysctl = {
     "net.ipv4.tcp_mtu_probing" = 1;
   };
