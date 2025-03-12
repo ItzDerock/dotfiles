@@ -65,44 +65,7 @@ in
       nvidiaSettings = true;
 
       # Optionally, you may need to select the appropriate driver version for your specific GPU.
-      package = config.boot.kernelPackages.nvidiaPackages.beta.overrideAttrs (old: rec {
-        patches = (old.patches or []) ++ [
-          (builtins.toFile "remove-date.patch" ''
-            --- a/kernel/nvidia-drm/nvidia-drm-drv.c
-            +++ b/kernel/nvidia-drm/nvidia-drm-drv.c
-            @@ -88,6 +88,7 @@
-             
-             #include <linux/pci.h>
-             #include <linux/workqueue.h>
-            +#include <linux/version.h>
-             
-             /*
-              * Commit fcd70cd36b9b ("drm: Split out drm_probe_helper.h")
-            @@ -1915,7 +1916,9 @@ static struct drm_driver nv_drm_driver = {
-                 .name                   = "nvidia-drm",
-             
-                 .desc                   = "NVIDIA DRM driver",
-            +#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 14, 0)
-                 .date                   = "20160202",
-            +#endif
-             
-             #if defined(NV_DRM_DRIVER_HAS_DEVICE_LIST)
-                 .device_list            = LIST_HEAD_INIT(nv_drm_driver.device_list),
-          '')
-        ];
-      });
-
-      # package = config.boot.kernelPackages.nvidiaPackages.beta.overrideAttrs ({
-      #   version,
-      #   postPatch ? "",
-      #   ...
-      # }: {
-      #   postPatch = ''
-      #     ls -lah
-      #     find . -type f -iname "*nvidia-drm*"
-      #     sed '1733d' $src/NVIDIA-Linux-x86_64-570.86.16/nvidia-drm/nvidia-drm-drv.c
-      #   '';
-      # });
+      package = config.boot.kernelPackages.nvidiaPackages.stable;
 
       prime = mkIf (!cfg.primary) {
         intelBusId = "PCI:0:2:0";

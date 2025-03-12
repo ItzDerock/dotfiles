@@ -1,4 +1,4 @@
-{ pkgs, config, ... }: {
+{ pkgs, config, outputs, ... }: {
   imports = [ 
     ./embedded-dev.nix
     ./lemurs.nix
@@ -18,6 +18,12 @@
     ./garbage.nix
     ./theme.nix
     ./network-shares.nix
+  ];
+
+  # Apply overlays
+  nixpkgs.overlays = [
+    outputs.overlays.additions
+    outputs.overlays.modifications
   ];
 
   # global configuration regardless of system

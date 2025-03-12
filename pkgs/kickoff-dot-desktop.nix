@@ -14,12 +14,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "j0ru";
     repo = pname;
-    rev = "02f619a167d45a569d2150af4f84e06b86b79764";
-    hash = "sha256-uIjRyC2wu/Jg5UamO9pYIcNgS0NUWwu/osAFrd80ZhU=";
+    rev = "ba3e8788c7120c95c4ee963abf3904eb0736cb24";
+    hash = "sha256-exMmqOkDKuyAEdda8gG/uF3+tnQzhJnOJK+sEtZbsZc=";
     # branch = "feat/dot-desktop-from-xdg";
   };
 
-  cargoHash = "sha256-rpOyZlB1FVKLdekCzltOM9h4qMeUoKxvBtvawuz+teg=";
+  cargoHash = "sha256-sLztMbfabVz1AXZ08waDrIWpG8CkdKe8hN99JOCJj6w=";
 
   libPath = lib.makeLibraryPath [
     wayland
