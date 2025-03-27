@@ -15,7 +15,7 @@ in {
       settings = {
         # CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
         CPU_DRIVER_OPMODE_ON_BAT="active"; # passive caps 400mhz
-        CPU_SCALING_GOVERNOR_ON_BAT="schedutil";
+        CPU_SCALING_GOVERNOR_ON_BAT="powersave";
         CPU_ENERGY_PERF_POLICY_ON_AC = "balance_performance";
         PLATFORM_PROFILE_ON_BAT = "balanced";
         PLATFORM_PROFILE_ON_AC = "performance";
