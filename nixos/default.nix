@@ -52,7 +52,7 @@
     wavemon # wifi
     ncdu # storage
     gparted # disks
-    nvtop # gpu
+    nvtopPackages.full # gpu
 
     appimage-run
 

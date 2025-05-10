@@ -116,7 +116,6 @@
     liquidctl
     lm_sensors
     btop
-    nvtop
   ];
 
   # corsair
@@ -149,9 +148,9 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.11"; # Did you read the comment?
 
-  services.xserver.enable = true;
-  services.xserver.displayManager.sddm.enable = true;
-  services.xserver.desktopManager.plasma6.enable = true;
+  # services.xserver.enable = true;
+  # services.xserver.displayManager.sddm.enable = true;
+  # services.xserver.desktopManager.plasma6.enable = true;
   programs.coolercontrol.enable = true;
 
   boot.extraModulePackages = with config.boot.kernelPackages; [ nct6687d ];

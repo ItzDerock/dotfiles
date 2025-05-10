@@ -66,7 +66,7 @@ in
       inputs.hyprland-plugins.packages.${pkgs.system}.hyprexpo
 
       # i3 stuff like sub-workspaces
-      inputs.hy3.packages.${pkgs.system}.hy3
+      # inputs.hy3.packages.${pkgs.system}.hy3
 
       # workspace overview
       # inputs.Hyprspace.packages.${pkgs.system}.Hyprspace 
@@ -74,6 +74,10 @@ in
 
     # package = null; # use system hyprland
     settings = {
+      plugin = [
+        "${inputs.hy3.packages.${pkgs.system}.hy3}/lib/libhy3.so"
+      ];
+
       "$mod" = "SUPER";
 
       env = [
@@ -173,7 +177,7 @@ in
 
           # Move a window up/down/left/right, 
           # only moving to neighboring group, without moving into subgroups
-          "$mod_SHIFT, h, hy3:movewindow, l,once"
+          "$mod_SHIFT, h, hy3:movewindow, l, once"
           "$mod_SHIFT, h, hy3:movewindow, l, once"
           "$mod_SHIFT, j, hy3:movewindow, d, once"
           "$mod_SHIFT, k, hy3:movewindow, u, once"
@@ -310,6 +314,14 @@ in
       dwindle = {
         smart_split = true;
       };
+
+      experimental = {
+        xx_color_management_v4 = true;
+      };
+
+      debug = {
+        disable_logs = false;
+      };
     };
 
     extraConfig = ''
@@ -338,7 +350,6 @@ in
       binde = , L, submap, reset
       bind = , catchall, submap, reset
       submap = reset
-
 
       # QWER through windows (similar to HJKL, but one handed)
       bind = $mod, W, submap, cycle

@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     # branch = "feat/dot-desktop-from-xdg";
   };
 
-  cargoHash = "sha256-sLztMbfabVz1AXZ08waDrIWpG8CkdKe8hN99JOCJj6w=";
+  cargoHash = "sha256-4x9kEBnYPhhYej0mNmV7jibw6sH8SxVau9tIkIVTen8=";
 
   libPath = lib.makeLibraryPath [
     wayland

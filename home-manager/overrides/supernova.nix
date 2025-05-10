@@ -15,9 +15,12 @@ in
       "DP-3,3840x2160@60,3440x0,1" # 4k 
     ];
 
-    # disable VRR, should fix flickering
     env = [
+      # disable VRR, should fix flickering
       "__GL_VRR_ALLOWED,0"
+
+      # HDR
+      "DXVK_HDR,1" 
     ];
   };
 }
