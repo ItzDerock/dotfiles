@@ -11,6 +11,7 @@
     [
       # Include the results of the hardware scan.
       inputs.home-manager.nixosModules.home-manager
+      inputs.windscribe-bin.nixosModules.default
       ../../nixos
       ./hardware-configuration.nix
     ];
@@ -38,6 +39,8 @@
       # backend = "iwd";
     }; 
   };
+
+  services.windscribe.enable = true;
 
   boot.kernel.sysctl = {
     "net.ipv4.tcp_mtu_probing" = 1;
@@ -70,7 +73,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.derock = {
     isNormalUser = true; description = "Derock";
-    extraGroups = [ "networkmanager" "wheel" "dialout" "storage" "plugdev" ];
+    extraGroups = [ "networkmanager" "wheel" "dialout" "storage" "plugdev" "windscribe" ];
     packages = with pkgs; [ ];
   };
 
