@@ -1132,7 +1132,8 @@
         "nvchad4nix": "nvchad4nix",
         "rose-pine-hyprcursor": "rose-pine-hyprcursor",
         "split-monitor-workspaces": "split-monitor-workspaces",
-        "stylix": "stylix"
+        "stylix": "stylix",
+        "windscribe-bin": "windscribe-bin"
       }
     },
     "rose-pine-hyprcursor": {
@@ -1436,6 +1437,23 @@
         "owner": "numtide",
         "repo": "flake-utils",
         "type": "github"
+      }
+    },
+    "windscribe-bin": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1747015981,
+        "narHash": "sha256-KQEbwehTTW8MH6eWw7EAEF10qfPY2Fo3Sk82lMw3Gp0=",
+        "path": "/home/derock/Documents/Code/nixos-windscribe-bin",
+        "type": "path"
+      },
+      "original": {
+        "id": "windscribe-nix",
+        "type": "indirect"
       }
     },
     "xdph": {
