@@ -75,8 +75,7 @@
     stylix.url = "github:danth/stylix";
 
     windscribe-bin = {
-      # url = "github:ItzDerock/windscribe-nix";
-      url = "flake:windscribe-nix";
+      url = "github:ItzDerock/windscribe-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

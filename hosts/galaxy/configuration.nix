@@ -125,32 +125,36 @@
   powerManagement.enable = true;
 
   # enable plasma6 de
-  services.xserver.enable = true;
+  services.xserver.enable = false;
   services.displayManager.sddm.enable = lib.mkForce false;
-  services.desktopManager.plasma6.enable = true;
+  services.desktopManager.plasma6.enable = false;
   services.power-profiles-daemon.enable = lib.mkForce false; # tlp/autocpufreq already configured
   environment.plasma6.excludePackages = with pkgs.kdePackages; [
     plasma-browser-integration
     konsole
   ];
 
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "23.11"; # Did you read the comment?
-
   boot.kernelPackages = pkgs.linuxPackagesFor (pkgs.linux_zen);
-  # boot.kernelPackages = pkgs.linuxPackagesFor (pkgs.linux_lqx);
-  boot.extraModulePackages =
-    let
-      sgbextras = config.boot.kernelPackages.callPackage ../../pkgs/samsung-galaxybook-extras.nix { };
-    in
-    [ sgbextras ];
-  boot.kernelModules = [ "samsung-galaxybook" "v4l2loopback" ];
+
+  # boot.extraModulePackages =
+  #   let
+  #     sgbextras = config.boot.kernelPackages.callPackage ../../pkgs/samsung-galaxybook-extras.nix { };
+  #   in
+  #   [ sgbextras ];
+
+  boot.kernelModules = [ 
+    # "samsung-galaxybook" 
+    "v4l2loopback" 
+  ];
+
   boot.kernelPatches = [
+    {
+      name = "Samsung Galaxybook";
+      patch = null;
+      extraConfig = ''
+        SAMSUNG_GALAXYBOOK y
+      '';
+    }
 	  # {
 	  #   name = "intel-ipu6-fix";
 	  #   patch = builtins.fetchurl {
@@ -159,49 +163,6 @@
 	  #   };
 	  # } 
   ];
-
-  # boot.kernelPackages = let
-  #   linux_pdx86_pkg = { buildLinux, ... } @ args:
-  #     buildLinux (args // rec {
-  #       src = builtins.fetchGit {
-  #         url = "git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git";
-  #         ref = "for-next";
-  #         shallow = true;
-  #         rev = "f976346114088a0de11521a84ce743f1360ec1ca";
-  #       };
-  #
-  #       kernelPatches = [
-  #         {
-  #           name = "acpi-fan-only-fst";
-  #           patch = builtins.fetchurl {
-  #             url = "https://lore.kernel.org/linux-acpi/20250125100711.70977-1-josh@joshuagrisham.com/raw";
-  #             sha256 = "0s6si2rz30vv1gdd5h6y4irl9r1xnbd1988nv4mmqd3mvray66k0";
-  #           };
-  #         }
-  #       ];
-  #
-  #       extraConfig = ''
-  #         SAMSUNG_GALAXYBOOK m
-  #         X86_PLATFORM_DEVICES y
-  #         ACPI y
-  #         ACPI_BATTERY m
-  #         INPUT y
-  #         LEDS_CLASS m
-  #         SERIO_I8042 m
-  #       '';
-  #
-  #       version = "6.14.0-rc1";
-  #       modDirVersion = "6.14.0-rc1";
-  #       extraMeta.branch = "6.14";
-  #     } // (args.argsOverride or {}));
-  #   linux_pdx86 = pkgs.callPackage linux_pdx86_pkg{};
-  # in
-  #   pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor linux_pdx86);
-  
-  
-  # Temporary fix - linux-surface/linux-surface #1516
-  # boot.blacklistedKernelModules = [ "intel-ipu6" "intel-ipu6-isys" ];
-
 
   boot.kernel.sysctl."kernel.sysrq" = 438;
 
@@ -226,4 +187,7 @@
     efi.canTouchEfiVariables = true;
     efi.efiSysMountPoint = "/boot";
   };
+
+
+  system.stateVersion = "23.11"; # dont change me
 }
