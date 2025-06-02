@@ -134,7 +134,10 @@
     konsole
   ];
 
-  boot.kernelPackages = pkgs.linuxPackagesFor (pkgs.linux_zen);
+  # TODO: switch back to linux_zen once kernel ver 6.15 is available
+  # 6.15 merges the required Samsung Galaxybook driver
+  # 6.14 doesn't have, and the out-of-tree module does not support 6.14 either.
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # boot.extraModulePackages =
   #   let
