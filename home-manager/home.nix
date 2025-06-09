@@ -79,7 +79,6 @@ in
       # browser (i am indecisive)
       google-chrome
       firefox
-      vivaldi
       vivaldi-ffmpeg-codecs
       brave
       microsoft-edge
