@@ -5,7 +5,7 @@
 #       name = "quartus-prime-lite-env";
 #       paths = [ pkgs.quartus-prime-lite quartusPrime ];
 #     };
-#   in 
+#   in
 {
   imports =
     [
@@ -37,7 +37,7 @@
     wifi = {
       powersave = false;
       # backend = "iwd";
-    }; 
+    };
   };
 
   services.windscribe.enable = true;
@@ -124,47 +124,13 @@
   virtualisation.waydroid.enable = true;
   powerManagement.enable = true;
 
-  # enable plasma6 de
-  services.xserver.enable = false;
-  services.displayManager.sddm.enable = lib.mkForce false;
-  services.desktopManager.plasma6.enable = false;
-  services.power-profiles-daemon.enable = lib.mkForce false; # tlp/autocpufreq already configured
-  environment.plasma6.excludePackages = with pkgs.kdePackages; [
-    plasma-browser-integration
-    konsole
-  ];
-
   # TODO: switch back to linux_zen once kernel ver 6.15 is available
   # 6.15 merges the required Samsung Galaxybook driver
   # 6.14 doesn't have, and the out-of-tree module does not support 6.14 either.
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxSamsung;
 
-  # boot.extraModulePackages =
-  #   let
-  #     sgbextras = config.boot.kernelPackages.callPackage ../../pkgs/samsung-galaxybook-extras.nix { };
-  #   in
-  #   [ sgbextras ];
-
-  boot.kernelModules = [ 
-    # "samsung-galaxybook" 
-    "v4l2loopback" 
-  ];
-
-  boot.kernelPatches = [
-    {
-      name = "Samsung Galaxybook";
-      patch = null;
-      extraConfig = ''
-        SAMSUNG_GALAXYBOOK y
-      '';
-    }
-	  # {
-	  #   name = "intel-ipu6-fix";
-	  #   patch = builtins.fetchurl {
-	  #     url = "https://lore.kernel.org/stable/20241209175416.59433-1-stanislaw.gruszka@linux.intel.com/raw";
-	  #     sha256 = "sha256:0h8gnmr029mknp7fv001hbq6cjdmsrmk18khqry4iv7xaw7nhjcy";
-	  #   };
-	  # } 
+  boot.kernelModules = [
+    "v4l2loopback"
   ];
 
   boot.kernel.sysctl."kernel.sysrq" = 438;
@@ -176,7 +142,7 @@
   # more intel stuff
   hardware.graphics = {
     extraPackages = with pkgs; [
-      mesa.drivers
+      mesa
       intel-ocl
     ];
   };

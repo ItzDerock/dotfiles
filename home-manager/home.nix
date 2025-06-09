@@ -1,5 +1,3 @@
-# This is your home-manager configuration file
-# Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
 { inputs
 , outputs
 , lib
@@ -32,6 +30,9 @@ in
     ./theme.nix
     ./development.nix
     ./hwaccel.nix
+    ./quickshell.nix
+
+    inputs.opnix.homeManagerModules.default
   ] ++ (if host == "supernova" then [ ./overrides/supernova.nix ] else [ ])
   ++ (if host == "galaxy" then [ ./overrides/galaxy.nix ] else [ ]);
 
@@ -74,6 +75,11 @@ in
         system = "x86_64-linux";
         config.allowUnfree = true;
       });
+
+      nixpkgs-msedge = (import inputs.nixpkgs-msedge {
+        system = "x86_64-linux";
+        config.allowUnfree = true;
+      });
     in
     with pkgs; [
       # browser (i am indecisive)
@@ -81,19 +87,9 @@ in
       firefox
       vivaldi-ffmpeg-codecs
       brave
-      microsoft-edge
-      (pkgs.symlinkJoin {
-        name = "opera";
-        paths = [
-	  (pkgs.writeShellScriptBin "opera" ''
-	    export LD_LIBRARY_PATH=${pkgs.libGL}/lib
-            exec ${pkgs.opera}/bin/opera
-	  '')
-          (opera.override { proprietaryCodecs = true; })
-	];
-      })
+      nixpkgs-msedge.microsoft-edge
 
-      # file browser 
+      # file browser
       xfce.thunar
       xfce.thunar-volman
       xfce.thunar-archive-plugin # unzip
@@ -113,7 +109,7 @@ in
       leela
       handbrake
 
-      # social media 
+      # social media
       customVesktop
 
       # gaymin
@@ -129,7 +125,7 @@ in
       audacity
       yt-dlp
       obs-studio
-      (blender.override { cudaSupport = true; })
+      # (blender.override { cudaSupport = true; })
 
       quick-record-script
       zoom-us
@@ -138,7 +134,7 @@ in
       # slicer stuff
       prusa-slicer
       (perl.withPackages(ps: [ps.FileWhich]))
-      gpx 
+      gpx
     ];
 
   # my cfg stuff

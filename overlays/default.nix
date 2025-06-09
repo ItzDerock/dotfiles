@@ -13,6 +13,21 @@
       patches = (old.patches or []) ++ [../assets/openssh/no-check-permission.patch];
       doCheck = false;
     });
+
+    linuxSamsung = prev.linuxPackagesFor (prev.linuxPackages_latest.kernel.override {
+      structuredExtraConfig = with prev.lib.kernel; {
+        SAMSUNG_GALAXYBOOK = module;
+
+        # following are dependencies of SAMSUNG_GALAXYBOOK
+        # ACPI = yes;
+        # ACPI_BATTERY = yes;
+        # INPUT = yes;
+        # LEDS_CLASS = yes;
+        # SERIO_I8042 = yes;
+      };
+
+      ignoreConfigErrors = true;
+    });
   };
 
   # When applied, the unstable nixpkgs set (declared in the flake inputs) will

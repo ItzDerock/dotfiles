@@ -1,4 +1,4 @@
-# printing 
+# printing
 
 { lib, pkgs, config, ... }:
 with lib;
@@ -12,8 +12,8 @@ in {
 
   config = mkIf cfg.enable {
     virtualisation.docker.enable = true;
-    users.extraGroups.docker.members = [ "derock" ]; 
+    users.extraGroups.docker.members = [ "derock" ];
     virtualisation.docker.liveRestore = false;
-    virtualisation.docker.enableNvidia = cfg.nvidia;
+    hardware.nvidia-container-toolkit.enable = cfg.nvidia;
   };
 }

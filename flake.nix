@@ -19,9 +19,9 @@
 
   inputs = {
     # Nixpkgs
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable"; # we live on the edge B)
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable"; # for old modules i wrote that need this
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-master.url = "github:nixos/nixpkgs/master";
+    nixpkgs-msedge.url = "github:Daholli/nixpkgs/reinit-msedge";
 
     # Home manager
     home-manager = {
@@ -58,6 +58,11 @@
       inputs.hyprland.follows = "hyprland";
     };
 
+    quickshell = {
+      url = "git+https://git.outfoxxed.me/quickshell/quickshell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # cursor theme
     rose-pine-hyprcursor.url = "github:ndom91/rose-pine-hyprcursor";
 
@@ -76,6 +81,12 @@
 
     windscribe-bin = {
       url = "github:ItzDerock/windscribe-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # Secrets w/ 1password
+    opnix = {
+      url = "github:brizzbuzz/opnix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -125,6 +136,7 @@
           modules = [
             ./hosts/galaxy/configuration.nix
             inputs.stylix.nixosModules.stylix
+            inputs.opnix.nixosModules.default
           ];
         };
 
@@ -133,6 +145,7 @@
           modules = [
             ./hosts/supernova/configuration.nix
             inputs.stylix.nixosModules.stylix
+            inputs.opnix.nixosModules.default
           ];
         };
 
