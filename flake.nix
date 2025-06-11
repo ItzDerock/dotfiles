@@ -18,6 +18,8 @@
   };
 
   inputs = {
+    self.submodules = true;
+
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-master.url = "github:nixos/nixpkgs/master";
@@ -60,6 +62,11 @@
 
     quickshell = {
       url = "git+https://git.outfoxxed.me/quickshell/quickshell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    caelestia-scripts = {
+      url = "github:ItzDerock/caelestia-scripts";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

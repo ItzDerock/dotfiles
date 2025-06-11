@@ -32,6 +32,9 @@ in {
 
       direnv
       devenv
+
+      # terminals
+      fish
     ];
 
   programs.bash = {

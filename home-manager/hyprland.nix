@@ -219,6 +219,7 @@ in
 
           # run dialog
           "$mod, SPACE, exec, kickoff-dot-desktop | kickoff --from-stdin" # wofi -S drun -I
+          "$mod, l, global, caelestia:launcher"
           "$mod_SHIFT, SPACE, exec, wofi -S drun -I"
           "$mod, R, exec, kickoff" # wofi -S run
           "$mod_ALT, SPACE, exec, 1password --quick-access"

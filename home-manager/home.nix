@@ -121,6 +121,9 @@ in
       bottles
       lutris
 
+      # vpn
+      v2raya
+
       unzip
       audacity
       yt-dlp

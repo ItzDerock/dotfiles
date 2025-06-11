@@ -9,9 +9,10 @@ in {
 
   config = mkIf cfg.enable { 
     powerManagement.enable = true;
-    services.thermald.enable = true; # borken
+    services.thermald.enable = true; 
+    services.power-profiles-daemon.enable = true;
     services.tlp = {
-      enable = true;
+      enable = false;
       settings = {
         # CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
         CPU_DRIVER_OPMODE_ON_BAT="active"; # passive caps 400mhz
