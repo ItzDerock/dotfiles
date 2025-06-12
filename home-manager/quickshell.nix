@@ -33,6 +33,9 @@
     };
   };
 
+  home.file."Pictures/Wallpapers".source =
+    config.lib.file.mkOutOfStoreSymlink ../assets/wallpapers;
+
   systemd.user.services.quickshell = {
     Unit = {
       Description = "Quickshell UI";

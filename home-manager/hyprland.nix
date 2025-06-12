@@ -44,7 +44,7 @@ in
   # footerm
   home.file."${config.xdg.configHome}/foot/foot.ini" = {
     text = ''
-      font=JetBrainsMono Nerd Font:size=18
+      font=JetBrainsMono Nerd Font:size=16
 
       [colors]
       alpha=0.8
@@ -81,14 +81,12 @@ in
       "$mod" = "SUPER";
 
       env = [
-        "XCURSOR_SIZE,34"
-        "XCURSOR_THEME,rose-pine-cursor"
         "GDK_SCALE,1"
-        "QT_SCALE_FACTOR,1.2"
+        "QT_SCALE_FACTOR,1"
         "QT_SCREEN_SCALE_FACTORS,1;1"
         "BROWSER,microsoft-edge"
-        "SUDO_EDITOR,/usr/bin/nvim"
-        "EDITOR,/usr/bin/nvim"
+        "SUDO_EDITOR,${pkgs.neovim}"
+        "EDITOR,${pkgs.neovim}"
         "WLR_NO_HARDWARE_CURSORS,1"
 
         # enable wayland for stuff
@@ -103,7 +101,9 @@ in
 
         # cursor
         "HYPRCURSOR_THEME,rose-pine-hyprcursor"
-        "HYPRCURSOR_SIZE,34"
+        "HYPRCURSOR_SIZE,18"
+        "XCURSOR_SIZE,18"
+        "XCURSOR_THEME,rose-pine-cursor"
       ];
 
       general = {
@@ -119,12 +119,11 @@ in
       ];
 
       "exec-once" = [
-        "waybar"
-        "swww init"
+        # "waybar"
+        # "swww init"
 
         # "wl-paste -p --watch wl-copy -pc" # disable middle mouse paste
         "playerctld" # music daemon
-        "swaync" # notifs
         "wl-paste --watch cliphist store" # clipboard
 
         "1password --silent" # 1p daemon
@@ -149,13 +148,25 @@ in
 
           "$mod, period, exec, wofi-emoji" # emoji picker
 
+          # session management
+          "Ctrl+Alt, Delete, global, caelestia:session"
+
           # screenshot
-          "$mod_SHIFT, S, exec, grimblast --freeze copy area"
-          ",Print,exec, grimblast --freeze copy screen && notify-send Screen copied"
-          "$mod_SHIFT,Print,exec, grimblast --freeze save area - | com.github.phase1geo.annotator -i"
+          # "$mod_SHIFT, S, exec, grimblast --freeze copy area"
+          # ",Print,exec, grimblast --freeze copy screen && notify-send Screen copied"
+          # "$mod_SHIFT,Print,exec, grimblast --freeze save area - | com.github.phase1geo.annotator -i"
+          ", Print, exec, caelestia screenshot"  # Full screen capture > clipboard
+          "$mod_SHIFT, S, exec, caelestia screenshot region freeze"  # Capture region (freeze)
+          "$mod_Shift_Alt, S, exec, caelestia screenshot region"  # Capture region
+          "$mod_SHIFT, Print, exec, caelestia record -s"  # Record screen with sound
+          "$mod_Alt, Print, exec, caelestia record"  # Record screen
+          "SHIFT, Print, exec, caelestia record -r"  # Record region
+
+          # Lock
+          "$mod, L, exec, loginctl lock-session"
 
           # screen record
-          "SHIFT, Print, exec, quick-record &> ~/.cache/quick-record.log"
+          # "SHIFT, Print, exec, quick-record &> ~/.cache/quick-record.log"
 
           # pick color
           "$mod_SHIFT, C, exec, hyprpicker -f hex -a"
@@ -218,8 +229,8 @@ in
           "$mod_CONTROL, right, hy3:movefocus, r, visible, nowarp"
 
           # run dialog
-          "$mod, SPACE, exec, kickoff-dot-desktop | kickoff --from-stdin" # wofi -S drun -I
-          "$mod, l, global, caelestia:launcher"
+          # "$mod, SPACE, exec, kickoff-dot-desktop | kickoff --from-stdin" # wofi -S drun -I
+          "$mod, SPACE, global, caelestia:launcher"
           "$mod_SHIFT, SPACE, exec, wofi -S drun -I"
           "$mod, R, exec, kickoff" # wofi -S run
           "$mod_ALT, SPACE, exec, 1password --quick-access"
@@ -231,7 +242,7 @@ in
           "$mod, TAB, hyprexpo:expo, toggle"
 
           # notification center
-          "$mod, N, exec, swaync-client -t"
+          # "$mod, N, exec, swaync-client -t"
 
           # Pulls all windows from unplugged monitors into current wksp (hyprsplit)
           "$mod, G, split:grabroguewindows"
@@ -273,8 +284,10 @@ in
         ",XF86AudioLowerVolume, exec, pamixer -d 5"
 
         # Brightness
-        ",XF86MonBrightnessUp, exec, brightnessctl set 5%+ &> ~/.cache/brightness.log"
-        ",XF86MonBrightnessDown, exec, brightnessctl set 5%- &> ~/.cache/brightness.log"
+        # ",XF86MonBrightnessUp, exec, brightnessctl set 5%+ &> ~/.cache/brightness.log"
+        # ",XF86MonBrightnessDown, exec, brightnessctl set 5%- &> ~/.cache/brightness.log"
+        ",XF86MonBrightnessUp, global, caelestia:brightnessUp"
+        ",XF86MonBrightnessDown, global, caelestia:brightnessDown"
 
         # Media controls
         ",XF86AudioPlay, exec, playerctl play-pause"
