@@ -11,9 +11,13 @@ in {
   };
 
   config = mkIf cfg.enable {
-    virtualisation.docker.enable = true;
     users.extraGroups.docker.members = [ "derock" ];
-    virtualisation.docker.liveRestore = false;
+    virtualisation.docker = {
+      enable = true;
+      liveRestore = false;
+      enableOnBoot = false; # dont wait for boot
+    };
+    systemd.sockets.docker.enable = true; # on demand
     hardware.nvidia-container-toolkit.enable = cfg.nvidia;
   };
 }

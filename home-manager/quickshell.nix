@@ -23,12 +23,14 @@
     material-design-icons # for material-symbols
     ibm-plex
     jetbrains-mono
+
+    gtk3 # for gtk-launch
   ];
 
   xdg.configFile = {
     quickshell = {
-      # source = config.lib.file.mkOutOfStoreSymlink ../assets/quickshell;
-      source = ../assets/quickshell;
+      source = config.lib.file.mkOutOfStoreSymlink ../assets/quickshell;
+      # source = ../assets/quickshell;
       recursive = true;
     };
   };
@@ -45,7 +47,7 @@
       WantedBy = [ "graphical-session.target" ];
     };
     Service = {
-      ExecStart = "%h/.config/quickshell/run.fish";
+      ExecStart = "${pkgs.bash}/bin/bash -c %h/.config/quickshell/run.sh";
       Restart = "on-failure";
       Slice = "app-graphical.slice";
     };

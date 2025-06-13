@@ -3,7 +3,9 @@ let
   cursorTheme = inputs.rose-pine-hyprcursor.packages.${pkgs.system}.default;
 in
 {
-  # programs.bash.profileExtra = '' [ "$(tty)" = "/dev/tty1" ] && ! pgrep Hyprland >/dev/null && exec Hyprland &> /dev/null'';
+  programs.bash.profileExtra = ''
+    [ "$(tty)" = "/dev/tty1" ] && ! pgrep Hyprland >/dev/null && exec Hyprland &> /dev/null
+  '';
 
   home.packages = with pkgs; [
     swww
@@ -34,6 +36,32 @@ in
     # display window
     nwg-displays
   ];
+
+  home.sessionVariables = {
+    GDK_SCALE = "1";
+    QT_SCALE_FACTOR = "1";
+    QT_SCREEN_SCALE_FACTORS = "1;1";
+    BROWSER = "microsoft-edge";
+    SUDO_EDITOR = "${pkgs.neovim}";
+    EDITOR = "${pkgs.neovim}";
+    WLR_NO_HARDWARE_CURSORS = "1";
+
+    # enable wayland for stuff
+    NIXOS_OZONE_WL = "1";
+    QT_QPA_PLATFORM = "wayland;xcb";
+    GDK_BACKEND = "wayland";
+    SDL_VIDEODRIVER = "wayland";
+    CLUTTER_BACKEND = "wayland";
+
+    # Disable QT window decoration
+    QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
+
+    # cursor
+    HYPRCURSOR_THEME = "rose-pine-hyprcursor";
+    HYPRCURSOR_SIZE = "18";
+    XCURSOR_SIZE = "18";
+    XCURSOR_THEME = "rose-pine-cursor";
+  };
 
   # programs.hyprlock.enable = true;
 
@@ -69,7 +97,7 @@ in
       # inputs.hy3.packages.${pkgs.system}.hy3
 
       # workspace overview
-      # inputs.Hyprspace.packages.${pkgs.system}.Hyprspace 
+      # inputs.Hyprspace.packages.${pkgs.system}.Hyprspace
     ];
 
     # package = null; # use system hyprland
@@ -79,32 +107,6 @@ in
       ];
 
       "$mod" = "SUPER";
-
-      env = [
-        "GDK_SCALE,1"
-        "QT_SCALE_FACTOR,1"
-        "QT_SCREEN_SCALE_FACTORS,1;1"
-        "BROWSER,microsoft-edge"
-        "SUDO_EDITOR,${pkgs.neovim}"
-        "EDITOR,${pkgs.neovim}"
-        "WLR_NO_HARDWARE_CURSORS,1"
-
-        # enable wayland for stuff
-        "NIXOS_OZONE_WL,1"
-        "QT_QPA_PLATFORM,wayland;xcb"
-        "GDK_BACKEND,wayland"
-        "SDL_VIDEODRIVER,wayland"
-        "CLUTTER_BACKEND,wayland"
-
-        # Disable QT window decoration
-        "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
-
-        # cursor
-        "HYPRCURSOR_THEME,rose-pine-hyprcursor"
-        "HYPRCURSOR_SIZE,18"
-        "XCURSOR_SIZE,18"
-        "XCURSOR_THEME,rose-pine-cursor"
-      ];
 
       general = {
        	border_size = 0;
@@ -186,7 +188,7 @@ in
           # Change the split mode (dwidnle,hy3)
           "$mod, D, togglesplit"
 
-          # Move a window up/down/left/right, 
+          # Move a window up/down/left/right,
           # only moving to neighboring group, without moving into subgroups
           "$mod_SHIFT, h, hy3:movewindow, l, once"
           "$mod_SHIFT, h, hy3:movewindow, l, once"
@@ -353,7 +355,7 @@ in
       # dwindle stuff
       bind = $mod, A, submap, dwindle
 
-      submap = dwindle 
+      submap = dwindle
       binde = , H, layoutmsg, preselect l
       binde = , H, submap, reset
       binde = , J, layoutmsg, preselect d

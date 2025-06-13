@@ -128,4 +128,7 @@
   nix.extraOptions = ''
     builders-use-substitutes = true
   '';
+
+  # dont wait for networkmanager on boot
+  systemd.services.NetworkManager-wait-online.enable = false;
 }
