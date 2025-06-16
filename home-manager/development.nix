@@ -22,7 +22,6 @@ in {
       # code editors
       vscode
       nixpkgs-master.zed-editor.fhs
-      jetbrains.idea-ultimate
 
       # cli tools
       imagemagick

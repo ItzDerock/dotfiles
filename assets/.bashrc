@@ -20,5 +20,10 @@ function preexec {
   echo -ne "\e]0;foot - $1\e\\"
 }
 
+# direnv
 eval "$(direnv hook bash)"
+
+# util functions
 mkcd() { mkdir -p "$@" && cd "$@"; }
+install() { nix profile install "nixpkgs#""$@" }
+shell() { nix shell "nixpkgs#""$@" }
