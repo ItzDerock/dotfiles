@@ -338,6 +338,12 @@ in
       debug = {
         disable_logs = false;
       };
+
+      xwayland = {
+        # X doesnt support fractional scaling
+        # so force back to 0 scaling else blurry text
+        force_zero_scaling = true;
+      };
     };
 
     extraConfig = ''

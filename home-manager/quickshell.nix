@@ -25,6 +25,7 @@
     jetbrains-mono
 
     gtk3 # for gtk-launch
+    ddcutil
   ];
 
   xdg.configFile = {
