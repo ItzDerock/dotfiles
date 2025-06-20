@@ -129,11 +129,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1749707496,
-        "narHash": "sha256-j8+/RLZg691nZ3vYlzRp+UCHP3/Z2EYCze/FeTAO2HU=",
+        "lastModified": 1750106857,
+        "narHash": "sha256-KfP5ejCGFX6ydQscwpoQROSurev2q+n2ZcDkRrXl2tw=",
         "owner": "ItzDerock",
         "repo": "caelestia-scripts",
-        "rev": "a3fdf3fab1c4069c5ccb55af88b5a39e8e6e04a3",
+        "rev": "757e69c7789a2d34dccb8d0287af6facbac7001c",
         "type": "github"
       },
       "original": {

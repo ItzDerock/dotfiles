@@ -25,5 +25,5 @@ eval "$(direnv hook bash)"
 
 # util functions
 mkcd() { mkdir -p "$@" && cd "$@"; }
-install() { nix profile install "nixpkgs#""$@" }
-shell() { nix shell "nixpkgs#""$@" }
+#install() { nix profile install "nixpkgs#""$@" }
+#shell() { nix shell "nixpkgs#""$@" }
