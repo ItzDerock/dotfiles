@@ -23,7 +23,6 @@
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-master.url = "github:nixos/nixpkgs/master";
-    nixpkgs-msedge.url = "github:Daholli/nixpkgs/reinit-msedge";
 
     # Home manager
     home-manager = {
@@ -94,6 +93,12 @@
     # Secrets w/ 1password
     opnix = {
       url = "github:brizzbuzz/opnix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # Browser
+    zen-browser = {
+      url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

@@ -17,7 +17,7 @@ in {
     environment.etc = {
       "1password/custom_allowed_browsers" = {
         text = ''
-          floorp
+          zen
           brave
         '';
         mode = "0755";

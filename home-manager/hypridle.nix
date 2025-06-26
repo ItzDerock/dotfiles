@@ -32,9 +32,6 @@
     };
   };
 
-  # prevent stylix from overriding background
-  stylix.targets.hyprlock.enable = false;
-
   programs.hyprlock = {
     enable = true;
     settings = {

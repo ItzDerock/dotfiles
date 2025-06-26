@@ -131,4 +131,12 @@
 
   # dont wait for networkmanager on boot
   systemd.services.NetworkManager-wait-online.enable = false;
+  
+  # 3rd party nix cli
+  programs.nh = {
+    enable = true;
+    clean.enable = true;
+    clean.extraArgs = "--keep-since 30d --keep 3";
+    flake = "/home/derock/NixOS/";
+  };
 }

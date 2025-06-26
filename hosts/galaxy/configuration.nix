@@ -155,6 +155,14 @@
     grub.efiSupport = true;
     efi.canTouchEfiVariables = true;
     efi.efiSysMountPoint = "/boot";
+
+    # dsdt patches
+    grub.extraFiles = {
+      "samsung_acpi_patch.aml" = "${../../assets/dsdt/960XFH.aml}";
+    };
+    grub.extraConfig = ''
+      acpi /samsung_acpi_patch.aml
+    '';
   };
 
 

@@ -72,12 +72,7 @@ in
   home.packages =
     let
       nixpkgs-master = (import inputs.nixpkgs-master {
-        system = "x86_64-linux";
-        config.allowUnfree = true;
-      });
-
-      nixpkgs-msedge = (import inputs.nixpkgs-msedge {
-        system = "x86_64-linux";
+        system = pkgs.system;
         config.allowUnfree = true;
       });
     in
@@ -86,8 +81,8 @@ in
       google-chrome
       firefox
       vivaldi-ffmpeg-codecs
-      brave
-      nixpkgs-msedge.microsoft-edge
+      microsoft-edge
+      inputs.zen-browser.packages."${pkgs.system}".default
 
       # file browser
       xfce.thunar
