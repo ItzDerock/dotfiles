@@ -147,6 +147,11 @@
     ];
   };
 
+  hardware.ipu6 = {
+    enable = true;
+    platform = "ipu6ep";
+  };
+
   boot.loader = {
     systemd-boot.enable = false;
     grub.enable = true;
