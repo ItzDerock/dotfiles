@@ -1,11 +1,7 @@
 { config, pkgs, inputs, outputs, lib, ... }:
-# let
-#     quartusPrime = ../../assets/quartus;
-#     quartusEnv = pkgs.buildEnv {
-#       name = "quartus-prime-lite-env";
-#       paths = [ pkgs.quartus-prime-lite quartusPrime ];
-#     };
-#   in
+let
+  secrets = import ../../secrets.nix; 
+in
 {
   imports =
     [
@@ -105,6 +101,11 @@
     };
     network-shares.enable = true;
     embedded-dev.enable = true;
+
+    duke = {
+      enable = true;
+      netid = secrets.duke-netid;
+    };
   };
 
   # List packages installed in system profile. To search, run:

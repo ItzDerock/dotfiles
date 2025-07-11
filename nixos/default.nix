@@ -18,6 +18,7 @@
     ./garbage.nix
     ./theme.nix
     ./network-shares.nix
+    ./duke.nix
   ];
 
   # Apply overlays
