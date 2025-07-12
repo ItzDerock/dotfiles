@@ -94,7 +94,7 @@ in
       inputs.hyprland-plugins.packages.${pkgs.system}.hyprexpo
 
       # i3 stuff like sub-workspaces
-      # inputs.hy3.packages.${pkgs.system}.hy3
+      inputs.hy3.packages.${pkgs.system}.hy3
 
       # workspace overview
       # inputs.Hyprspace.packages.${pkgs.system}.Hyprspace
@@ -103,7 +103,7 @@ in
     # package = null; # use system hyprland
     settings = {
       plugin = [
-        "${inputs.hy3.packages.${pkgs.system}.hy3}/lib/libhy3.so"
+        # "${inputs.hy3.packages.${pkgs.system}.hy3}/lib/libhy3.so"
       ];
 
       "$mod" = "SUPER";

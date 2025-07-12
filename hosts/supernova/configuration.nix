@@ -87,12 +87,6 @@
     embedded-dev.enable = true;
     docker = {
       enable = true;
-      nvidia = true;
-    };
-
-    nvidia = {
-      enable = true;
-      primary = true;
     };
   };
 
@@ -155,5 +149,11 @@
 
   boot.extraModulePackages = with config.boot.kernelPackages; [ nct6687d ];
   boot.kernelModules = [ "nct6687" ];
-  boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linux_zen;
+  boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linux_latest;
+
+  powerManagement.enable = true;
+
+  #amd
+  boot.initrd.kernelModules = [ "amdgpu" ];
+  boot.kernelParams = ["amd.dcdebugmask=0x10"];
 }
