@@ -1,6 +1,7 @@
 { inputs, pkgs, config, outputs, ... }:
 let
   cursorTheme = inputs.rose-pine-hyprcursor.packages.${pkgs.system}.default;
+  caelestia = inputs.caelestia.packages.${pkgs.system}.default;
 in
 {
   programs.bash.profileExtra = ''
@@ -8,6 +9,9 @@ in
   '';
 
   home.packages = with pkgs; [
+    # shell
+    caelestia
+
     swww
     foot
     (grimblast.override {
@@ -15,7 +19,6 @@ in
     })
     playerctl
 
-    swaynotificationcenter
     adwaita-icon-theme
     libnotify
 
@@ -121,8 +124,7 @@ in
       ];
 
       "exec-once" = [
-        # "waybar"
-        # "swww init"
+        "caelestia-shell"
 
         # "wl-paste -p --watch wl-copy -pc" # disable middle mouse paste
         "playerctld" # music daemon
@@ -158,10 +160,9 @@ in
           # ",Print,exec, grimblast --freeze copy screen && notify-send Screen copied"
           # "$mod_SHIFT,Print,exec, grimblast --freeze save area - | com.github.phase1geo.annotator -i"
           ", Print, exec, caelestia screenshot"  # Full screen capture > clipboard
-          "$mod_SHIFT, S, exec, caelestia screenshot region freeze"  # Capture region (freeze)
+          "$mod_SHIFT, S, exec, caelestia screenshot -fr"  # Capture region (freeze)
           "$mod_Shift_Alt, S, exec, caelestia screenshot region"  # Capture region
-          "$mod_SHIFT, Print, exec, caelestia record -s"  # Record screen with sound
-          "$mod_Alt, Print, exec, caelestia record"  # Record screen
+          "$mod_SHIFT, Print, exec, caelestia record -rs"  # Record screen with sound
           "SHIFT, Print, exec, caelestia record -r"  # Record region
 
           # Lock

@@ -60,14 +60,17 @@
       inputs.hyprland.follows = "hyprland";
     };
 
+    # pin quickshell version
     quickshell = {
-      url = "git+https://git.outfoxxed.me/quickshell/quickshell";
+      url = "git+https://git.outfoxxed.me/outfoxxed/quickshell?rev=49a3752b9d79bf9f56d8372de594d54312315470";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    caelestia-scripts = {
-      url = "github:ItzDerock/caelestia-scripts";
+    # Shell
+    caelestia = {
+      url = "github:pinksteven/caelestia-shell/flake-only";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.quickshell.follows = "quickshell";
     };
 
     # cursor theme

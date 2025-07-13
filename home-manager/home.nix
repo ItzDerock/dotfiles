@@ -30,7 +30,6 @@ in
     ./theme.nix
     ./development.nix
     ./hwaccel.nix
-    ./quickshell.nix
 
     inputs.opnix.homeManagerModules.default
   ] ++ (if host == "supernova" then [ ./overrides/supernova.nix ] else [ ])

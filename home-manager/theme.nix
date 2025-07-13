@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 let
   wallpaper-script = pkgs.writeScriptBin "wallpaper" (builtins.readFile ../assets/scripts/wallpaper.sh);
   wpaudiochanger = pkgs.writeScriptBin "wpaudiochanger" (builtins.readFile ../assets/scripts/wpaudiochange.py);
@@ -20,20 +20,26 @@ in
     })
   ];
 
-  home.file.".config/sxiv/exec/image-info" = {
-    executable = true;
-    source = ../assets/scripts/image-info.sh;
+  home.file = {
+    ".config/sxiv/exec/image-info" = {
+      executable = true;
+      source = ../assets/scripts/image-info.sh;
+    };
+
+    ".config/wallust/templates" = {
+      recursive = true;
+      source = ../assets/wallust/templates;
+    };
+
+    ".config/wallust/wallust.toml" = {
+      recursive = true;
+      source = ../assets/wallust.toml;
+    };
+
+    "Pictures/Wallpapers".source =
+      config.lib.file.mkOutOfStoreSymlink ../assets/wallpapers;
   };
 
-  home.file.".config/wallust/templates" = {
-    recursive = true;
-    source = ../assets/wallust/templates;
-  };
-
-  home.file.".config/wallust/wallust.toml" = {
-    recursive = true;
-    source = ../assets/wallust.toml;
-  };
 
   qt = {
     enable = true;
