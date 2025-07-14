@@ -42,6 +42,8 @@ in
     nwg-displays
   ];
 
+  services.network-manager-applet.enable = true;
+
   home.sessionVariables = {
     GDK_SCALE = "1";
     QT_SCALE_FACTOR = "1";
@@ -245,9 +247,6 @@ in
           "$mod_SHIFT, D, exec, cliphist list | wofi -dmenu | cliphist delete"
 
           "$mod, TAB, hyprexpo:expo, toggle"
-
-          # notification center
-          # "$mod, N, exec, swaync-client -t"
 
           # Pulls all windows from unplugged monitors into current wksp (hyprsplit)
           "$mod, G, split:grabroguewindows"
