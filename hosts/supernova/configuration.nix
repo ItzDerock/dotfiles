@@ -21,11 +21,7 @@
   # Experimental features
   nix.settings.experimental-features = ["nix-command" "flakes" ];
 
-  # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
-  networking.hostName = "derock-desktop"; # Define your hostname.
+networking.hostName = "derock-desktop"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -156,4 +152,15 @@
   #amd
   boot.initrd.kernelModules = [ "amdgpu" ];
   boot.kernelParams = ["amd.dcdebugmask=0x10"];
+
+
+  boot.loader = {
+    systemd-boot.enable = false;
+    grub.enable = true;
+    grub.device = "nodev";
+    grub.useOSProber = true;
+    grub.efiSupport = true;
+    efi.canTouchEfiVariables = true;
+    efi.efiSysMountPoint = "/boot";
+  };
 }
