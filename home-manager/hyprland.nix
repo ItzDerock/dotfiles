@@ -116,6 +116,7 @@ in
       "$mod" = "SUPER";
 
       general = {
+        layout = "hy3";
        	border_size = 0;
        	gaps_in = 1;
        	gaps_out = 0;
