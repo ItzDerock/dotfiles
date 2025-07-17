@@ -10,7 +10,9 @@ in
 
   home.packages = with pkgs; [
     # shell
-    caelestia
+    (caelestia.override {
+      withCli = true;
+    })
 
     swww
     foot

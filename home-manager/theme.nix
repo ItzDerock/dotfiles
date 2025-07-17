@@ -1,7 +1,8 @@
-{ pkgs, config, ... }:
+{ pkgs, config, inputs, ... }:
 let
   wallpaper-script = pkgs.writeScriptBin "wallpaper" (builtins.readFile ../assets/scripts/wallpaper.sh);
   wpaudiochanger = pkgs.writeScriptBin "wpaudiochanger" (builtins.readFile ../assets/scripts/wpaudiochange.py);
+  caelestia = inputs.caelestia.packages.${pkgs.system}.default;
 in
 {
   home.packages = with pkgs; [
@@ -47,10 +48,6 @@ in
     # platformTheme = "qtct";
   };
 
-  # xdg.configFile."Kvantum/kvantum.kvconfig".source = (pkgs.formats.ini { }).generate "kvantum.kvconfig" {
-  #   General.theme = "Catppuccin-Mocha-Lavender";
-  # };
-
   gtk = {
     enable = true;
     # theme = {
@@ -75,24 +72,5 @@ in
     gtk3 = {
       extraConfig.gtk-application-prefer-dark-theme = true;
     };
-  };
-
-  # home.pointerCursor = {
-  #   gtk.enable = true;
-  #   name = "Catppuccin-Mocha-Dark-Cursors";
-  #   package = pkgs.catppuccin-cursors.mochaDark;
-  #   size = 16;
-  # };
-
-  # dconf.settings = {
-  #   "org/gnome/desktop/interface" = {
-  #     gtk-theme = "Catppuccin-Mocha-Standard-Lavender-Dark";
-  #     color-scheme = "prefer-dark";
-  #   };
-  #
-  #   # For Gnome shell
-  #   "org/gnome/shell/extensions/user-theme" = {
-  #     name = "Catppuccin-Mocha-Standard-Lavender-Dark";
-  #   };
-  # };
+  }; 
 }
