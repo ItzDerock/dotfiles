@@ -37,6 +37,12 @@ in
       source = ../assets/wallust.toml;
     };
 
+    ".config/caelestia/shell.json".text = builtins.toJSON {
+      paths = {
+        wallpaperDir = "/home/derock/NixOS/assets/wallpapers/";
+      };
+    };
+
     "Pictures/Wallpapers".source =
       config.lib.file.mkOutOfStoreSymlink ../assets/wallpapers;
   };
