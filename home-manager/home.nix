@@ -119,19 +119,14 @@ in
       v2raya
 
       unzip
-      audacity
       yt-dlp
       obs-studio
-      # (blender.override { cudaSupport = true; })
 
       quick-record-script
       zoom-us
-      # nixpkgs-master.vmware-workstation
 
       # slicer stuff
       prusa-slicer
-      (perl.withPackages(ps: [ps.FileWhich]))
-      gpx
     ];
 
   # my cfg stuff

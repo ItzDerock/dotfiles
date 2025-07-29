@@ -32,11 +32,11 @@
     };
 
     # - HYPRLAND STUFF
-    hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1&ref=c6497a719379e36c25df5f1980a5b2a1a78d3536";
+    hyprland.url = "github:hyprwm/Hyprland";
     hyprpicker.url = "github:hyprwm/hyprpicker";
 
     hyprland-plugins = {
-      url = "github:hyprwm/hyprland-plugins?ref=34f94ab7381860d42850fa41e91af497d4eb26dc";
+      url = "github:hyprwm/hyprland-plugins";
       inputs.hyprland.follows = "hyprland";
     };
 

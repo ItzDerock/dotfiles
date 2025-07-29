@@ -4,9 +4,9 @@ let
   caelestia = inputs.caelestia.packages.${pkgs.system}.default;
 in
 {
-  programs.bash.profileExtra = ''
-    [ "$(tty)" = "/dev/tty1" ] && ! pgrep Hyprland >/dev/null && exec Hyprland &> /dev/null
-  '';
+  # programs.bash.profileExtra = ''
+  #   [ "$(tty)" = "/dev/tty1" ] && ! pgrep Hyprland >/dev/null && exec Hyprland &> /dev/null
+  # '';
 
   home.packages = with pkgs; [
     # shell
@@ -109,11 +109,11 @@ in
 
     # package = null; # use system hyprland
     settings = {
-      plugin = [
-        # "${inputs.hy3.packages.${pkgs.system}.hy3}/lib/libhy3.so"
-      ];
-
       "$mod" = "SUPER";
+
+      # plugins = [
+      #   "${inputs.hy3.packages.${pkgs.system}.hy3}/lib/libhy3.so"
+      # ];
 
       general = {
         layout = "hy3";
