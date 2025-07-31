@@ -2,6 +2,7 @@
 let
   cursorTheme = inputs.rose-pine-hyprcursor.packages.${pkgs.system}.default;
   caelestia = inputs.caelestia.packages.${pkgs.system}.default;
+  caelestia-cli = inputs.caelestia.inputs.caelestia-cli.packages.${pkgs.system}.default;
 in
 {
   # programs.bash.profileExtra = ''
@@ -10,6 +11,7 @@ in
 
   home.packages = with pkgs; [
     # shell
+    caelestia-cli
     (caelestia.override {
       withCli = true;
     })
