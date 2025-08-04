@@ -349,6 +349,13 @@ in
         # so force back to 0 scaling else blurry text
         force_zero_scaling = true;
       };
+
+      # Plugin Configuration
+      plugin = {
+        hyprexpo = {
+          skip_empty = true;
+        };
+      };
     };
 
     extraConfig = ''
