@@ -151,7 +151,7 @@ networking.hostName = "derock-desktop"; # Define your hostname.
 
   #amd
   boot.initrd.kernelModules = [ "amdgpu" ];
-  boot.kernelParams = ["amd.dcdebugmask=0x10"];
+  boot.kernelParams = ["amd.dcdebugmask=0x10" "amdgpu.runpm=0"];
 
 
   boot.loader = {
