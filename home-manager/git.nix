@@ -17,6 +17,7 @@ in {
       enable = true;
       userName = "Derock";
       userEmail = "derock@derock.dev";
+      lfs.enable = true;
     };   
   }; 
 }
