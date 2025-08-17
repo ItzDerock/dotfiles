@@ -95,10 +95,7 @@ in
     enable = true;
     package = inputs.hyprland.packages."${pkgs.system}".hyprland;
 
-    plugins = [
-      # Separate workspaces per monitor
-      inputs.hyprsplit.packages.${pkgs.system}.hyprsplit
-
+    plugins = [ 
       # WIN + TAB, show all workspaces
       inputs.hyprland-plugins.packages.${pkgs.system}.hyprexpo
 
