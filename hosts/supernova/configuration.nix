@@ -67,8 +67,11 @@ networking.hostName = "derock-desktop"; # Define your hostname.
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
  
-  services.tailscale.enable = true;
-  services.tailscale.useRoutingFeatures = "client";
+  services.tailscale = {
+    enable = true;
+    useRoutingFeatures = "client";
+    openFirewall = true;
+  };
  
   # dm.lemurs.enable = true;
   wm.hyprland.enable = true;
