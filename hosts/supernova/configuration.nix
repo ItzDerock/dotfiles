@@ -166,4 +166,9 @@ networking.hostName = "derock-desktop"; # Define your hostname.
     efi.canTouchEfiVariables = true;
     efi.efiSysMountPoint = "/boot";
   };
+
+  swapDevices = [{
+    device = "/swapfile";
+    size = 64 * 1024;
+  }];
 }
