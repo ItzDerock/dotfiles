@@ -128,17 +128,23 @@ in
   # TODO: switch back to linux_zen once kernel ver 6.15 is available
   # 6.15 merges the required Samsung Galaxybook driver
   # 6.14 doesn't have, and the out-of-tree module does not support 6.14 either.
-  boot.kernelPackages = pkgs.linuxSamsung;
+  boot = {
+    kernelPackages = pkgs.linuxSamsung;
 
-  boot.kernelModules = [
-    "v4l2loopback"
-  ];
+    # ipu6 doesn't support sbg's webcam
+    # and causes lots of interrupts, so disable for battery
+    blacklistedKernelModules = [ 
+      "intel-ipu6" 
+      "intel-ipu6-isys"
+    ];
 
-  boot.kernel.sysctl."kernel.sysrq" = 438;
+    kernelModules = [
+      "v4l2loopback"
+    ];
 
-  # Auto reboot if system locks up
-  boot.kernel.sysctl."kernel.panic" = 60;
-  systemd.watchdog.runtimeTime = "30s";
+    kernel.sysctl."kernel.sysrq" = 438;
+    kernel.sysctl."kernel.panic" = 60;
+  };
 
   # more intel stuff
   hardware.graphics = {
@@ -148,10 +154,10 @@ in
     ];
   };
 
-  hardware.ipu6 = {
-    enable = true;
-    platform = "ipu6ep";
-  };
+  # hardware.ipu6 = {
+  #   enable = true;
+  #   platform = "ipu6ep";
+  # };
 
   boot.loader = {
     systemd-boot.enable = false;

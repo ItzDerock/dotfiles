@@ -50,31 +50,38 @@ in
 
   qt = {
     enable = true;
+    platformTheme.name = "gtk";
+    style.name = "adwaita-dark";
+
     # style.name = "kvantum";
     # platformTheme = "qtct";
   };
 
   gtk = {
     enable = true;
-    # theme = {
-    #   name = "Catppuccin-Mocha-Standard-Lavender-Dark";
-    #   package = pkgs.catppuccin-gtk.override {
-    #     accents = [ "lavender" ];
-    #     size = "standard";
-    #     variant = "mocha";
-    #   };
-    # };
-    # iconTheme = {
-    #   name = "Papirus-Dark";
-    #   package = pkgs.catppuccin-papirus-folders.override {
-    #     flavor = "mocha";
-    #     accent = "lavender";
-    #   };
-    # };
+
+    theme = {
+      name = "Catppuccin-Mocha-Standard-Lavender-Dark";
+      package = pkgs.catppuccin-gtk.override {
+        accents = [ "lavender" ];
+        size = "standard";
+        variant = "mocha";
+      };
+    };
+
+    iconTheme = {
+      name = "Papirus-Dark";
+      package = pkgs.catppuccin-papirus-folders.override {
+        flavor = "mocha";
+        accent = "lavender";
+      };
+    };
+
     # cursorTheme = {
     #   name = "Catppuccin-Mocha-Dark-Cursors";
     #   package = pkgs.catppuccin-cursors.mochaDark;
     # };
+
     gtk3 = {
       extraConfig.gtk-application-prefer-dark-theme = true;
     };
