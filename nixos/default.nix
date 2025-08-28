@@ -19,6 +19,7 @@
     ./theme.nix
     ./network-shares.nix
     ./duke.nix
+    ./networking.nix
   ];
 
   # Apply overlays
