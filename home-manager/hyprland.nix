@@ -125,7 +125,10 @@ in
        	border_size = 0;
        	gaps_in = 1;
        	gaps_out = 0;
-      };
+
+        "col.active_border" = "rgb(101415) rgb(101415)";
+        "col.inactive_border" = "rgb(101415) rgb(101415)";
+      }; 
 
       animations.enabled = false;
 
@@ -255,11 +258,12 @@ in
           "$mod, TAB, hyprexpo:expo, toggle"
 
           # Pulls all windows from unplugged monitors into current wksp (hyprsplit)
-          "$mod, G, split:grabroguewindows"
+          # "$mod, G, split:grabroguewindows"
 
           # hy3
           # Make a split
           "$mod, S, hy3:makegroup, v"
+          "$mod, G, hy3:makegroup, tab, ephemeral"
 
           # toggle window swallowing
           "$mod_CONTROL_SHIFT, s, toggleswallow"

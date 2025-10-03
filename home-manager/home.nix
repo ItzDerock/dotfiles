@@ -91,6 +91,7 @@ in
       xfce.thunar-media-tags-plugin
       xfce.tumbler # dbus thumbnailer
       nemo-with-extensions
+      nautilus
       kdePackages.ark # zip
 
       # basic desktop apps

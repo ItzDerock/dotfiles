@@ -13,8 +13,9 @@ let
   ];
 
   associations = {
-    "inode/directory" = ["nemo.desktop"];
+    "inode/directory" = ["nautilus.desktop"];
     "application/zip" = ["ark.desktop"];
+    "application/pdf" = ["microsoft-edge.desktop"];
   } 
   // builtins.listToAttrs (
     map (imageType: { name = "image/${imageType}"; value = ["org.nomacs.ImageLounge.desktop"]; }) imageTypes
