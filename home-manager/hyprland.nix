@@ -93,7 +93,10 @@ in
 
   wayland.windowManager.hyprland = {
     enable = true;
-    package = inputs.hyprland.packages."${pkgs.system}".hyprland;
+
+    # use Hyprland package from the NixOS module (nixos/wm_hyprland.nix)
+    package = null;
+    portalPackage = null;
 
     plugins = [
       # Separate workspaces per monitor

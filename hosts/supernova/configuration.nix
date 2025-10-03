@@ -1,5 +1,14 @@
 { config, inputs, outputs, pkgs, lib, ... }:
-{
+let 
+  pkgs-hypr = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.system};
+in {
+  hardware.graphics = {
+    package = pkgs-hypr.mesa;
+    package32 = pkgs-hypr.pkgsi686Linux.mesa;
+    enable32Bit = true;
+    enable = true;
+  };
+
   imports =
     [ # Include the results of the hardware scan.
       inputs.home-manager.nixosModules.home-manager
@@ -105,7 +114,13 @@
   ];
 
   # corsair
-  hardware.ckb-next.enable = true; 
+  hardware.ckb-next = {
+    enable = true; 
+    # TODO: remove after #444209
+    package = pkgs.ckb-next.overrideAttrs (old: {
+      cmakeFlags = (old.cmakeFlags or [ ]) ++ [ "-DUSE_DBUS_MENU=0" ];
+    });
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -141,13 +156,23 @@
 
   boot.extraModulePackages = with config.boot.kernelPackages; [ nct6687d ];
   boot.kernelModules = [ "nct6687" ];
-  boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linux_latest;
+  boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linux_zen;
 
   powerManagement.enable = true;
+  powerManagement.cpuFreqGovernor = "performance";
 
   #amd
   boot.initrd.kernelModules = [ "amdgpu" ];
   boot.kernelParams = ["amd.dcdebugmask=0x10" "amdgpu.runpm=0"];
+
+  # native compiler optimizations
+  boot.kernelPatches = [{
+    name = "compiler-optimizations";
+    patch = null;
+    extraConfig = ''
+      X86_NATIVE_CPU y
+    '';
+  }];
 
 
   boot.loader = {

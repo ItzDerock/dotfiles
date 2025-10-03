@@ -2,6 +2,7 @@
 with lib;
 let
   cfg = config.wm.hyprland;
+  pkgs-hypr = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.system};
 in {
   options.wm.hyprland = {
     enable = mkEnableOption "Enables Hyprland";
@@ -17,13 +18,15 @@ in {
     };
 
     # pin mesa version
-    nixpkgs.overlays = [
-      (final: prev: {
-        mesa = inputs.hyprland.inputs.nixpkgs.legacyPackages.${prev.system}.mesa;
-      })
-    ];
+    # nixpkgs.overlays = [
+    #   (final: prev: {
+    #     mesa = pkgs-hypr.mesa;
+    #   })
+    # ];
 
     hardware.graphics = {
+      package = mkForce pkgs-hypr.mesa;
+      package32 = mkForce pkgs-hypr.pkgsi686Linux.mesa;
       enable32Bit = true;
       enable = true;
     };
