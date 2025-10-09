@@ -40,7 +40,16 @@ in
       enable = true;
       defaultApplications = associations;
       associations.added = associations;
-    };  
+    };
+
+    userDirs = {
+      enable = true;
+      desktop = "$HOME/Desktop/";
+      download = "$HOME/Downloads/";
+      documents = "$HOME/Documents/";
+      videos = "$HOME/Videos/";
+      pictures = "$HOME/Pictures/";
+    };
   };
 }
 

@@ -8,6 +8,7 @@
 }:
 let
   quick-record-script = pkgs.writeScriptBin "quick-record" (builtins.readFile ../assets/scripts/quick-record.sh);
+  screenshot = pkgs.writeScriptBin "screenshot" (builtins.readFile ../assets/scripts/screenshot.sh);
 
   # vesktop fork with replaced shaggy.gif so its not weird
   customVesktop = pkgs.vesktop.overrideAttrs (oldAttrs: {
@@ -90,7 +91,6 @@ in
       xfce.thunar-archive-plugin # unzip
       xfce.thunar-media-tags-plugin
       xfce.tumbler # dbus thumbnailer
-      nemo-with-extensions
       nautilus
       kdePackages.ark # zip
 
@@ -124,11 +124,15 @@ in
       yt-dlp
       obs-studio
 
-      quick-record-script
       zoom-us
 
       # slicer stuff
       prusa-slicer
+
+      # my scripts
+      quick-record-script
+      screenshot
+      hyprshot satty # screenshot deps
     ];
 
   # my cfg stuff

@@ -49,7 +49,6 @@
     # basic sysadmin stuff
     jq # json parsing
     psmisc # processes
-    btop # system
     nload # network
     wavemon # wifi
     ncdu # storage

@@ -51,8 +51,8 @@ in
     QT_SCALE_FACTOR = "1";
     QT_SCREEN_SCALE_FACTORS = "1;1";
     BROWSER = "microsoft-edge";
-    SUDO_EDITOR = "${pkgs.neovim}";
-    EDITOR = "${pkgs.neovim}";
+    SUDO_EDITOR = "${pkgs.neovim}/bin/nvim";
+    EDITOR = "${pkgs.neovim}/bin/nvim";
     WLR_NO_HARDWARE_CURSORS = "1";
 
     # enable wayland for stuff
@@ -173,7 +173,8 @@ in
           # ",Print,exec, grimblast --freeze copy screen && notify-send Screen copied"
           # "$mod_SHIFT,Print,exec, grimblast --freeze save area - | com.github.phase1geo.annotator -i"
           ", Print, exec, caelestia screenshot"  # Full screen capture > clipboard
-          "$mod_SHIFT, S, exec, caelestia screenshot -fr"  # Capture region (freeze)
+          "Ctrl, Print, exec, caelestia screenshot -fr"
+          "$mod_SHIFT, S, exec, screenshot"  # Capture region (freeze)
           "$mod_Shift_Alt, S, exec, caelestia screenshot region"  # Capture region
           "$mod_SHIFT, Print, exec, caelestia record -rs"  # Record screen with sound
           "SHIFT, Print, exec, caelestia record -r"  # Record region
@@ -262,7 +263,7 @@ in
 
           # hy3
           # Make a split
-          "$mod, S, hy3:makegroup, v"
+          # "$mod_SHIFT, S, hy3:makegroup, v"
           "$mod, G, hy3:makegroup, tab, ephemeral"
 
           # toggle window swallowing

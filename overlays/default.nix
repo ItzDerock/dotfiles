@@ -15,6 +15,15 @@
       };
     });
 
+    btop = prev.btop.overrideAttrs (old: {
+      passthru = (old.passthru or {}) // {
+        # `withoutGpu` is a new package variant of btop.
+        withoutGpu = prev.btop.overrideAttrs (final: prev: {
+          cmakeFlags = prev.cmakeFlags ++ [ "-DGPU_SUPPORT=OFF" ];
+        });
+      };
+    });
+
     openssh = prev.openssh.overrideAttrs (old: {
       # Disable "bad permission" checking in openssh
       # Home-manager issue #322
