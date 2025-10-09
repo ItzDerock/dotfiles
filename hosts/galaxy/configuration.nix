@@ -89,7 +89,7 @@ in
     power.enable = true;
     laptop = {
       enable = true;
-      soundFix = true;
+      soundFix = false;
     };
     wireplumber.enable = true;
     nvidia.enable = true;

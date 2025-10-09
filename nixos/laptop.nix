@@ -18,17 +18,21 @@ in {
       alsa-tools
     ] else []);
 
-    # boot.extraModprobeConfig = mkIf cfg.soundFix ''
-    #   options snd slots=snd_soc_skl_hda_dsp
-    # '';
+    boot.extraModprobeConfig = mkIf cfg.soundFix ''
+      options snd slots=snd_hda_intel
+    '';
+
+    # snd_soc_skl
 
     boot.blacklistedKernelModules = mkIf cfg.soundFix [
-      "snd_hda_intel"
+      # "snd_hda_intel"
+      # "sof_audio_pci_intel_tgl"
+      # "snd_soc_avs"
     ];
 
-    hardware.firmware = mkIf cfg.soundFix [
-      pkgs.sof-firmware
-    ];
+    # hardware.firmware = mkIf cfg.soundFix [
+    #   pkgs.sof-firmware
+    # ];
 
     hardware.graphics = {
       extraPackages = with pkgs; [ intel-media-driver ];

@@ -20,7 +20,7 @@ in {
       python3
 
       # code editors
-      vscode
+      vscode-fhs
       nixpkgs-master.zed-editor.fhs
 
       # cli tools
