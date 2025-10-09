@@ -132,7 +132,7 @@ in
       # my scripts
       quick-record-script
       screenshot
-      hyprshot satty # screenshot deps
+      satty # screenshot deps
     ];
 
   # my cfg stuff

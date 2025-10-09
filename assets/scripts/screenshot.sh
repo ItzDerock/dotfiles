@@ -8,7 +8,8 @@ TEMP_DIR=$(mktemp -d)
 SCREENSHOT_DATE=$(date +"%Y-%m-%d_%H:%M:%S")
 
 # Select region and save + copy
-pkill slurp || hyprshot -m ${1:-region} -o $TEMP_DIR -f screenshot.png --silent
+pkill slurp || true
+PICTURE_DIM=$(grimblast save ${1:-area} $TEMP_DIR/screenshot.png 2>&1 | sed -n 's/.* \([0-9]\+x[0-9]\+\).*/\1/p')
 
 if [ ! -f "$TEMP_DIR/screenshot.png" ]; then
   echo "Screenshot doesn't exist."
@@ -17,7 +18,12 @@ if [ ! -f "$TEMP_DIR/screenshot.png" ]; then
 fi
 
 wl-copy < $TEMP_DIR/screenshot.png
-PICTURE_DIM=$(file "$TEMP_DIR/screenshot.png" | cut -d, -f2 | sed "s/ //g")
+
+# if no picture dimensions, use `file` to find as fallback
+if [[ -z "$PICTURE_DIM" ]]; then
+  echo "warn: Grimblast did not return dimensions!"
+  PICTURE_DIM=$(file "$TEMP_DIR/screenshot.png" | cut -d, -f2 | sed "s/ //g")
+fi
 
 # Ask user what they want to do
 notify-send "Screenshot Taken" \
