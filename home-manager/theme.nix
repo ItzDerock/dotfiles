@@ -38,8 +38,26 @@ in
     };
 
     ".config/caelestia/shell.json".text = builtins.toJSON {
-      paths = {
-        wallpaperDir = "/home/derock/NixOS/assets/wallpapers/";
+      paths.wallpaperDir = "/home/derock/NixOS/assets/wallpapers/";
+      bar = {
+        clock.showIcon = false;
+        scrollActions = {
+          brightness = false;
+          workspaces = false;
+          volume = false;
+        };
+
+        status.showAudio = true;
+        showOnHover = false;
+      };
+
+      launcher = {
+        vimKeybinds = true;
+        useFuzzy.apps = true;
+      };
+
+      services = {
+        useFahrenheit = false;
       };
     };
 
