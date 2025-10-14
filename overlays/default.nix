@@ -19,7 +19,7 @@
       passthru = (old.passthru or {}) // {
         # `withoutGpu` is a new package variant of btop.
         withoutGpu = prev.btop.overrideAttrs (final: prev: {
-          cmakeFlags = prev.cmakeFlags ++ [ "-DGPU_SUPPORT=OFF" ];
+          cmakeFlags = prev.cmakeFlags ++ [ "-DBTOP_GPU=OFF" ];
         });
       };
     });

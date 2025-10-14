@@ -120,6 +120,7 @@ in
     libgccjit
     mesa
     linuxPackages.v4l2loopback
+    btop.withoutGpu
   ];
 
   virtualisation.waydroid.enable = true;
