@@ -95,11 +95,6 @@ in
       };
     };
 
-    # cursorTheme = {
-    #   name = "Catppuccin-Mocha-Dark-Cursors";
-    #   package = pkgs.catppuccin-cursors.mochaDark;
-    # };
-
     gtk3 = {
       extraConfig.gtk-application-prefer-dark-theme = true;
     };

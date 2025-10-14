@@ -320,9 +320,19 @@ in
         ",XF86MonBrightnessDown, global, caelestia:brightnessDown"
       ];
 
-      windowrulev2 = [
-        "opacity 0.85 override 0.85 override,class:(code-url-handler)"
+      windowrule = [
+        # Floating windows
+        # taken from omarchy hypr config
+        "float, tag:floating-window"
+        "center, tag:floating-window"
+        "size 800 600, tag:floating-window"
+        "tag +floating-window, class:(blueberry.py|Impala|Wiremix|org.gnome.NautilusPreviewer|com.gabm.satty|About|TUI.float)"
+        "tag +floating-window, class:(xdg-desktop-portal-gtk|sublime_text|DesktopEditors|org.gnome.Nautilus), title:^(Open.*Files?|Open [F|f]older.*|Save.*Files?|Save.*As|Save|All Files)"
+
         "float, class:(xdg-desktop-portal-gtk)"
+
+        # transparency
+        "opacity 0.9 override 0.9 override,class:(code|org.gnome.Nautilus)"
       ];
 
       input = {
