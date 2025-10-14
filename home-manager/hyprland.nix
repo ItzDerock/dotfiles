@@ -3,6 +3,7 @@ let
   cursorTheme = inputs.rose-pine-hyprcursor.packages.${pkgs.system}.default;
   caelestia = inputs.caelestia.packages.${pkgs.system}.default;
   caelestia-cli = inputs.caelestia.inputs.caelestia-cli.packages.${pkgs.system}.default;
+  clamshell = pkgs.writeScriptBin "clamshell" (builtins.readFile ../assets/scripts/clamshell.sh);
 in
 {
   # programs.bash.profileExtra = ''
@@ -27,8 +28,7 @@ in
     libnotify
 
     # theme
-    hyprcursor # cursor
-    cursorTheme
+    hyprcursor # cursor cursorTheme
     rose-pine-cursor
 
     cliphist # clipboard
@@ -301,8 +301,6 @@ in
         # Brightness
         # ",XF86MonBrightnessUp, exec, brightnessctl set 5%+ &> ~/.cache/brightness.log"
         # ",XF86MonBrightnessDown, exec, brightnessctl set 5%- &> ~/.cache/brightness.log"
-        ",XF86MonBrightnessUp, global, caelestia:brightnessUp"
-        ",XF86MonBrightnessDown, global, caelestia:brightnessDown"
 
         # Media controls
         ",XF86AudioPlay, exec, playerctl play-pause"
@@ -313,6 +311,13 @@ in
         # muilti monitor stuff
         # "$mod, H, split-changemonitor prev"
         # "$mod, L, split-changemonitor next"
+      ];
+
+      bindl = [
+        ",switch:on:Lid Switch,exec,${clamshell}/bin/clamshell close"
+        ",switch:off:Lid Switch,exec,${clamshell}/bin/clamshell open"
+        ",XF86MonBrightnessUp, global, caelestia:brightnessUp"
+        ",XF86MonBrightnessDown, global, caelestia:brightnessDown"
       ];
 
       windowrulev2 = [
