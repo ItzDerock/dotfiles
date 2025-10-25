@@ -1,6 +1,7 @@
 { config, inputs, outputs, pkgs, lib, ... }:
 let 
   pkgs-hypr = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.system};
+  secrets = import ../../secrets.nix; 
 in {
   hardware.graphics = {
     package = pkgs-hypr.mesa;
@@ -88,6 +89,11 @@ in {
     networking.enable = true;
     docker = {
       enable = true;
+    };
+
+    duke = {
+      enable = true;
+      netid = secrets.duke-netid;
     };
   };
 

@@ -49,6 +49,10 @@ in
 
         status.showAudio = true;
         showOnHover = false;
+        
+        popouts = {
+          activeWindow = false;
+        };
       };
 
       launcher = {
@@ -58,6 +62,12 @@ in
 
       services = {
         useFahrenheit = false;
+      };
+
+      general = {
+        idle = {
+          timeouts = [];
+        };
       };
     };
 
