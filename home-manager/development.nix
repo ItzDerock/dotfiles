@@ -32,6 +32,9 @@ in {
       direnv
       devenv
 
+      # pcb design
+      kicad-unstable
+
       # terminals
       fish
     ];
