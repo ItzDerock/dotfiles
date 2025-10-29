@@ -29,7 +29,6 @@ in {
       nodejs_20
       libsecret
 
-      direnv
       devenv
 
       # pcb design
@@ -39,29 +38,37 @@ in {
       fish
     ];
 
-  programs.bash = {
-    enable = true;
-    shellAliases = {
-      "☕" = "ssh terminal.shop";
-      "zed" = "zeditor -n";
+  programs = {
+    bash = {
+      enable = true;
+      shellAliases = {
+        "☕" = "ssh terminal.shop";
+        "zed" = "zeditor -n";
+      };
+
+      bashrcExtra = (builtins.readFile ../assets/.bashrc) + ''
+        # bash-preexec
+        source ${bash_preexec}
+
+        # source
+        source ${../assets/scripts/tssh.sh}
+      '';
     };
 
-    bashrcExtra = (builtins.readFile ../assets/.bashrc) + ''
-      # bash-preexec
-      source ${bash_preexec}
-    '';
-  };
+    zoxide = {
+      enable = true;
+      enableBashIntegration = true;
+      options = [ "--cmd cd" ];
+    };
 
-  programs.zoxide = {
-    enable = true;
-    enableBashIntegration = true;
-    options = [ "--cmd cd" ];
-  };
+    starship = {
+      enable = true;
+    };
 
-  programs.starship = {
-    enable = true;
+    direnv = {
+      enable = true;
+      enableBashIntegration = true;
+      nix-direnv.enable = true;
+    };
   };
-
-  # devenv
-  services.lorri.enable = true;
 }
