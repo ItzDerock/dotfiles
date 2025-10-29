@@ -80,9 +80,6 @@ in
     enable = true;
     platformTheme.name = "gtk";
     style.name = "adwaita-dark";
-
-    # style.name = "kvantum";
-    # platformTheme = "qtct";
   };
 
   gtk = {
@@ -108,5 +105,15 @@ in
     gtk3 = {
       extraConfig.gtk-application-prefer-dark-theme = true;
     };
-  }; 
+  };
+
+  home.sessionVariables = {
+    GTK_THEME = "Adwaita:dark";
+  };
+
+  dconf.settings = {
+    "org/gnome/desktop/interface" = {
+      color-scheme = "prefer-dark";
+    };
+  };
 }
