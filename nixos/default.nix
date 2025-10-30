@@ -4,6 +4,7 @@
     ./lemurs.nix
     ./wm_hyprland.nix
     ./wayland.nix
+    ./winboat.nix
     ./nvidia.nix
     ./power.nix
     ./laptop.nix

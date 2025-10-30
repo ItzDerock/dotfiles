@@ -87,8 +87,10 @@ in {
     instantreplay.enable = true;
     embedded-dev.enable = true;
     networking.enable = true;
-    docker = {
+    docker.enable = true;
+    winboat = {
       enable = true;
+      username = "derock";
     };
 
     duke = {

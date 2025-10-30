@@ -106,8 +106,8 @@
     };
 
     # Run windows apps in VM
-    winapps = {
-      url = "github:winapps-org/winapps";
+    winboat = {
+      url = "github:TibixDev/winboat";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
