@@ -9,7 +9,7 @@ SCREENSHOT_DATE=$(date +"%Y-%m-%d_%H:%M:%S")
 
 # Select region and save + copy
 pkill slurp || true
-PICTURE_DIM=$(grimblast save ${1:-area} $TEMP_DIR/screenshot.png 2>&1 | sed -n 's/.* \([0-9]\+x[0-9]\+\).*/\1/p')
+PICTURE_DIM=$(grimblast save -f ${1:-area} $TEMP_DIR/screenshot.png 2>&1 | sed -n 's/.* \([0-9]\+x[0-9]\+\).*/\1/p')
 
 if [ ! -f "$TEMP_DIR/screenshot.png" ]; then
   echo "Screenshot doesn't exist."
