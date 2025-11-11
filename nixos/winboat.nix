@@ -18,9 +18,9 @@ in {
     };
 
     users.users.${cfg.username}.extraGroups = [ "libvirtd" ];
-    environment.systemPackages = [
-      inputs.winboat.packages.${pkgs.system}.winboat
-      pkgs.freerdp
+    environment.systemPackages = with pkgs; [
+      winboat
+      freerdp
     ];
   };
 }
