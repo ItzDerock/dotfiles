@@ -55,9 +55,7 @@
     };
 
     hy3 = {
-      # url = "github:outfoxxed/hy3";
-      # hy3 #230
-      url = "github:ItzDerock/hy3?ref=25cbfc9450b0a1fc239745c1d12db5395bfadf53";
+      url = "github:outfoxxed/hy3";
       inputs.hyprland.follows = "hyprland";
     };
 
