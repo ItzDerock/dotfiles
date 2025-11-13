@@ -1,35 +1,65 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 let
-  imageTypes = ["png" "jpeg" "heic" "bmp" "gif"];
+
+  # To find .desktop locations:
+  # for p in ${XDG_DATA_DIRS//:/ }; do find $p/applications -name '*.desktop'; done
+
+  # makeMimeAssociations $.desktop $prefix $mime[]
+  makeMimeAssociations = handler: prefix: types:
+    builtins.listToAttrs (
+      map (type: { name = "${prefix}${type}"; value = [handler]; }) types
+    );
+
+  terminalApplication = "foot.desktop";
+
+  # image/ auto-appended
+  imageTypes = [
+    "png" "jpeg" "heic" "bmp" "gif"
+  ];
+
+  # video/ auto-appended
   videoTypes = [
     "mp4" "mkv" "avi" "mov" "webm" "flv" "wmv" "mpeg" "mpg" "3gp" "ogv" "ts"
   ];
+
   browserTypes = [
     "text/html"
     "x-scheme-handler/http"
     "x-scheme-handler/https"
     "x-scheme-handler/about"
     "x-scheme-handler/unknown"
+    "application/x-extension-html"
+    "application/x-extension-htm"
   ];
 
-  associations = {
-    "inode/directory" = ["nautilus.desktop"];
+  textTypes = [
+    "application/x-extension-htm"
+    "application/x-extension-html"
+    "application/x-wine-extension-ini"
+    "text/plain"
+    "text/vbscript"
+    "application/x-mswrite"
+    "application/xml"
+  ];
+
+  # These associations override all pregen ones
+  extraAssociations = {
+    "inode/directory" = ["org.gnome.Nautilus.desktop"];
     "application/zip" = ["ark.desktop"];
     "application/pdf" = ["microsoft-edge.desktop"];
-  } 
-  // builtins.listToAttrs (
-    map (imageType: { name = "image/${imageType}"; value = ["org.nomacs.ImageLounge.desktop"]; }) imageTypes
-  ) 
-  // builtins.listToAttrs (
-    map (videoType: { name = "video/${videoType}"; value = ["mpv.desktop"]; }) videoTypes
-  )
-  // builtins.listToAttrs (
-    map (browserType: { name = browserType; value = ["microsoft-edge.desktop"]; }) browserTypes
-  );
+  };
+
+  # [lowest prio ... highest prio]
+  allAssociations = 
+    (makeMimeAssociations "microsoft-edge.desktop" "" browserTypes)
+    // (makeMimeAssociations "mpv.desktop" "video/" videoTypes)
+    // (makeMimeAssociations "org.kde.kdegraphics.gwenview.desktop" "image/" imageTypes)
+    // (makeMimeAssociations "nvim.desktop" "" textTypes)
+    // extraAssociations;
 in
 {
   home.packages = with pkgs; [
-    nomacs
+    kdePackages.gwenview
     mpv
   ];
 
@@ -38,8 +68,8 @@ in
 
     mimeApps = {
       enable = true;
-      defaultApplications = associations;
-      associations.added = associations;
+      defaultApplications = allAssociations;
+      associations.added = allAssociations;
     };
 
     userDirs = {
@@ -50,6 +80,19 @@ in
       videos = "$HOME/Videos/";
       pictures = "$HOME/Pictures/";
     };
+
+    # force override
+    configFile."mimeapps.list".force = true;
+  };
+
+  # Set default terminal
+  home.file.".config/xdg-terminals.list" = {
+    text = terminalApplication;
+    force = true;
+  };
+
+  home.sessionVariables = {
+    TERMINAL = terminalApplication;
   };
 }
 

@@ -32,6 +32,7 @@ in
     ./development.nix
     ./hwaccel.nix
     ./winapps.nix
+    ./mpv.nix
 
     inputs.opnix.homeManagerModules.default
   ] ++ (if host == "supernova" then [ ./overrides/supernova.nix ] else [ ])

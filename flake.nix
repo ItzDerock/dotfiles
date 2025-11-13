@@ -33,8 +33,8 @@
 
     # - HYPRLAND STUFF
     hyprland = {
-      url = "github:hyprwm/Hyprland";
-      # inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:hyprwm/Hyprland?ref=v0.52.0";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     hyprpicker.url = "github:hyprwm/hyprpicker";
