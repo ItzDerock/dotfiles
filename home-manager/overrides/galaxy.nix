@@ -14,10 +14,10 @@ in
   };
 
   # configure winapps
-  rockcfg.winapps = {
-    enable = true;
-    rdp_password = secrets.winapps.rdp_password;
-  };
+  # rockcfg.winapps = {
+  #   enable = true;
+  #   rdp_password = secrets.winapps.rdp_password;
+  # };
 
   # wayland.windowManager.hyprland.settings = {
   #   # monitors

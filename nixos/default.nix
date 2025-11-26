@@ -1,4 +1,4 @@
-{ pkgs, config, outputs, ... }: {
+{ pkgs, config, inputs, outputs, ... }: {
   imports = [ 
     ./embedded-dev.nix
     ./lemurs.nix
@@ -38,8 +38,13 @@
     nerd-fonts.iosevka
   ];
 
-  environment.systemPackages = with pkgs; [
-    cachix
+  environment.systemPackages = let
+    nixpkgs-master = (import inputs.nixpkgs-master {
+      system = pkgs.system;
+      config.allowUnfree = true;
+    });
+  in with pkgs; [
+    nixpkgs-master.cachix
 
     libgcc
     nix-index
@@ -71,7 +76,7 @@
     libgsf # .odf
     nufraw-thumbnailer # .raw
     gnome-epub-thumbnailer # .epub, .mobi
-    f3d
+    nixpkgs-master.f3d
   ];
 
 

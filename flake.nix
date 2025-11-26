@@ -21,7 +21,8 @@
     self.submodules = true;
 
     # Nixpkgs
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable"; 
+
     nixpkgs-master.url = "github:nixos/nixpkgs/master";
 
     # Home manager

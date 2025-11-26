@@ -147,6 +147,8 @@ in
     kernel.sysctl."kernel.panic" = 60;
   };
 
+  services.throttled.enable = true;
+
   # more intel stuff
   hardware.graphics = {
     extraPackages = with pkgs; [

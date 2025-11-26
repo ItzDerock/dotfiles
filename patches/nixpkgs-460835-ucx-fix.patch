@@ -1,0 +1,28 @@
+From dd21a6dbf358c5286db83f9b19add2bda91e89f9 Mon Sep 17 00:00:00 2001
+From: "jfietz@github" <jfietz@github>
+Date: Wed, 12 Nov 2025 03:14:04 +0100
+Subject: [PATCH] ucx: fix `./configure` error due to strict_deps and incorrect
+ package
+
+The package was failing after strict_deps was enabled because a
+line-change described in the todo at the top was not made. This commit
+corrects this issue and follows the guidance from the todo.
+
+Fixes: #459635
+---
+ pkgs/by-name/uc/ucx/package.nix | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pkgs/by-name/uc/ucx/package.nix b/pkgs/by-name/uc/ucx/package.nix
+index 570ea47376451..ac43c32435bda 100644
+--- a/pkgs/by-name/uc/ucx/package.nix
++++ b/pkgs/by-name/uc/ucx/package.nix
+@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
+     "--with-dm"
+     "--with-verbs=${lib.getDev rdma-core}"
+   ]
+-  ++ lib.optionals enableCuda [ "--with-cuda=${cudaPackages.cuda_cudart}" ]
++  ++ lib.optionals enableCuda [ "--with-cuda=${cudaPackages.cuda_nvcc}" ]
+   ++ lib.optionals enableRocm [ "--with-rocm=${rocm}" ];
+ 
+   postInstall = ''
