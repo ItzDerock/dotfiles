@@ -1,5 +1,6 @@
 { pkgs, config, inputs, outputs, ... }: {
   imports = [ 
+    ./nix-ld.nix
     ./embedded-dev.nix
     ./lemurs.nix
     ./wm_hyprland.nix

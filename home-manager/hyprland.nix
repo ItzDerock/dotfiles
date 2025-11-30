@@ -214,24 +214,33 @@ in
           "$mod_CONTROL_SHIFT, right, hy3:movewindow, r, once, visible"
 
           # move focus
-          "$mod, h, hy3:movefocus, l"
-          "$mod, j, hy3:movefocus, d"
-          "$mod, k, hy3:movefocus, u"
-          "$mod, l, hy3:movefocus, r"
+          "$mod_CONTROL, h, hy3:movefocus, l"
+          "$mod_CONTROL, j, hy3:movefocus, d"
+          "$mod_CONTROL, k, hy3:movefocus, u"
+          "$mod_CONTROL, l, hy3:movefocus, r"
           "$mod, left, hy3:movefocus, l"
           "$mod, down, hy3:movefocus, d"
           "$mod, up, hy3:movefocus, u"
           "$mod, right, hy3:movefocus, r"
 
           # Move focus on only visible, without warping mouse
-          "$mod_CONTROL, h, hy3:movefocus, l, visible, nowarp"
-          "$mod_CONTROL, j, hy3:movefocus, d, visible, nowarp"
-          "$mod_CONTROL, k, hy3:movefocus, u, visible, nowarp"
-          "$mod_CONTROL, l, hy3:movefocus, r, visible, nowarp"
+          "$mod, j, hy3:movefocus, d, visible, nowarp"
+          "$mod, k, hy3:movefocus, u, visible, nowarp"
+          "$mod, bracketleft, hy3:movefocus, l, visible, nowarp"
+          "$mod, bracketright, hy3:movefocus, r, visible, nowarp"
+          "$mod_ALT, bracketleft, hy3:movefocus, l, nowarp"
+          "$mod_ALT, bracketright, hy3:movefocus, r, nowarp"
           "$mod_CONTROL, left, hy3:movefocus, l, visible, nowarp"
           "$mod_CONTROL, down, hy3:movefocus, d, visible, nowarp"
           "$mod_CONTROL, up, hy3:movefocus, u, visible, nowarp"
           "$mod_CONTROL, right, hy3:movefocus, r, visible, nowarp"
+
+          # other hy3 binds
+          "$mod_ALT, Return, hy3:locktab" # lock a group
+          "$mod_ALT, q, hy3:changegroup, toggletab"
+          "$mod_ALT, \\, hy3:changegroup, opposite"
+          "$mod_ALT, backspace, hy3:changegroup, untab"
+
 
           # run dialog
           # "$mod, SPACE, exec, kickoff-dot-desktop | kickoff --from-stdin" # wofi -S drun -I
