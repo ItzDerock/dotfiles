@@ -76,16 +76,6 @@ in
     enable = true;
   };
 
-  # footerm
-  home.file."${config.xdg.configHome}/foot/foot.ini" = {
-    text = ''
-      font=JetBrainsMono Nerd Font:size=16
-
-      [colors]
-      alpha=0.8
-    '';
-  };
-
   # cursor
   home.file.".local/share/icons/rose-pine-hyprcursor".source = "${cursorTheme}/share/icons/rose-pine-hyprcursor/";
 

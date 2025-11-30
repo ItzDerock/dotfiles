@@ -15,6 +15,8 @@
     extraPackages = with pkgs; [
       nodePackages.bash-language-server
       nixd
+      clang-tools
+      nil
       (python3.withPackages(ps: with ps; [
         python-lsp-server
       	flake8
@@ -30,47 +32,56 @@
       vim.opt.relativenumber = true
     '';
 
+    # CHANGES MADE HERE MAY REQUIRE CACHE CLEAR TO APPLY
+    # rm -rf ~/.local/share/nvim/base46
+    # OR :lua require("base46").compile()
     chadrcConfig = ''
       local M = {}
-      M.base46.transparency = true
-      M.ui.theme = "kanagawa"
-      return M
-    '';
 
-    extraPlugins = ''
-      return {
+      M.base46 = {
+        transparency = true,
+        theme = "dark_horizon",
+
+        hl_override = {
+          LineNr = { fg = "#9ca0a4" },
+          Comment = { fg = "#abb2bf" },
+        },
+      }
+
+      M.plugins = {
         {
-          "rebelot/kanagawa.nvim",
-          lazy = false,
-          priority = 1000,
-          config = function ()
-            -- local dragon_theme = require("kanagawa.colors").setup({
-            --   theme = "dragon"
-            -- }).theme
-            -- 
-            -- dragon_theme.ui.bg_gutter = "none"
+          "neovim/nvim-lspconfig",
+          config = function()
+            local lspconfig = require("lspconfig")
+            local on_attach = require("nvchad.configs.lspconfig").on_attach
+            local on_init = require("nvchad.configs.lspconfig").on_init
+            local capabilities = require("nvchad.configs.lspconfig").capabilities
 
-            require("kanagawa").setup({
-              transparent = true,
-              colors = {
-                theme = {
-                  all = {
-                    ui = { bg_gutter = "none" }
-                  },
-                },
-              },
-            })
+            -- List of servers to initialize automatically.
+            -- Ensure the binaries are in 'extraPackages' above!
+            local servers = { 
+              "html", "css", 
+              "bashls",
+              "nixd",
+              "pylsp",
+              "clangd",
+              "jdtls",
+              "gopls",
+              "nil_ls"
+            }
 
-            vim.cmd("colorscheme kanagawa")
-            vim.api.nvim_create_autocmd("VimEnter", {
-              pattern = "*",
-              callback = function()
-                vim.cmd("colorscheme kanagawa")
-              end,
-            })
+            for _, lsp in ipairs(servers) do
+              lspconfig[lsp].setup {
+                on_attach = on_attach,
+                on_init = on_init,
+                capabilities = capabilities,
+              }
+            end
           end,
         },
       }
-    '';
+
+      return M
+    ''; 
   };
 }

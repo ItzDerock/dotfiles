@@ -103,6 +103,9 @@
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Grub theme
+    minegrub-theme.url = "github:Lxtharia/minegrub-theme";
   };
 
   outputs =
@@ -151,6 +154,7 @@
             ./hosts/galaxy/configuration.nix
             inputs.stylix.nixosModules.stylix
             inputs.opnix.nixosModules.default
+            inputs.minegrub-theme.nixosModules.default
           ];
         };
 
@@ -160,6 +164,7 @@
             ./hosts/supernova/configuration.nix
             inputs.stylix.nixosModules.stylix
             inputs.opnix.nixosModules.default
+            inputs.minegrub-theme.nixosModules.default
           ];
         };
 

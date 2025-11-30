@@ -36,6 +36,9 @@ in {
 
       # terminals
       fish
+
+      # nix lsp
+      nil
     ];
 
   programs = {

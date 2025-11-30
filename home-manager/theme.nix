@@ -75,6 +75,16 @@ in
       config.lib.file.mkOutOfStoreSymlink ../assets/wallpapers;
   };
 
+  
+  # footerm
+  home.file."${config.xdg.configHome}/foot/foot.ini" = {
+    text = ''
+      font=JetBrainsMono Nerd Font:size=16
+
+      [colors]
+      alpha=0.87
+    '';
+  };
 
   # qt = {
   #   enable = true;
