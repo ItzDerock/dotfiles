@@ -72,8 +72,6 @@ in
     XCURSOR_THEME = "rose-pine-cursor";
   };
 
-  # programs.hyprlock.enable = true;
-
   programs.waybar = {
     enable = true;
   };

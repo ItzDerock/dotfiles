@@ -76,40 +76,40 @@ in
   };
 
 
-  qt = {
-    enable = true;
-    platformTheme.name = "gtk";
-    style.name = "adwaita-dark";
-  };
+  # qt = {
+  #   enable = true;
+  #   platformTheme.name = "gtk";
+  #   style.name = "adwaita-dark";
+  # };
 
-  gtk = {
-    enable = true;
+  # gtk = {
+  #   enable = true;
 
-    theme = {
-      name = "Catppuccin-Mocha-Standard-Lavender-Dark";
-      package = pkgs.catppuccin-gtk.override {
-        accents = [ "lavender" ];
-        size = "standard";
-        variant = "mocha";
-      };
-    };
+  #   theme = {
+  #     name = "Catppuccin-Mocha-Standard-Lavender-Dark";
+  #     package = pkgs.catppuccin-gtk.override {
+  #       accents = [ "lavender" ];
+  #       size = "standard";
+  #       variant = "mocha";
+  #     };
+  #   };
 
-    iconTheme = {
-      name = "Papirus-Dark";
-      package = pkgs.catppuccin-papirus-folders.override {
-        flavor = "mocha";
-        accent = "lavender";
-      };
-    };
+  #   iconTheme = {
+  #     name = "Papirus-Dark";
+  #     package = pkgs.catppuccin-papirus-folders.override {
+  #       flavor = "mocha";
+  #       accent = "lavender";
+  #     };
+  #   };
 
-    gtk3 = {
-      extraConfig.gtk-application-prefer-dark-theme = true;
-    };
-  };
+  #   gtk3 = {
+  #     extraConfig.gtk-application-prefer-dark-theme = true;
+  #   };
+  # };
 
-  home.sessionVariables = {
-    GTK_THEME = "Adwaita:dark";
-  };
+  # home.sessionVariables = {
+  #   GTK_THEME = "Adwaita:dark";
+  # };
 
   dconf.settings = {
     "org/gnome/desktop/interface" = {
