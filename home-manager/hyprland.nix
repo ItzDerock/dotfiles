@@ -125,7 +125,7 @@ in
       ];
 
       "exec-once" = [
-        "caelestia-shell"
+        # "caelestia-shell"
 
         # "wl-paste -p --watch wl-copy -pc" # disable middle mouse paste
         "playerctld" # music daemon
@@ -416,5 +416,23 @@ in
       bind = , catchall, submap, reset
       submap = reset
     '';
+  };
+
+  # caelestia shell systemd unit
+  systemd.user.services.caelestia = {
+    Unit = {
+      Description = "Caelestia Shell Hyprland";
+      PartOf = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+    };
+
+    Service = {
+      ExecStart = "${caelestia}/bin/caelestia-shell";
+      Restart = "on-failure";
+    };
+
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
   };
 }
