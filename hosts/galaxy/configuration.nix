@@ -67,6 +67,7 @@ in
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.extraGroups.plugdev = { };
   users.users.derock = {
     isNormalUser = true; description = "Derock";
     extraGroups = [ "networkmanager" "wheel" "dialout" "storage" "plugdev" "windscribe" ];
@@ -180,6 +181,8 @@ in
     '';
   };
 
+  services.fprintd.enable = true;
+  # services.fprintd.tod.enable = true;
 
   system.stateVersion = "23.11"; # dont change me
 }
