@@ -135,10 +135,10 @@ in
 
     # ipu6 doesn't support sbg's webcam
     # and causes lots of interrupts, so disable for battery
-    blacklistedKernelModules = [ 
-      "intel-ipu6" 
-      "intel-ipu6-isys"
-    ];
+    # blacklistedKernelModules = [ 
+    #   "intel-ipu6" 
+    #   "intel-ipu6-isys"
+    # ];
 
     kernelModules = [
       "v4l2loopback"
@@ -158,10 +158,10 @@ in
     ];
   };
 
-  # hardware.ipu6 = {
-  #   enable = true;
-  #   platform = "ipu6ep";
-  # };
+  hardware.ipu6 = {
+    enable = true;
+    platform = "ipu6ep";
+  };
 
   boot.loader = {
     systemd-boot.enable = false;

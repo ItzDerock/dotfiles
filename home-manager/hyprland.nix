@@ -10,6 +10,8 @@ in
   #   [ "$(tty)" = "/dev/tty1" ] && ! pgrep Hyprland >/dev/null && exec Hyprland &> /dev/null
   # '';
 
+  systemd.user.sessionVariables = config.home.sessionVariables;
+
   home.packages = with pkgs; [
     # shell
     caelestia-cli
@@ -85,6 +87,9 @@ in
     # use Hyprland package from the NixOS module (nixos/wm_hyprland.nix)
     package = null;
     portalPackage = null;
+    
+    # make dbus activation inherit all variables
+    systemd.variables = ["--all"];
 
     plugins = [
       # Separate workspaces per monitor

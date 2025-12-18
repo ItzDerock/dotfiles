@@ -87,11 +87,11 @@ in
       inputs.zen-browser.packages."${pkgs.system}".default
 
       # file browser
-      xfce.thunar
-      xfce.thunar-volman
-      xfce.thunar-archive-plugin # unzip
-      xfce.thunar-media-tags-plugin
-      xfce.tumbler # dbus thumbnailer
+      # xfce.thunar
+      # xfce.thunar-volman
+      # xfce.thunar-archive-plugin # unzip
+      # xfce.thunar-media-tags-plugin
+      # xfce.tumbler # dbus thumbnailer
       nautilus
       kdePackages.ark # zip
 
