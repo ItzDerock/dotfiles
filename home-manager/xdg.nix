@@ -46,12 +46,12 @@ let
   extraAssociations = {
     "inode/directory" = ["org.gnome.Nautilus.desktop"];
     "application/zip" = ["ark.desktop"];
-    "application/pdf" = ["microsoft-edge.desktop"];
+    "application/pdf" = ["zen.desktop"];
   };
 
   # [lowest prio ... highest prio]
   allAssociations = 
-    (makeMimeAssociations "microsoft-edge.desktop" "" browserTypes)
+    (makeMimeAssociations "zen.desktop" "" browserTypes)
     // (makeMimeAssociations "mpv.desktop" "video/" videoTypes)
     // (makeMimeAssociations "org.kde.kdegraphics.gwenview.desktop" "image/" imageTypes)
     // (makeMimeAssociations "nvim.desktop" "" textTypes)

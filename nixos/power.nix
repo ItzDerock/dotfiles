@@ -11,6 +11,7 @@ in {
     powerManagement.enable = true;
     services.thermald.enable = true; 
     services.power-profiles-daemon.enable = false;
+    services.system76-scheduler.enable = true;
     services.tlp = {
       enable = false;
       settings = {

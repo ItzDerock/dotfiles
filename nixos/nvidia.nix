@@ -63,7 +63,8 @@ in
       nvidiaSettings = true;
 
       # Optionally, you may need to select the appropriate driver version for your specific GPU.
-      package = config.boot.kernelPackages.nvidiaPackages.stable;
+      # Stable has a use-after-free bug .-.
+      package = config.boot.kernelPackages.nvidiaPackages.beta;
 
       prime = mkIf (!cfg.primary) {
         intelBusId = "PCI:0:2:0";

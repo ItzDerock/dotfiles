@@ -82,16 +82,10 @@ in
       # browser (i am indecisive)
       google-chrome
       firefox
-      vivaldi-ffmpeg-codecs
       microsoft-edge
       inputs.zen-browser.packages."${pkgs.system}".default
 
       # file browser
-      # xfce.thunar
-      # xfce.thunar-volman
-      # xfce.thunar-archive-plugin # unzip
-      # xfce.thunar-media-tags-plugin
-      # xfce.tumbler # dbus thumbnailer
       nautilus
       kdePackages.ark # zip
 
@@ -108,13 +102,15 @@ in
 
       # social media
       customVesktop
+      kdePackages.dolphin
+      nixpkgs-master.thunderbird # need >145 for Exchange
 
       # gaymin
       steam
       mangohud
-      nixpkgs-master.wineWowPackages.waylandFull
+      wineWowPackages.waylandFull
       prismlauncher
-      nixpkgs-master.gamescope
+      gamescope
       bottles
       lutris
 

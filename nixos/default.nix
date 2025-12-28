@@ -22,6 +22,7 @@
     ./network-shares.nix
     ./duke.nix
     ./networking.nix
+    ./laptops/samsung-960XFH.nix
   ];
 
   # Apply overlays
@@ -45,7 +46,7 @@
       config.allowUnfree = true;
     });
   in with pkgs; [
-    nixpkgs-master.cachix
+    cachix
 
     libgcc
     nix-index
@@ -147,4 +148,9 @@
     clean.extraArgs = "--keep-since 30d --keep 3";
     flake = "/home/derock/NixOS/";
   };
+
+  # udev rules
+  services.udev.extraRules = ''
+    SUBSYSTEM=="block", ENV{ID_FS_UUID}=="5e222bf6-e9ff-496e-9a41-3af44eb4f1b5", ENV{UDISKS_MOUNT_OPTIONS_DEFAULTS}="rw,exec,compress=zstd"
+  '';
 }

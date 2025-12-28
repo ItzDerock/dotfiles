@@ -52,7 +52,7 @@ in
     GDK_SCALE = "1";
     QT_SCALE_FACTOR = "1";
     QT_SCREEN_SCALE_FACTORS = "1;1";
-    BROWSER = "microsoft-edge";
+    BROWSER = "zen";
     SUDO_EDITOR = "${pkgs.neovim}/bin/nvim";
     EDITOR = "${pkgs.neovim}/bin/nvim";
     WLR_NO_HARDWARE_CURSORS = "1";
@@ -123,7 +123,40 @@ in
         "col.inactive_border" = "rgb(101415) rgb(101415)";
       }; 
 
-      animations.enabled = false;
+      animations = {
+        enabled = true;
+       
+        # Stolen from https://github.com/vyrx-dev/dotfiles/blob/main/.config/hypr/animations.conf
+        bezier = [
+          "water, 0.22, 0.9, 0.36, 1.0"
+          "flow, 0.25, 0.1, 0.25, 1.0"
+          "ripple, 0.33, 0.0, 0.2, 1.0"
+          "stream, 0.4, 0.0, 0.4, 1.0"
+          "cascade, 0.19, 1.0, 0.22, 1.0"
+          "md3_standard, 0.2, 0, 0, 1"
+          "md3_accel, 0.3, 0, 0.8, 0.15"
+          "overshot, 0.05, 0.9, 0.1, 1.05"
+        ];
+
+        animation = [
+          "windows,    1, 3.0, water"
+          "windowsIn,  1, 2.5, cascade,slide"
+          "windowsOut, 1, 2.4, stream,slide"
+          "windowsMove,1, 1.6, flow"
+          "fade,       1, 2.4, water"
+          "fadeIn,     1, 2.0, cascade"
+          "fadeOut,    1, 1.8, ripple"
+          "fadeDim,    1, 2.0, water"
+          "fadeSwitch, 1, 1.4, flow"
+          "layersIn,       1, 1.5, overshot, popin 80%"
+          "layersOut,      1, 1.3, md3_accel, popin 90%"
+          "layers,         1, 1.5, md3_standard"
+          "workspaces, 1, 1.5, flow"
+          "specialWorkspace, 1, 2.5, water"
+          "border,     1, 2.9, water"
+          "borderangle,1, 3.5, flow"
+        ];
+      };
 
       source = [
         "~/.config/hypr/monitors.conf"
@@ -374,6 +407,10 @@ in
         # so force back to 0 scaling else blurry text
         force_zero_scaling = true;
       };
+
+      gesture = [
+        "3, horizontal, workspace"
+      ];
 
       # Plugin Configuration
       plugin = {

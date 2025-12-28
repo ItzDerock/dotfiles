@@ -90,7 +90,7 @@ in
     power.enable = true;
     laptop = {
       enable = true;
-      soundFix = false;
+      samsung_960XFH = true;
     };
     wireplumber.enable = true;
     nvidia.enable = true;
@@ -108,6 +108,11 @@ in
       netid = secrets.duke-netid;
     };
   };
+
+  # save alsamixer
+  # On SBG3, the DP audio is muted by default
+  # alsamixer -> f6 -> 0 -> m to unmute (any MM)
+  hardware.alsa.enablePersistence = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -133,13 +138,6 @@ in
   boot = {
     kernelPackages = pkgs.linuxSamsung;
 
-    # ipu6 doesn't support sbg's webcam
-    # and causes lots of interrupts, so disable for battery
-    # blacklistedKernelModules = [ 
-    #   "intel-ipu6" 
-    #   "intel-ipu6-isys"
-    # ];
-
     kernelModules = [
       "v4l2loopback"
     ];
@@ -161,6 +159,15 @@ in
   hardware.ipu6 = {
     enable = true;
     platform = "ipu6ep";
+  };
+
+  # Update format to YUY2
+  services.v4l2-relayd.instances.ipu6 = {
+    input = {
+      width = 1280;
+      height = 720;
+      format = "nv12";
+    };
   };
 
   boot.loader = {

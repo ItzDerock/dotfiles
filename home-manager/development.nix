@@ -21,7 +21,8 @@ in {
 
       # code editors
       vscode-fhs
-      nixpkgs-master.zed-editor.fhs
+      # nixpkgs-master.zed-editor.fhs
+      zed-editor.fhs
 
       # cli tools
       imagemagick
