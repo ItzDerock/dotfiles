@@ -51,15 +51,5 @@ in {
         };
       };
     }];
-
-    # grub theme
-    boot.loader.grub = {
-      minegrub-theme = {
-        enable = true;
-        splash = "I use NixOS btw";
-        background = "background_options/1.8  - [Classic Minecraft].png";
-        boot-options-count = 4;
-      };
-    };
   };
 }

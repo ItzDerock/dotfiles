@@ -356,18 +356,21 @@ in
       ];
 
       windowrule = [
-        # Floating windows
-        # taken from omarchy hypr config
-        "float, tag:floating-window"
-        "center, tag:floating-window"
-        "size 800 600, tag:floating-window"
-        "tag +floating-window, class:(blueberry.py|Impala|Wiremix|org.gnome.NautilusPreviewer|com.gabm.satty|About|TUI.float)"
-        "tag +floating-window, class:(xdg-desktop-portal-gtk|sublime_text|DesktopEditors|org.gnome.Nautilus), title:^(Open.*Files?|Open [F|f]older.*|Save.*Files?|Save.*As|Save|All Files)"
+        # Actions for windows tagged 'floating-window'
+        # (Combined float, center, and size into one rule as permitted by new syntax)
+        "float on, center on, size 800 600, match:tag floating-window"
 
-        "float, class:(xdg-desktop-portal-gtk)"
+        # Apply tag based on class
+        "tag +floating-window, match:class (blueberry.py|Impala|Wiremix|org.gnome.NautilusPreviewer|com.gabm.satty|About|TUI.float)"
 
-        # transparency
-        "opacity 0.9 override 0.9 override,class:(code|org.gnome.Nautilus)"
+        # Apply tag based on class AND title
+        "tag +floating-window, match:class (xdg-desktop-portal-gtk|sublime_text|DesktopEditors|org.gnome.Nautilus), match:title ^(Open.*Files?|Open [F|f]older.*|Save.*Files?|Save.*As|Save|All Files)"
+
+        # Standalone float rule
+        "float on, match:class (xdg-desktop-portal-gtk)"
+
+        # Transparency
+        "opacity 0.9 override 0.9 override, match:class (code|org.gnome.Nautilus)"
       ];
 
       input = {
@@ -382,6 +385,7 @@ in
       };
 
       misc = {
+        on_focus_under_fullscreen = 1;
         disable_hyprland_logo = true;
         enable_swallow = true;
         swallow_regex = "^(kitty|foot*)$";
@@ -392,10 +396,6 @@ in
 
       dwindle = {
         smart_split = true;
-      };
-
-      experimental = {
-        xx_color_management_v4 = true;
       };
 
       debug = {

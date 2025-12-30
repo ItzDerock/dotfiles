@@ -22,7 +22,6 @@
 
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable"; 
-
     nixpkgs-master.url = "github:nixos/nixpkgs/master";
 
     # Home manager
@@ -34,7 +33,7 @@
 
     # - HYPRLAND STUFF
     hyprland = {
-      url = "github:hyprwm/Hyprland?ref=v0.52.0";
+      url = "github:hyprwm/Hyprland";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -104,8 +103,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Grub theme
-    minegrub-theme.url = "github:Lxtharia/minegrub-theme";
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -154,7 +155,7 @@
             ./hosts/galaxy/configuration.nix
             inputs.stylix.nixosModules.stylix
             inputs.opnix.nixosModules.default
-            inputs.minegrub-theme.nixosModules.default
+            inputs.lanzaboote.nixosModules.lanzaboote
           ];
         };
 
@@ -164,7 +165,7 @@
             ./hosts/supernova/configuration.nix
             inputs.stylix.nixosModules.stylix
             inputs.opnix.nixosModules.default
-            inputs.minegrub-theme.nixosModules.default
+            inputs.lanzaboote.nixosModules.lanzaboote
           ];
         };
 

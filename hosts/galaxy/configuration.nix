@@ -1,6 +1,14 @@
 { config, pkgs, inputs, outputs, lib, ... }:
 let
-  secrets = import ../../secrets.nix; 
+  secrets = import ../../secrets.nix;
+
+  dsdtPatch = pkgs.runCommand "dsdt-patch.cpio" {
+    nativeBuildInputs = [ pkgs.cpio ];
+  } ''
+    mkdir -p kernel/firmware/acpi
+    cp ${../../assets/dsdt/960XFH.aml} kernel/firmware/acpi/dsdt.aml   
+    find kernel | cpio -H newc -o --reproducible > $out
+  '';
 in
 {
   imports =
@@ -127,6 +135,7 @@ in
     mesa
     linuxPackages.v4l2loopback
     btop.withoutGpu
+    sbctl
   ];
 
   virtualisation.waydroid.enable = true;
@@ -171,21 +180,17 @@ in
   };
 
   boot.loader = {
-    systemd-boot.enable = false;
-    grub.enable = true;
-    grub.device = "nodev";
-    grub.useOSProber = true;
-    grub.efiSupport = true;
+    systemd-boot.enable = lib.mkForce false;
+    grub.enable = false;
     efi.canTouchEfiVariables = true;
     efi.efiSysMountPoint = "/boot";
+  };
 
-    # dsdt patches
-    grub.extraFiles = {
-      "samsung_acpi_patch.aml" = "${../../assets/dsdt/960XFH.aml}";
-    };
-    grub.extraConfig = ''
-      acpi /samsung_acpi_patch.aml
-    '';
+  boot.initrd.prepend = [ "${dsdtPatch}" ];
+
+  boot.lanzaboote = {
+    enable = true;
+    pkiBundle = "/var/lib/sbctl";
   };
 
   services.fprintd.enable = true;
