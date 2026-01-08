@@ -182,15 +182,16 @@ in {
     '';
   }];
 
-
   boot.loader = {
-    systemd-boot.enable = false;
-    grub.enable = true;
-    grub.device = "nodev";
-    grub.useOSProber = true;
-    grub.efiSupport = true;
+    systemd-boot.enable = lib.mkForce false;
+    grub.enable = false;
     efi.canTouchEfiVariables = true;
     efi.efiSysMountPoint = "/boot";
+  };
+
+  boot.lanzaboote = {
+    enable = true;
+    pkiBundle = "/var/lib/sbctl";
   };
 
   swapDevices = [{
