@@ -47,7 +47,7 @@ in {
           obsidian.enable = true;
           starship.enable = true;
           tmux.enable = true;
-          kde.enable = true;
+          qt.enable = true;
         };
       };
     }];

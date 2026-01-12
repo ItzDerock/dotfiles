@@ -78,6 +78,7 @@ in {
   # dm.lemurs.enable = true;
   wm.hyprland.enable = true;
   rockcfg = {
+    theme.enable = true;
     onepass.enable = true;
     syncthing.enable = true;
     printing.enable = true;
@@ -163,15 +164,10 @@ in {
   programs.coolercontrol.enable = true;
 
   boot.extraModulePackages = with config.boot.kernelPackages; [ nct6687d ];
-  boot.kernelModules = [ "nct6687" ];
   boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linux_zen;
 
   powerManagement.enable = true;
   powerManagement.cpuFreqGovernor = "performance";
-
-  #amd
-  boot.initrd.kernelModules = [ "amdgpu" ];
-  boot.kernelParams = ["amd.dcdebugmask=0x10" "amdgpu.runpm=0"];
 
   # native compiler optimizations
   boot.kernelPatches = [{
@@ -182,16 +178,35 @@ in {
     '';
   }];
 
-  boot.loader = {
-    systemd-boot.enable = lib.mkForce false;
-    grub.enable = false;
-    efi.canTouchEfiVariables = true;
-    efi.efiSysMountPoint = "/boot";
-  };
+  hardware.enableRedistributableFirmware = true;
 
-  boot.lanzaboote = {
-    enable = true;
-    pkiBundle = "/var/lib/sbctl";
+  boot = {
+    kernelModules = [ "amdgpu" "iwlwifi" "nct6687" ];
+    kernelParams = ["amd.dcdebugmask=0x10" "amdgpu.runpm=0"];
+      
+    loader = {
+      systemd-boot.enable = lib.mkForce false;
+      grub.enable = false;
+      efi.canTouchEfiVariables = true;
+      efi.efiSysMountPoint = "/boot";
+    };
+
+    initrd = {
+      systemd.enable = true;
+      availableKernelModules = ["tpm_tis"];
+      luks.devices."luks-c4e1f149-9b46-426b-9494-cd8b9dd81254" = {
+        # This merges with your hardware-configuration.nix, so you don't 
+        # strictly need to repeat the 'device = ...' line if it's already there.
+        crypttabExtraOpts = [ "tpm2-device=auto" ];
+      };
+    };
+
+    lanzaboote = {
+      enable = true;
+      pkiBundle = "/var/lib/sbctl";
+    };
+
+    bootspec.enableValidation = true;
   };
 
   swapDevices = [{
