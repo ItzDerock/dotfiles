@@ -34,12 +34,14 @@ in
   boot.initrd.luks.devices."luks-b2c00540-b801-4ae1-bb27-7f5dfaae4194".device = "/dev/disk/by-uuid/b2c00540-b801-4ae1-bb27-7f5dfaae4194";
   networking.hostName = "derock-nix"; # Define your hostname.
 
-  # Enable networking
   hardware.enableAllFirmware = true;
+  hardware.cpu.intel.updateMicrocode = true;
+
+  # Enable networking
   networking.networkmanager = {
     enable = true;
     wifi = {
-      powersave = false;
+      powersave = true;
       # backend = "iwd";
     };
   };
@@ -108,6 +110,7 @@ in
       enable = true;
       nvidia = true;
     };
+    networking.enable = true;
     network-shares.enable = true;
     embedded-dev.enable = true;
 
@@ -179,18 +182,39 @@ in
     };
   };
 
-  boot.loader = {
-    systemd-boot.enable = lib.mkForce false;
-    grub.enable = false;
-    efi.canTouchEfiVariables = true;
-    efi.efiSysMountPoint = "/boot";
-  };
+  boot = {
+    bootspec.enableValidation = true;
 
-  boot.initrd.prepend = [ "${dsdtPatch}" ];
+    initrd = {
+      systemd.enable = true;
+      availableKernelModules = [ "tpm_tis" ];
 
-  boot.lanzaboote = {
-    enable = true;
-    pkiBundle = "/var/lib/sbctl";
+      luks.devices = {
+        # ROOT Partition (nvme1n1p2)
+        "luks-42c869fb-4b43-44c5-97ff-136cb326054c" = {
+          crypttabExtraOpts = [ "tpm2-device=auto" ];
+        };
+
+        # SWAP Partition (nvme1n1p3)
+        "luks-b2c00540-b801-4ae1-bb27-7f5dfaae4194" = {
+          crypttabExtraOpts = [ "tpm2-device=auto" ];
+        };
+      };
+
+      # prepend = [ "${dsdtPatch}" ];
+    };
+
+    loader = {
+      systemd-boot.enable = lib.mkForce false;
+      grub.enable = false;
+      efi.canTouchEfiVariables = true;
+      efi.efiSysMountPoint = "/boot";
+    };
+
+    lanzaboote = {
+      enable = true;
+      pkiBundle = "/var/lib/sbctl";
+    };
   };
 
   services.fprintd.enable = true;
