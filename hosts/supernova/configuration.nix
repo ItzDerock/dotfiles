@@ -78,6 +78,7 @@ in {
   # dm.lemurs.enable = true;
   wm.hyprland.enable = true;
   rockcfg = {
+    greeter.enable = true;
     theme.enable = true;
     onepass.enable = true;
     syncthing.enable = true;

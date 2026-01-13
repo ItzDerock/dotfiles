@@ -2,7 +2,7 @@
   imports = [ 
     ./nix-ld.nix
     ./embedded-dev.nix
-    ./lemurs.nix
+    ./greeter.nix
     ./wm_hyprland.nix
     ./wayland.nix
     ./winboat.nix

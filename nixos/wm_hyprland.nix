@@ -17,8 +17,6 @@ in {
       portalPackage = inputs.hyprland.packages."${pkgs.system}".xdg-desktop-portal-hyprland;
     };
 
-    security.pam.services.hyprland.kwallet.enable = true;
-
     # pin mesa version
     # nixpkgs.overlays = [
     #   (final: prev: {
