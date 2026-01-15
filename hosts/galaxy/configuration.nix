@@ -119,6 +119,10 @@ in
       enable = true;
       netid = secrets.duke-netid;
     };
+
+    hardware = {
+      sharge.enable = true;
+    };
   };
 
   # save alsamixer

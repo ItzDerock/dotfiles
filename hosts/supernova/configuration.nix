@@ -78,6 +78,7 @@ in {
   # dm.lemurs.enable = true;
   wm.hyprland.enable = true;
   rockcfg = {
+    network-shares.enable = true;
     greeter.enable = true;
     theme.enable = true;
     onepass.enable = true;
@@ -98,6 +99,11 @@ in {
     duke = {
       enable = true;
       netid = secrets.duke-netid;
+    };
+
+    hardware = {
+      razer.enable = true;
+      sharge.enable = true;
     };
   };
 
@@ -121,6 +127,7 @@ in {
     liquidctl
     lm_sensors
     btop
+    openrgb-with-all-plugins
   ];
 
   # corsair
@@ -182,7 +189,9 @@ in {
   hardware.enableRedistributableFirmware = true;
 
   boot = {
-    kernelModules = [ "amdgpu" "iwlwifi" "nct6687" ];
+    # nct6687 -> for sensors
+    # i2c-dev -> openrgb
+    kernelModules = [ "amdgpu" "iwlwifi" "nct6687" "i2c-dev" ];
     kernelParams = ["amd.dcdebugmask=0x10" "amdgpu.runpm=0"];
       
     loader = {
@@ -214,4 +223,8 @@ in {
     device = "/swapfile";
     size = 64 * 1024;
   }];
+
+  # openrgb for corsair
+  hardware.i2c.enable = true;
+  services.hardware.openrgb.enable = true;
 }

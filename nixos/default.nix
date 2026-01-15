@@ -23,6 +23,8 @@
     ./duke.nix
     ./networking.nix
     ./laptops/samsung-960XFH.nix
+    ./hardware/razer.nix
+    ./hardware/sharge.nix
   ];
 
   # Apply overlays
