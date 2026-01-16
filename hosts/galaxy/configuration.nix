@@ -94,6 +94,7 @@ in
   wm.hyprland.enable = true;
 
   rockcfg = {
+    greeter.enable = true;
     onepass.enable = true;
     syncthing.enable = true;
     printing.enable = true;
