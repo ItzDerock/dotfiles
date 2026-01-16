@@ -9,7 +9,7 @@ in {
 
   config = mkIf cfg.enable { 
     networking.networkmanager = {
-      wifi.backend = "iwd";
+      # wifi.backend = "iwd";
       enable = true;
       plugins = with pkgs; [
         networkmanager-openvpn
