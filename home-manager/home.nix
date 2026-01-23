@@ -130,6 +130,12 @@ in
       quick-record-script
       screenshot
       satty # screenshot deps
+
+      # productivity
+      libreoffice-qt6
+      hunspell
+      hunspellDicts.en_US
+      zotero
     ];
 
   # my cfg stuff
