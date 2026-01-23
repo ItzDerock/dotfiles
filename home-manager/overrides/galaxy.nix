@@ -13,6 +13,10 @@ in
     mimeType = [ "text/html" "text/xml" ];
   };
 
+  home.sessionVariables = {
+    WLR_DRM_DEVICES = "/dev/dri/card0";
+  };
+
   # configure winapps
   # rockcfg.winapps = {
   #   enable = true;
