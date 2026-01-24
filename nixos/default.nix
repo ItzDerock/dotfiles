@@ -81,6 +81,11 @@
     nufraw-thumbnailer # .raw
     gnome-epub-thumbnailer # .epub, .mobi
     nixpkgs-master.f3d
+
+    # utils
+    pciutils
+    usbutils
+    lsof
   ];
 
 

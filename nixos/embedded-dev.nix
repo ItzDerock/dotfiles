@@ -11,6 +11,7 @@ in
   config = mkIf cfg.enable {
     services.udev.packages = [
       outputs.packages.${pkgs.system}.probe-rs-rules
+      pkgs.tio # serial tty
     ];
   };
 }

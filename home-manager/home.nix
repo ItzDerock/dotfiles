@@ -136,6 +136,8 @@ in
       hunspell
       hunspellDicts.en_US
       zotero
+
+      comma
     ];
 
   # my cfg stuff
