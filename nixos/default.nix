@@ -86,6 +86,8 @@
     pciutils
     usbutils
     lsof
+    mtr
+    nload
   ];
 
 

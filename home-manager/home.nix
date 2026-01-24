@@ -136,6 +136,7 @@ in
       hunspell
       hunspellDicts.en_US
       zotero
+      localsend
 
       comma
     ];
