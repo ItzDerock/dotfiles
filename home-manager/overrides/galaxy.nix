@@ -14,7 +14,7 @@ in
   };
 
   home.sessionVariables = {
-    WLR_DRM_DEVICES = "/dev/dri/card0";
+    AQ_DRM_DEVICES = "/dev/dri/card1";
   };
 
   # configure winapps
