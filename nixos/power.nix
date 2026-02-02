@@ -43,6 +43,19 @@ in {
 
     services.tuned = {
       enable = true;
+      profiles = {
+        intel-powersave = {
+          main = {
+            include = "powersave";
+          };
+
+          sysfs = {
+            "/sys/class/drm/card1/gt_min_freq_mhz" = 300;
+            "/sys/class/drm/card1/gt_max_freq_mhz" = 400;
+            "/sys/class/drm/card1/gt_boost_freq_mhz" = 500;
+          };
+        };
+      };
     };
 
     # prevent docker from auto-starting
