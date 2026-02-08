@@ -48,6 +48,8 @@ in {
           starship.enable = true;
           tmux.enable = true;
           qt.enable = true;
+          qt.platform = "kvantum";
+          kde.enable = true;
         };
       };
     }];

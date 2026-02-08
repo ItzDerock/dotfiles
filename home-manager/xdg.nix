@@ -83,6 +83,8 @@ in
 
     # force override
     configFile."mimeapps.list".force = true;
+
+    terminal-exec.settings.default = [ terminalApplication ];
   };
 
   # Set default terminal

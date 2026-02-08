@@ -380,7 +380,7 @@ in
           scroll_factor = 0.2;
         };
 
-        sensitivity = 0;
+        sensitivity = -0.3;
         accel_profile = "flat";
       };
 

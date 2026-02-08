@@ -1,4 +1,4 @@
-{ pkgs, config, inputs, ... }:
+{ lib, pkgs, config, inputs, ... }:
 let
   wallpaper-script = pkgs.writeScriptBin "wallpaper" (builtins.readFile ../assets/scripts/wallpaper.sh);
   wpaudiochanger = pkgs.writeScriptBin "wpaudiochanger" (builtins.readFile ../assets/scripts/wpaudiochange.py);
@@ -11,7 +11,8 @@ in
     nsxiv
     file
     wallust # pywal was archived
-
+    
+    kdePackages.qt6ct
     libsForQt5.qtstyleplugin-kvantum
     qt6Packages.qtstyleplugin-kvantum
     ayu-theme-gtk
@@ -75,6 +76,17 @@ in
       config.lib.file.mkOutOfStoreSymlink ../assets/wallpapers;
   };
 
+  systemd.user.sessionVariables = {
+    QT_STYLE_OVERRIDE = lib.mkForce "kvantum";
+    QT_QPA_PLATFORMTHEME = lib.mkForce "qt6ct"; 
+  };
+
+  
+  home.sessionVariables = {
+    QT_STYLE_OVERRIDE = lib.mkForce "kvantum";
+    QT_QPA_PLATFORMTHEME = lib.mkForce "qt6ct"; 
+  };
+
   
   # footerm
   home.file."${config.xdg.configHome}/foot/foot.ini" = {
@@ -85,41 +97,6 @@ in
       alpha=0.87
     '';
   };
-
-  # qt = {
-  #   enable = true;
-  #   platformTheme.name = "gtk";
-  #   style.name = "adwaita-dark";
-  # };
-
-  # gtk = {
-  #   enable = true;
-
-  #   theme = {
-  #     name = "Catppuccin-Mocha-Standard-Lavender-Dark";
-  #     package = pkgs.catppuccin-gtk.override {
-  #       accents = [ "lavender" ];
-  #       size = "standard";
-  #       variant = "mocha";
-  #     };
-  #   };
-
-  #   iconTheme = {
-  #     name = "Papirus-Dark";
-  #     package = pkgs.catppuccin-papirus-folders.override {
-  #       flavor = "mocha";
-  #       accent = "lavender";
-  #     };
-  #   };
-
-  #   gtk3 = {
-  #     extraConfig.gtk-application-prefer-dark-theme = true;
-  #   };
-  # };
-
-  # home.sessionVariables = {
-  #   GTK_THEME = "Adwaita:dark";
-  # };
 
   dconf.settings = {
     "org/gnome/desktop/interface" = {
