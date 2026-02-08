@@ -370,7 +370,7 @@ in
         "float on, match:class (xdg-desktop-portal-gtk)"
 
         # Transparency
-        "opacity 0.9 override 0.9 override, match:class (code|org.gnome.Nautilus)"
+        "opacity 0.9 override 0.9 override, match:class (code|org.gnome.Nautilus|org.kde.dolphin)"
       ];
 
       input = {
