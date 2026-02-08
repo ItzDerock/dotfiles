@@ -88,6 +88,11 @@ in
       # file browser
       nautilus
       kdePackages.ark # zip
+      kdePackages.dolphin
+      kdePackages.kio
+      kdePackages.kio-fuse
+      kdePackages.kio-extras
+      kdePackages.qtsvg
 
       # basic desktop apps
       kdePackages.kate
@@ -102,7 +107,6 @@ in
 
       # social media
       customVesktop
-      kdePackages.dolphin
       nixpkgs-master.thunderbird # need >145 for Exchange
 
       # gaymin

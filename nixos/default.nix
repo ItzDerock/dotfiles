@@ -31,6 +31,7 @@
   nixpkgs.overlays = [
     outputs.overlays.additions
     outputs.overlays.modifications
+    inputs.dolphin-overlay.overlays.default
   ];
 
   # global configuration regardless of system
@@ -88,6 +89,7 @@
     lsof
     mtr
     nload
+    fastfetch
   ];
 
 
