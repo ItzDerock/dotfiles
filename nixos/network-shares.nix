@@ -8,17 +8,16 @@ in {
   };
 
   config = mkIf cfg.enable {
-    fileSystems."/mnt/home-nas" = {
-      device = "derock@cockpit.bat-major.ts.net:/mnt/main/derock";
-      fsType = "sshfs";
-      options = [
-        # Lazy mount
-        "x-systemd.automount"
-        "noauto"
-
-        # Disconnect on idle (10 mins)
-        "x-systemd.idle-timeout=600"
-      ];
-    };
+    # fileSystems."/mnt/home-nas" = {
+    #   device = "derock@cockpit.bat-major.ts.net:/mnt/main/derock";
+    #   fsType = "sshfs";
+    #   options = [
+    #     # Lazy mount
+    #     "x-systemd.automount"
+    #     "noauto"
+    #     # Disconnect on idle (10 mins)
+    #     "x-systemd.idle-timeout=600"
+    #   ];
+    # };
   };
 }

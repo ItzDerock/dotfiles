@@ -384,6 +384,13 @@ in
         accel_profile = "flat";
       };
 
+      device = [
+        {
+          name = "img4100:00-4d49:4150-touchpad";
+          sensitivity = 0;
+        }
+      ];
+
       misc = {
         on_focus_under_fullscreen = 1;
         disable_hyprland_logo = true;
