@@ -365,6 +365,7 @@ in
 
         # Apply tag based on class AND title
         "tag +floating-window, match:class (xdg-desktop-portal-gtk|sublime_text|DesktopEditors|org.gnome.Nautilus), match:title ^(Open.*Files?|Open [F|f]older.*|Save.*Files?|Save.*As|Save|All Files)"
+        "tag +floating-window, match:class (org.kde.dolphin), match:initial_title ^(Moving — Dolphin)"
 
         # Standalone float rule
         "float on, match:class (xdg-desktop-portal-gtk)"
