@@ -10,6 +10,7 @@ in
 
   config = mkIf cfg.enable {
     services.udev.packages = [
+      pkgs.platformio-core.udev
       outputs.packages.${pkgs.system}.probe-rs-rules
       pkgs.tio # serial tty
     ];

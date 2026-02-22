@@ -50,9 +50,20 @@ in {
           };
 
           sysfs = {
-            "/sys/class/drm/card1/gt_min_freq_mhz" = 300;
+            # "/sys/class/drm/card1/gt_min_freq_mhz" = 300;
             "/sys/class/drm/card1/gt_max_freq_mhz" = 400;
             "/sys/class/drm/card1/gt_boost_freq_mhz" = 500;
+          };
+        };
+
+        intel-balanced-power = {
+          main = {
+            include = "balanced-battery";
+          };
+
+          sysfs = {
+            "/sys/class/drm/card1/gt_max_freq_mhz" = 800;
+            "/sys/class/drm/card1/gt_boost_freq_mhz" = 800;
           };
         };
       };

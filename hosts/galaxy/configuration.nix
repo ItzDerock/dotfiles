@@ -46,6 +46,14 @@ in
     };
   };
 
+  # power saving
+  boot.extraModprobeConfig = ''
+    options iwlwifi power_save=1
+    options iwlmvm power_scheme=3
+    options iwlwifi uapsd_disable=0
+  '';
+  boot.kernelParams = [ "pcie_aspm=force" ];
+
   services.windscribe.enable = true;
 
   boot.kernel.sysctl = {
