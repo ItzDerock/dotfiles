@@ -26,6 +26,10 @@ in
         openssl
         curl
         expat
+        libxml2_13
+        zlib
+        xz
+        eudev
       ];
     };
   }; 
