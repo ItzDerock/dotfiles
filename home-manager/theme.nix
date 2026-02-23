@@ -61,8 +61,14 @@ in
         useFuzzy.apps = true;
       };
 
+      border = {
+        thickness = 1;
+      };
+
       services = {
         useFahrenheit = false;
+        useFahrenheitPerformance = false;
+        gpuType = "generic";
       };
 
       general = {
