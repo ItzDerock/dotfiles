@@ -7,11 +7,13 @@
       "https://hyprland.cachix.org"
       "https://cuda-maintainers.cachix.org"
       "https://devenv.cachix.org"
+      "https://attic.xuyh0120.win/lantian" # cachyos kernel
     ];
     extra-trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
       "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E="
+      "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" # cachyos kernel
     ];
 
     trustedUsers = [ "root" "@wheel" "derock" ];
@@ -33,7 +35,7 @@
 
     # - HYPRLAND STUFF
     hyprland = {
-      url = "github:hyprwm/Hyprland";
+      url = "github:hyprwm/Hyprland?ref=9f59ed786856df8a28430e4084491c7e9fa6234f";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -60,7 +62,7 @@
     };
 
     hyprsplit =  {
-      url = "github:shezdy/hyprsplit";
+      url = "github:shezdy/hyprsplit?ref=a83c66201832f93ece9622f46015995734d41b73";
       inputs.hyprland.follows = "hyprland";
     };
 
@@ -113,6 +115,9 @@
       url = "github:rumboon/dolphin-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # kernel
+    cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
   };
 
   outputs =

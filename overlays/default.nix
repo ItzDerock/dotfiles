@@ -58,6 +58,18 @@
             echo "Skipping install checks in Nix build"
           '';
         });
+
+        psycopg = python-prev.psycopg.overridePythonAttrs (oldAttrs: {
+          doCheck = false;
+
+          propagatedBuildInputs = (oldAttrs.propagatedBuildInputs or []) 
+            ++ [ python-prev.psycopg-pool ];
+
+          pythonImportsCheck = [
+            "psycopg"
+            "psycopg_pool"
+          ];
+        });
       })
     ];
   };

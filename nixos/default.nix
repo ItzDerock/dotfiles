@@ -32,6 +32,7 @@
     outputs.overlays.additions
     outputs.overlays.modifications
     inputs.dolphin-overlay.overlays.default
+    inputs.cachyos-kernel.overlays.pinned
   ];
 
   # global configuration regardless of system

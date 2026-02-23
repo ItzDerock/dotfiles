@@ -73,7 +73,7 @@ in
       # browser (i am indecisive)
       google-chrome
       firefox
-      microsoft-edge
+      # microsoft-edge
       inputs.zen-browser.packages."${pkgs.system}".default
 
       # file browser
