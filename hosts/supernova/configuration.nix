@@ -172,7 +172,7 @@ in {
   programs.coolercontrol.enable = true;
 
   boot.extraModulePackages = with config.boot.kernelPackages; [ nct6687d ];
-  boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linux_zen;
+  boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest-lto-x86_64-v3;
 
   powerManagement.enable = true;
   powerManagement.cpuFreqGovernor = "performance";
