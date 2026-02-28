@@ -29,7 +29,7 @@ in
         libxml2_13
         zlib
         xz
-        eudev
+        systemd
       ];
     };
   }; 

@@ -161,8 +161,8 @@ in
   # 6.15 merges the required Samsung Galaxybook driver
   # 6.14 doesn't have, and the out-of-tree module does not support 6.14 either.
   boot = {
-    # kernelPackages = pkgs.linuxSamsung;
-    kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest-lto-x86_64-v3;
+    kernelPackages = pkgs.linuxSamsung;
+    # kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest-lto-x86_64-v3;
 
     kernelModules = [
       "v4l2loopback"

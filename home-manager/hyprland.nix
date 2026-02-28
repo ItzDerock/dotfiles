@@ -1,4 +1,10 @@
-{ inputs, pkgs, config, outputs, ... }:
+{
+  inputs,
+  pkgs,
+  config,
+  outputs,
+  ...
+}:
 let
   cursorTheme = inputs.rose-pine-hyprcursor.packages.${pkgs.system}.default;
   caelestia = inputs.caelestia.packages.${pkgs.system}.default;
@@ -79,7 +85,8 @@ in
   };
 
   # cursor
-  home.file.".local/share/icons/rose-pine-hyprcursor".source = "${cursorTheme}/share/icons/rose-pine-hyprcursor/";
+  home.file.".local/share/icons/rose-pine-hyprcursor".source =
+    "${cursorTheme}/share/icons/rose-pine-hyprcursor/";
 
   wayland.windowManager.hyprland = {
     enable = true;
@@ -87,9 +94,9 @@ in
     # use Hyprland package from the NixOS module (nixos/wm_hyprland.nix)
     package = null;
     portalPackage = null;
-    
+
     # make dbus activation inherit all variables
-    systemd.variables = ["--all"];
+    systemd.variables = [ "--all" ];
 
     plugins = [
       # Separate workspaces per monitor
@@ -97,35 +104,25 @@ in
 
       # WIN + TAB, show all workspaces
       inputs.hyprland-plugins.packages.${pkgs.system}.hyprexpo
-
-      # i3 stuff like sub-workspaces
-      inputs.hy3.packages.${pkgs.system}.hy3
-
-      # workspace overview
-      # inputs.Hyprspace.packages.${pkgs.system}.Hyprspace
     ];
 
     # package = null; # use system hyprland
     settings = {
       "$mod" = "SUPER";
 
-      # plugins = [
-      #   "${inputs.hy3.packages.${pkgs.system}.hy3}/lib/libhy3.so"
-      # ];
-
       general = {
-        layout = "hy3";
-       	border_size = 0;
-       	gaps_in = 1;
-       	gaps_out = 0;
+        layout = "scrolling";
+        border_size = 0;
+        gaps_in = 1;
+        gaps_out = 0;
 
         "col.active_border" = "rgb(101415) rgb(101415)";
         "col.inactive_border" = "rgb(101415) rgb(101415)";
-      }; 
+      };
 
       animations = {
         enabled = true;
-       
+
         # Stolen from https://github.com/vyrx-dev/dotfiles/blob/main/.config/hypr/animations.conf
         bezier = [
           "water, 0.22, 0.9, 0.36, 1.0"
@@ -177,155 +174,113 @@ in
         "$mod, mouse:273, resizewindow"
       ];
 
-      bind =
-        [
-          # Basic controls
-          "$mod, P, togglefloating,"
-          "$mod, F, fullscreen,1"
-          "$mod_SHIFT, F, fullscreen,2"
-          "$mod, E, fullscreen,0"
+      bind = [
+        # Basic controls
+        "$mod, P, togglefloating,"
+        "$mod, F, fullscreen,1"
+        "$mod_SHIFT, F, fullscreen,2"
+        "$mod, E, fullscreen,0"
 
-          "$mod, I, exec, firefox" # browser
-          "$mod, T, exec, foot" # terminal
-          "$mod, C, killactive" # close window
+        "$mod, I, exec, firefox" # browser
+        "$mod, T, exec, foot" # terminal
+        "$mod, C, killactive" # close window
 
-          "$mod, period, exec, wofi-emoji" # emoji picker
+        "$mod, period, exec, wofi-emoji" # emoji picker
 
-          # session management
-          "Ctrl+Alt, Delete, global, caelestia:session"
+        # session management
+        "Ctrl+Alt, Delete, global, caelestia:session"
 
-          # screenshot
-          # "$mod_SHIFT, S, exec, grimblast --freeze copy area"
-          # ",Print,exec, grimblast --freeze copy screen && notify-send Screen copied"
-          # "$mod_SHIFT,Print,exec, grimblast --freeze save area - | com.github.phase1geo.annotator -i"
-          ", Print, exec, caelestia screenshot"  # Full screen capture > clipboard
-          "Ctrl, Print, exec, caelestia screenshot -fr"
-          "$mod_SHIFT, S, exec, screenshot"  # Capture region (freeze)
-          "$mod_Shift_Alt, S, exec, caelestia screenshot region"  # Capture region
-          "$mod_SHIFT, Print, exec, caelestia record -rs"  # Record screen with sound
-          "SHIFT, Print, exec, caelestia record -r"  # Record region
+        # screenshot
+        # "$mod_SHIFT, S, exec, grimblast --freeze copy area"
+        # ",Print,exec, grimblast --freeze copy screen && notify-send Screen copied"
+        # "$mod_SHIFT,Print,exec, grimblast --freeze save area - | com.github.phase1geo.annotator -i"
+        ", Print, exec, caelestia screenshot" # Full screen capture > clipboard
+        "Ctrl, Print, exec, caelestia screenshot -fr"
+        "$mod_SHIFT, S, exec, screenshot" # Capture region (freeze)
+        "$mod_Shift_Alt, S, exec, caelestia screenshot region" # Capture region
+        "$mod_SHIFT, Print, exec, caelestia record -rs" # Record screen with sound
+        "SHIFT, Print, exec, caelestia record -r" # Record region
 
-          # Lock
-          "$mod, L, exec, loginctl lock-session"
+        # Lock
+        "$mod, L, exec, loginctl lock-session"
 
-          # screen record
-          # "SHIFT, Print, exec, quick-record &> ~/.cache/quick-record.log"
+        # screen record
+        # "SHIFT, Print, exec, quick-record &> ~/.cache/quick-record.log"
 
-          # pick color
-          "$mod_SHIFT, C, exec, hyprpicker -f hex -a"
-          "$mod_ALT, C, exec, hyprpicker -f hex -a -r"
+        # pick color
+        "$mod_SHIFT, C, exec, hyprpicker -f hex -a"
+        "$mod_ALT, C, exec, hyprpicker -f hex -a -r"
 
-          # "Alt Tab"
-          "ALT, Tab, cyclenext"
-          "ALT, Tab, bringactivetotop"
+        # "Alt Tab"
+        "ALT, Tab, cyclenext"
+        "ALT, Tab, bringactivetotop"
 
-          # L/R between desktops
-          "$mod_SHIFT, W, workspace, e-1"
-          "$mod_SHIFT, E, workspace, e+1"
+        "ALT_SHIFT, Tab, cyclenext, prev"
+        "ALT_SHIFT, Tab, bringactivetotop"
 
-          # Pin a window (shows on all wkspcs)
-          "$mod_SHIFT, P, pin"
+        # L/R between desktops
+        "$mod_SHIFT, W, layoutmsg, move -col"
+        "$mod_SHIFT, E, layoutmsg, move +col"
 
-          # Change the split mode (dwidnle,hy3)
-          "$mod, D, togglesplit"
+        # Pin a window (shows on all wkspcs)
+        "$mod_SHIFT, P, pin"
 
-          # Move a window up/down/left/right,
-          # only moving to neighboring group, without moving into subgroups
-          "$mod_SHIFT, h, hy3:movewindow, l, once"
-          "$mod_SHIFT, h, hy3:movewindow, l, once"
-          "$mod_SHIFT, j, hy3:movewindow, d, once"
-          "$mod_SHIFT, k, hy3:movewindow, u, once"
-          "$mod_SHIFT, l, hy3:movewindow, r, once"
-          "$mod_SHIFT, left, hy3:movewindow, l, once"
-          "$mod_SHIFT, down, hy3:movewindow, d, once"
-          "$mod_SHIFT, up, hy3:movewindow, u, once"
-          "$mod_SHIFT, right, hy3:movewindow, r, once"
+        # Change the split mode (dwidnle,hy3)
+        "$mod, D, togglesplit"
 
-          # Only moves between visibile nodes, not hidden
-          "$mod_CONTROL_SHIFT, h, hy3:movewindow, l, once, visible"
-          "$mod_CONTROL_SHIFT, j, hy3:movewindow, d, once, visible"
-          "$mod_CONTROL_SHIFT, k, hy3:movewindow, u, once, visible"
-          "$mod_CONTROL_SHIFT, l, hy3:movewindow, r, once, visible"
-          "$mod_CONTROL_SHIFT, left, hy3:movewindow, l, once, visible"
-          "$mod_CONTROL_SHIFT, down, hy3:movewindow, d, once, visible"
-          "$mod_CONTROL_SHIFT, up, hy3:movewindow, u, once, visible"
-          "$mod_CONTROL_SHIFT, right, hy3:movewindow, r, once, visible"
+        # focus window
+        "$mod, Z, layoutmsg, focus"
 
-          # move focus
-          "$mod_CONTROL, h, hy3:movefocus, l"
-          "$mod_CONTROL, j, hy3:movefocus, d"
-          "$mod_CONTROL, k, hy3:movefocus, u"
-          "$mod_CONTROL, l, hy3:movefocus, r"
-          "$mod, left, hy3:movefocus, l"
-          "$mod, down, hy3:movefocus, d"
-          "$mod, up, hy3:movefocus, u"
-          "$mod, right, hy3:movefocus, r"
+        # Move a window left/right,
+        "$mod_SHIFT, h, layoutmsg, swapcol l once"
+        "$mod_SHIFT, l, layoutmsg, swapcol r once"
 
-          # Move focus on only visible, without warping mouse
-          "$mod, j, hy3:movefocus, d, visible, nowarp"
-          "$mod, k, hy3:movefocus, u, visible, nowarp"
-          "$mod, bracketleft, hy3:movefocus, l, visible, nowarp"
-          "$mod, bracketright, hy3:movefocus, r, visible, nowarp"
-          "$mod_ALT, bracketleft, hy3:movefocus, l, nowarp"
-          "$mod_ALT, bracketright, hy3:movefocus, r, nowarp"
-          "$mod_CONTROL, left, hy3:movefocus, l, visible, nowarp"
-          "$mod_CONTROL, down, hy3:movefocus, d, visible, nowarp"
-          "$mod_CONTROL, up, hy3:movefocus, u, visible, nowarp"
-          "$mod_CONTROL, right, hy3:movefocus, r, visible, nowarp"
+        # move focus
+        "$mod_CONTROL, h, layoutmsg, move -col"
+        "$mod_CONTROL, l, layoutmsg, move +col"
 
-          # other hy3 binds
-          "$mod_ALT, Return, hy3:locktab" # lock a group
-          "$mod_ALT, q, hy3:changegroup, toggletab"
-          "$mod_ALT, \\, hy3:changegroup, opposite"
-          "$mod_ALT, backspace, hy3:changegroup, untab"
+        # run dialog
+        "$mod, SPACE, global, caelestia:launcher"
+        "$mod_SHIFT, SPACE, exec, wofi -S drun -I"
+        "$mod, R, exec, kickoff" # wofi -S run
+        "$mod_ALT, SPACE, exec, 1password --quick-access"
 
+        # clipboard
+        "$mod, V, exec, cliphist list | wofi -dmenu | cliphist decode | wl-copy"
+        "$mod_SHIFT, D, exec, cliphist list | wofi -dmenu | cliphist delete"
 
-          # run dialog
-          # "$mod, SPACE, exec, kickoff-dot-desktop | kickoff --from-stdin" # wofi -S drun -I
-          "$mod, SPACE, global, caelestia:launcher"
-          "$mod_SHIFT, SPACE, exec, wofi -S drun -I"
-          "$mod, R, exec, kickoff" # wofi -S run
-          "$mod_ALT, SPACE, exec, 1password --quick-access"
+        "$mod, TAB, hyprexpo:expo, toggle"
 
-          # clipboard
-          "$mod, V, exec, cliphist list | wofi -dmenu | cliphist decode | wl-copy"
-          "$mod_SHIFT, D, exec, cliphist list | wofi -dmenu | cliphist delete"
+        # Pulls all windows from unplugged monitors into current wksp (hyprsplit)
+        # "$mod, G, split:grabroguewindows"
 
-          "$mod, TAB, hyprexpo:expo, toggle"
+        "$mod, G, layoutmsg, promote"
 
-          # Pulls all windows from unplugged monitors into current wksp (hyprsplit)
-          # "$mod, G, split:grabroguewindows"
-
-          # hy3
-          # Make a split
-          # "$mod_SHIFT, S, hy3:makegroup, v"
-          "$mod, G, hy3:makegroup, tab, ephemeral"
-
-          # toggle window swallowing
-          "$mod_CONTROL_SHIFT, s, toggleswallow"
-        ]
-        ++ (
-          # workspaces
-          # binds $mod + [shift +] {1..10} to [move to] workspace {1..10}
-          builtins.concatLists (builtins.genList
-            (
-              x:
-              let
-                ws =
-                  let
-                    c = (x + 1) / 10;
-                  in
-                  builtins.toString (x + 1 - (c * 10));
-              in
-              [
-                "$mod, ${ws}, split:workspace, ${toString (x + 1)}"
-                "$mod SHIFT, ${ws}, split:movetoworkspace, ${toString (x + 1)}"
-                "$mod ALT, ${ws}, split:movetoworkspacesilent, ${toString (x + 1)}"
-                "$mod $mod_CONTROL, ${ws}, hy3:focustab, index, ${toString (x + 1)}"
-              ]
-            )
-            10)
-        );
+        # toggle window swallowing
+        "$mod_CONTROL_SHIFT, s, toggleswallow"
+      ]
+      ++ (
+        # workspaces
+        # binds $mod + [shift +] {1..10} to [move to] workspace {1..10}
+        builtins.concatLists (
+          builtins.genList (
+            x:
+            let
+              ws =
+                let
+                  c = (x + 1) / 10;
+                in
+                builtins.toString (x + 1 - (c * 10));
+            in
+            [
+              "$mod, ${ws}, split:workspace, ${toString (x + 1)}"
+              "$mod SHIFT, ${ws}, split:movetoworkspace, ${toString (x + 1)}"
+              "$mod ALT, ${ws}, split:movetoworkspacesilent, ${toString (x + 1)}"
+              # "$mod $mod_CONTROL, ${ws}, hy3:focustab, index, ${toString (x + 1)}"
+            ]
+          ) 10
+        )
+      );
 
       # e = repeat, l = ignore inhibitors
       bindel = [
@@ -378,7 +333,7 @@ in
         touchpad = {
           natural_scroll = false;
           disable_while_typing = false;
-          scroll_factor = 0.2;
+          scroll_factor = 0.5;
         };
 
         sensitivity = 0;
@@ -452,17 +407,6 @@ in
       binde = , K, submap, reset
       binde = , L, layoutmsg, preselect r
       binde = , L, submap, reset
-      bind = , catchall, submap, reset
-      submap = reset
-
-      # QWER through windows (similar to HJKL, but one handed)
-      bind = $mod, W, submap, cycle
-
-      submap = cycle
-      binde = , Q, hy3:movefocus, l
-      binde = , W, hy3:movefocus, d
-      binde = , E, hy3:movefocus, u
-      binde = , R, hy3:movefocus, r
       bind = , catchall, submap, reset
       submap = reset
     '';

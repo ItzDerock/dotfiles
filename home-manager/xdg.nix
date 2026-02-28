@@ -5,21 +5,40 @@ let
   # for p in ${XDG_DATA_DIRS//:/ }; do find $p/applications -name '*.desktop'; done
 
   # makeMimeAssociations $.desktop $prefix $mime[]
-  makeMimeAssociations = handler: prefix: types:
+  makeMimeAssociations =
+    handler: prefix: types:
     builtins.listToAttrs (
-      map (type: { name = "${prefix}${type}"; value = [handler]; }) types
+      map (type: {
+        name = "${prefix}${type}";
+        value = [ handler ];
+      }) types
     );
 
   terminalApplication = "foot.desktop";
 
   # image/ auto-appended
   imageTypes = [
-    "png" "jpeg" "heic" "bmp" "gif"
+    "png"
+    "jpeg"
+    "heic"
+    "bmp"
+    "gif"
   ];
 
   # video/ auto-appended
   videoTypes = [
-    "mp4" "mkv" "avi" "mov" "webm" "flv" "wmv" "mpeg" "mpg" "3gp" "ogv" "ts"
+    "mp4"
+    "mkv"
+    "avi"
+    "mov"
+    "webm"
+    "flv"
+    "wmv"
+    "mpeg"
+    "mpg"
+    "3gp"
+    "ogv"
+    "ts"
   ];
 
   browserTypes = [
@@ -44,16 +63,16 @@ let
 
   # These associations override all pregen ones
   extraAssociations = {
-    "inode/directory" = ["org.gnome.Nautilus.desktop"];
-    "application/zip" = ["ark.desktop"];
-    "application/pdf" = ["zen.desktop"];
+    "inode/directory" = [ "org.kde.dolphin.desktop" ];
+    "application/zip" = [ "org.kde.ark.desktop" ];
+    "application/pdf" = [ "zen.desktop" ];
   };
 
   # [lowest prio ... highest prio]
-  allAssociations = 
+  allAssociations =
     (makeMimeAssociations "zen.desktop" "" browserTypes)
     // (makeMimeAssociations "mpv.desktop" "video/" videoTypes)
-    // (makeMimeAssociations "org.kde.kdegraphics.gwenview.desktop" "image/" imageTypes)
+    // (makeMimeAssociations "org.kde.gwenview.desktop" "image/" imageTypes)
     // (makeMimeAssociations "nvim.desktop" "" textTypes)
     // extraAssociations;
 in
@@ -97,4 +116,3 @@ in
     TERMINAL = terminalApplication;
   };
 }
-

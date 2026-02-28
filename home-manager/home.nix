@@ -1,14 +1,18 @@
-{ inputs
-, outputs
-, lib
-, config
-, pkgs
-, host
-, ...
+{
+  inputs,
+  outputs,
+  lib,
+  config,
+  pkgs,
+  host,
+  ...
 }:
 let
-  quick-record-script = pkgs.writeScriptBin "quick-record" (builtins.readFile ../assets/scripts/quick-record.sh);
+  quick-record-script = pkgs.writeScriptBin "quick-record" (
+    builtins.readFile ../assets/scripts/quick-record.sh
+  );
   screenshot = pkgs.writeScriptBin "screenshot" (builtins.readFile ../assets/scripts/screenshot.sh);
+  quick-rmbg = pkgs.writeScriptBin "quick-rmbg" (builtins.readFile ../assets/scripts/quick-rmbg.sh);
 
   # vesktop fork with replaced shaggy.gif so its not weird
   customVesktop = pkgs.vesktop.overrideAttrs (oldAttrs: {
@@ -35,7 +39,8 @@ in
     ./mpv.nix
 
     inputs.opnix.homeManagerModules.default
-  ] ++ (if host == "supernova" then [ ./overrides/supernova.nix ] else [ ])
+  ]
+  ++ (if host == "supernova" then [ ./overrides/supernova.nix ] else [ ])
   ++ (if host == "galaxy" then [ ./overrides/galaxy.nix ] else [ ]);
 
   nixpkgs = {
@@ -64,12 +69,15 @@ in
   # Add stuff for your user as you see fit:
   home.packages =
     let
-      nixpkgs-master = (import inputs.nixpkgs-master {
-        system = pkgs.system;
-        config.allowUnfree = true;
-      });
+      nixpkgs-master = (
+        import inputs.nixpkgs-master {
+          system = pkgs.system;
+          config.allowUnfree = true;
+        }
+      );
     in
-    with pkgs; [
+    with pkgs;
+    [
       # browser (i am indecisive)
       google-chrome
       firefox
@@ -77,7 +85,6 @@ in
       inputs.zen-browser.packages."${pkgs.system}".default
 
       # file browser
-      nautilus
       kdePackages.ark # zip
       kdePackages.dolphin
       kdePackages.kio
@@ -125,6 +132,8 @@ in
       quick-record-script
       screenshot
       satty # screenshot deps
+      quick-rmbg
+      rembg # removebg script dep
 
       # productivity
       libreoffice-qt6
