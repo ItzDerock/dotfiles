@@ -35,6 +35,7 @@ in
       enable = true;
       extraPortals = [
         pkgs.kdePackages.xdg-desktop-portal-kde
+        pkgs.xdg-desktop-portal-gtk
       ];
 
       config = {
@@ -43,6 +44,9 @@ in
             "hyprland"
             "kde"
           ];
+
+          "org.freedesktop.impl.portal.Settings" = [ "gtk" ];
+          "org.freedesktop.impl.portal.FileChooser" = [ "kde" ];
         };
       };
     };

@@ -280,12 +280,12 @@ in
   };
 
   systemd.user.sessionVariables = {
-    QT_STYLE_OVERRIDE = lib.mkForce "kvantum";
+    # QT_STYLE_OVERRIDE = lib.mkForce "kvantum";
     QT_QPA_PLATFORMTHEME = lib.mkForce "qt6ct";
   };
 
   home.sessionVariables = {
-    QT_STYLE_OVERRIDE = lib.mkForce "kvantum";
+    # QT_STYLE_OVERRIDE = lib.mkForce "kvantum";
     QT_QPA_PLATFORMTHEME = lib.mkForce "qt6ct";
   };
 
