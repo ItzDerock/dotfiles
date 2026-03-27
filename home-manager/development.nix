@@ -38,8 +38,9 @@ in {
       # terminals
       fish
 
-      # nix lsp
+      # lsps
       nil
+      ccls
     ];
 
   programs = {
