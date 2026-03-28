@@ -30,6 +30,7 @@ in
         zlib
         xz
         systemd
+        libusb1
       ];
     };
   }; 

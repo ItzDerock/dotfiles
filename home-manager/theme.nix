@@ -295,7 +295,8 @@ in
       font=JetBrainsMono Nerd Font:size=16
 
       [colors]
-      alpha=0.87
+      alpha=0.5
+      background=000000
     '';
   };
 
