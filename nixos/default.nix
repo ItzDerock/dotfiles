@@ -1,5 +1,12 @@
-{ pkgs, config, inputs, outputs, ... }: {
-  imports = [ 
+{
+  pkgs,
+  config,
+  inputs,
+  outputs,
+  ...
+}:
+{
+  imports = [
     ./nix-ld.nix
     ./embedded-dev.nix
     ./greeter.nix
@@ -44,55 +51,58 @@
     nerd-fonts.iosevka
   ];
 
-  environment.systemPackages = let
-    nixpkgs-master = (import inputs.nixpkgs-master {
-      system = pkgs.system;
-      config.allowUnfree = true;
-    });
-  in with pkgs; [
-    cachix
+  environment.systemPackages =
+    let
+      nixpkgs-master = (
+        import inputs.nixpkgs-master {
+          system = pkgs.system;
+          config.allowUnfree = true;
+        }
+      );
+    in
+    with pkgs;
+    [
+      cachix
 
-    libgcc
-    nix-index
-    libva
-    vulkan-loader
-    vulkan-tools
+      libgcc
+      nix-index
+      libva
+      vulkan-loader
+      vulkan-tools
 
-    # basic sysadmin stuff
-    jq # json parsing
-    psmisc # processes
-    nload # network
-    wavemon # wifi
-    ncdu # storage
-    gparted # disks
-    nvtopPackages.full # gpu
+      # basic sysadmin stuff
+      jq # json parsing
+      psmisc # processes
+      nload # network
+      wavemon # wifi
+      ncdu # storage
+      gparted # disks
+      nvtopPackages.full # gpu
 
-    appimage-run
+      appimage-run
 
-    # https://github.com/NixOS/nixpkgs/issues/206378
-    alsa-oss
-    blueberry
+      # https://github.com/NixOS/nixpkgs/issues/206378
+      alsa-oss
 
-    # additional tumbler support
-    webp-pixbuf-loader # webp
-    poppler_gi # adobe pdf
-    evince # pdf
-    ffmpegthumbnailer # videos
-    ftgl # font
-    libgsf # .odf
-    nufraw-thumbnailer # .raw
-    gnome-epub-thumbnailer # .epub, .mobi
-    nixpkgs-master.f3d
+      # additional tumbler support
+      webp-pixbuf-loader # webp
+      poppler_gi # adobe pdf
+      evince # pdf
+      ffmpegthumbnailer # videos
+      ftgl # font
+      libgsf # .odf
+      nufraw-thumbnailer # .raw
+      gnome-epub-thumbnailer # .epub, .mobi
+      nixpkgs-master.f3d
 
-    # utils
-    pciutils
-    usbutils
-    lsof
-    mtr
-    nload
-    fastfetch
-  ];
-
+      # utils
+      pciutils
+      usbutils
+      lsof
+      mtr
+      nload
+      fastfetch
+    ];
 
   home-manager.backupFileExtension = "bak";
 
@@ -145,14 +155,17 @@
   services.automatic-timezoned.enable = true;
   location.provider = "geoclue2";
 
-  nix.settings.trusted-users = [ "root" "@wheel" ];
+  nix.settings.trusted-users = [
+    "root"
+    "@wheel"
+  ];
   nix.extraOptions = ''
     builders-use-substitutes = true
   '';
 
   # dont wait for networkmanager on boot
   systemd.services.NetworkManager-wait-online.enable = false;
-  
+
   # 3rd party nix cli
   programs.nh = {
     enable = true;

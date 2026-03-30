@@ -1,8 +1,16 @@
-{ config, inputs, outputs, pkgs, lib, ... }:
-let 
+{
+  config,
+  inputs,
+  outputs,
+  pkgs,
+  lib,
+  ...
+}:
+let
   pkgs-hypr = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.system};
-  secrets = import ../../secrets.nix; 
-in {
+  secrets = import ../../secrets.nix;
+in
+{
   hardware.graphics = {
     package = pkgs-hypr.mesa;
     package32 = pkgs-hypr.pkgsi686Linux.mesa;
@@ -10,16 +18,16 @@ in {
     enable = true;
   };
 
-  imports =
-    [ # Include the results of the hardware scan.
-      inputs.home-manager.nixosModules.home-manager
-      ../../nixos
-      ./hardware-configuration.nix
-    ];
+  imports = [
+    # Include the results of the hardware scan.
+    inputs.home-manager.nixosModules.home-manager
+    ../../nixos
+    ./hardware-configuration.nix
+  ];
 
   home-manager = {
-    extraSpecialArgs = { 
-      inherit inputs outputs; 
+    extraSpecialArgs = {
+      inherit inputs outputs;
       host = "supernova";
     };
 
@@ -29,7 +37,10 @@ in {
   };
 
   # Experimental features
-  nix.settings.experimental-features = ["nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   networking.hostName = "derock-desktop";
 
@@ -59,8 +70,13 @@ in {
   users.users.derock = {
     isNormalUser = true;
     description = "Derock";
-    extraGroups = [ "networkmanager" "wheel" "dialout" "plugdev" ];
-    packages = with pkgs; [];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "dialout"
+      "plugdev"
+    ];
+    packages = with pkgs; [ ];
   };
 
   # Enable automatic login for the user.
@@ -68,13 +84,13 @@ in {
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
- 
+
   services.tailscale = {
     enable = true;
     useRoutingFeatures = "client";
     openFirewall = true;
   };
- 
+
   # dm.lemurs.enable = true;
   wm.hyprland.enable = true;
   rockcfg = {
@@ -92,7 +108,7 @@ in {
     networking.enable = true;
     docker.enable = true;
     winboat = {
-      enable = true;
+      enable = false;
       username = "derock";
     };
 
@@ -111,13 +127,31 @@ in {
   fileSystems."/mnt/LARGESHIT" = {
     device = "/dev/disk/by-uuid/82542B4F542B44EF";
     fsType = "ntfs3";
-    options = ["users" "nofail" "x-gvfs-show" "exec" "uid=1000" "gid=100" "dmask=002"];
+    options = [
+      "users"
+      "nofail"
+      "x-gvfs-show"
+      "exec"
+      "uid=1000"
+      "gid=100"
+      "dmask=002"
+    ];
   };
 
   fileSystems."/mnt/speedy" = {
     device = "/dev/disk/by-uuid/9856F4B056F48FEC";
     fsType = "ntfs3";
-    options = ["users" "rw" "nofail" "x-gvfs-show" "exec" "uid=1000" "gid=100" "dmask=002" "acl"];
+    options = [
+      "users"
+      "rw"
+      "nofail"
+      "x-gvfs-show"
+      "exec"
+      "uid=1000"
+      "gid=100"
+      "dmask=002"
+      "acl"
+    ];
     # options = ["nofail" "rw" "suid" "dev" "exec" "auto" "nouser" "async" "relatime"];
   };
 
@@ -132,7 +166,7 @@ in {
 
   # corsair
   hardware.ckb-next = {
-    enable = true; 
+    enable = true;
     # TODO: remove after #444209
     package = pkgs.ckb-next.overrideAttrs (old: {
       cmakeFlags = (old.cmakeFlags or [ ]) ++ [ "-DUSE_DBUS_MENU=0" ];
@@ -178,22 +212,32 @@ in {
   powerManagement.cpuFreqGovernor = "performance";
 
   # native compiler optimizations
-  boot.kernelPatches = [{
-    name = "compiler-optimizations";
-    patch = null;
-    extraConfig = ''
-      X86_NATIVE_CPU y
-    '';
-  }];
+  boot.kernelPatches = [
+    {
+      name = "compiler-optimizations";
+      patch = null;
+      extraConfig = ''
+        X86_NATIVE_CPU y
+      '';
+    }
+  ];
 
   hardware.enableRedistributableFirmware = true;
 
   boot = {
     # nct6687 -> for sensors
     # i2c-dev -> openrgb
-    kernelModules = [ "amdgpu" "iwlwifi" "nct6687" "i2c-dev" ];
-    kernelParams = ["amd.dcdebugmask=0x10" "amdgpu.runpm=0"];
-      
+    kernelModules = [
+      "amdgpu"
+      "iwlwifi"
+      "nct6687"
+      "i2c-dev"
+    ];
+    kernelParams = [
+      "amd.dcdebugmask=0x10"
+      "amdgpu.runpm=0"
+    ];
+
     loader = {
       systemd-boot.enable = lib.mkForce false;
       grub.enable = false;
@@ -203,9 +247,9 @@ in {
 
     initrd = {
       systemd.enable = true;
-      availableKernelModules = ["tpm_tis"];
+      availableKernelModules = [ "tpm_tis" ];
       luks.devices."luks-c4e1f149-9b46-426b-9494-cd8b9dd81254" = {
-        # This merges with your hardware-configuration.nix, so you don't 
+        # This merges with your hardware-configuration.nix, so you don't
         # strictly need to repeat the 'device = ...' line if it's already there.
         crypttabExtraOpts = [ "tpm2-device=auto" ];
       };
@@ -219,10 +263,12 @@ in {
     bootspec.enableValidation = true;
   };
 
-  swapDevices = [{
-    device = "/swapfile";
-    size = 64 * 1024;
-  }];
+  swapDevices = [
+    {
+      device = "/swapfile";
+      size = 64 * 1024;
+    }
+  ];
 
   # openrgb for corsair
   hardware.i2c.enable = true;

@@ -1,13 +1,19 @@
-{ lib, pkgs, config, inputs, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 with lib;
 let
   cfg = config.rockcfg.git;
-in {
+in
+{
   options.rockcfg.git = {
     enable = mkEnableOption "Git and GitHub CLI";
   };
 
-  config = mkIf cfg.enable { 
+  config = mkIf cfg.enable {
     programs.gh.enable = true;
     programs.gh.extensions = with pkgs; [
       gh-dash
@@ -15,9 +21,20 @@ in {
 
     programs.git = {
       enable = true;
-      userName = "Derock";
-      userEmail = "derock@derock.dev";
+
+      settings = {
+        user = {
+          name = "Derock";
+          email = "derock@derock.dev";
+        };
+
+        push = {
+          autoSetupRemote = true;
+          rebase = true;
+        };
+      };
+
       lfs.enable = true;
-    };   
-  }; 
+    };
+  };
 }
