@@ -294,7 +294,7 @@ in
     text = ''
       font=JetBrainsMono Nerd Font:size=16
 
-      [colors]
+      [colors-dark]
       alpha=0.5
       background=000000
     '';
