@@ -43,12 +43,16 @@
   ];
 
   # global configuration regardless of system
+  fonts.fontDir.enable = true;
+  fonts.enableDefaultPackages = true;
   fonts.packages = with pkgs; [
     iosevka
     font-awesome
     jetbrains-mono
     nerd-fonts.jetbrains-mono
     nerd-fonts.iosevka
+    corefonts
+    vista-fonts
   ];
 
   environment.systemPackages =
