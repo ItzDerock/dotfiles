@@ -42,7 +42,7 @@ in {
         targets = {
           btop.enable = true;
           foot.enable = true;
-          gtk.enable = true;
+          gtk.enable = false;
           neovim.enable = true;
           obsidian.enable = true;
           starship.enable = true;

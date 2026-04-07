@@ -25,5 +25,11 @@ eval "$(direnv hook bash)"
 
 # util functions
 mkcd() { mkdir -p "$@" && cd "$@"; }
+
+# apply theme
+if [ -f "$HOME/.local/state/caelestia/sequences.txt" ]; then
+    cat "$HOME/.local/state/caelestia/sequences.txt"
+fi
+
 #install() { nix profile install "nixpkgs#""$@" }
 #shell() { nix shell "nixpkgs#""$@" }
