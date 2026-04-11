@@ -1,8 +1,14 @@
-{ lib, pkgs, config, outputs, ... }: 
+{
+  lib,
+  pkgs,
+  config,
+  outputs,
+  ...
+}:
 with lib;
 let
   cfg = config.rockcfg.embedded-dev;
-in 
+in
 {
   options.rockcfg.embedded-dev = {
     enable = mkEnableOption "Embedded development tools/udev rules";
@@ -11,7 +17,8 @@ in
   config = mkIf cfg.enable {
     services.udev.packages = [
       pkgs.platformio-core.udev
-      outputs.packages.${pkgs.system}.probe-rs-rules
+      pkgs.probe-rs-tools
+      # outputs.packages.${pkgs.system}.probe-rs-rules
     ];
   };
 }
