@@ -13,7 +13,7 @@ in {
       enable = true;
       polkitPolicyOwners = ["derock"];
       # https://github.com/hyprwm/Hyprland/discussions/11978
-      package = pkgs._1password-gui-beta;
+      package = pkgs._1password-gui;
     };
 
     environment.etc = {
