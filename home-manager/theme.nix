@@ -12,7 +12,15 @@ let
   wpaudiochanger = pkgs.writeScriptBin "wpaudiochanger" (
     builtins.readFile ../assets/scripts/wpaudiochange.py
   );
-  caelestia = inputs.caelestia.packages.${pkgs.system}.default;
+
+  # https://github.com/hyprwm/hyprqt6engine/blob/0021cc218fc23862a5688b7b217adba09d44ef1c/common/common.cpp#L26C1-L29C7
+  # .config support requries additional libs
+  hyprqt6 = inputs.hyprqt6engine.packages.${pkgs.system}.default.overrideAttrs (old: {
+    buildInputs = old.buildInputs ++ [
+      pkgs.kdePackages.kconfig
+      pkgs.kdePackages.kcolorscheme
+    ];
+  });
 in
 {
   home.packages = with pkgs; [
@@ -22,9 +30,9 @@ in
     file
     wallust # pywal was archived
 
-    kdePackages.qt6ct
-    libsForQt5.qtstyleplugin-kvantum
-    qt6Packages.qtstyleplugin-kvantum
+    hyprqt6
+    kdePackages.breeze
+
     ayu-theme-gtk
     (catppuccin-kvantum.override {
       accent = "lavender";
@@ -33,6 +41,16 @@ in
   ];
 
   home.file = {
+    ".config/hypr/hyprqt6engine.conf" = {
+      text = ''
+        theme {
+          color_scheme = /home/derock/.config/qt6ct/colors/caelestia.colors
+          icon_theme = Papirus-Dark
+          style = Breeze
+        }
+      '';
+    };
+
     ".config/sxiv/exec/image-info" = {
       executable = true;
       source = ../assets/scripts/image-info.sh;
@@ -280,13 +298,13 @@ in
   };
 
   systemd.user.sessionVariables = {
-    # QT_STYLE_OVERRIDE = lib.mkForce "kvantum";
-    QT_QPA_PLATFORMTHEME = lib.mkForce "qt6ct";
+    QT_QPA_PLATFORMTHEME = lib.mkForce "hyprqt6engine";
+    QT_PLUGIN_PATH = lib.mkForce "${hyprqt6}/lib/qt-6:\${QT_PLUGIN_PATH}";
   };
 
   home.sessionVariables = {
-    # QT_STYLE_OVERRIDE = lib.mkForce "kvantum";
-    QT_QPA_PLATFORMTHEME = lib.mkForce "qt6ct";
+    QT_QPA_PLATFORMTHEME = lib.mkForce "hyprqt6engine";
+    QT_PLUGIN_PATH = lib.mkForce "${hyprqt6}/lib/qt-6:\${QT_PLUGIN_PATH}";
   };
 
   # footerm

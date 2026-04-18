@@ -1,8 +1,14 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 with lib;
 let
   cfg = config.rockcfg.theme;
-in {
+in
+{
   options.rockcfg.theme = {
     enable = mkOption {
       default = true;
@@ -26,7 +32,7 @@ in {
       polarity = "dark";
 
       base16Scheme = "${pkgs.base16-schemes}/share/themes/${cfg.theme16}.yaml";
-      
+
       # Check "Modules >" at
       # https://nix-community.github.io/stylix/
       autoEnable = false;
@@ -34,24 +40,28 @@ in {
         console.enable = true;
       };
     };
-    
-    home-manager.sharedModules = [{
-      stylix = {
-        enable = true;
-       
-        targets = {
-          btop.enable = true;
-          foot.enable = true;
-          gtk.enable = false;
-          neovim.enable = true;
-          obsidian.enable = true;
-          starship.enable = true;
-          tmux.enable = true;
-          qt.enable = true;
-          qt.platform = "kvantum";
-          kde.enable = true;
+
+    home-manager.sharedModules = [
+      {
+        stylix = {
+          enable = true;
+
+          targets = {
+            btop.enable = true;
+            foot.enable = true;
+            neovim.enable = true;
+            obsidian.enable = true;
+            starship.enable = true;
+            tmux.enable = true;
+
+            gtk.enable = true;
+
+            # configured by caelestia
+            qt.enable = false;
+            kde.enable = false;
+          };
         };
-      };
-    }];
+      }
+    ];
   };
 }

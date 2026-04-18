@@ -60,6 +60,11 @@
       inputs.hyprland.follows = "hyprland";
     };
 
+    hyprqt6engine = {
+      url = "github:hyprwm/hyprqt6engine";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Shell
     caelestia = {
       url = "github:caelestia-dots/shell";

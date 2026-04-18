@@ -327,6 +327,9 @@ in
 
         # Transparency
         "opacity 0.9 override 0.9 override, match:class (code|org.gnome.Nautilus|org.kde.dolphin)"
+
+        # KiCad footprint chooser window size
+        "match:title ^(Footprint Chooser.*), match:class kicad, match:float true, size 1411 854, center on"
       ];
 
       input = {
