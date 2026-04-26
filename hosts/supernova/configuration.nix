@@ -94,6 +94,7 @@ in
   # dm.lemurs.enable = true;
   wm.hyprland.enable = true;
   rockcfg = {
+    dolphin.extract-shortcut.enable = true;
     network-shares.enable = true;
     greeter.enable = true;
     theme.enable = true;

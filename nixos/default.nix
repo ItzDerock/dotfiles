@@ -32,6 +32,7 @@
     ./laptops/samsung-960XFH.nix
     ./hardware/razer.nix
     ./hardware/sharge.nix
+    ./dolphin-extract.nix
   ];
 
   # Apply overlays
