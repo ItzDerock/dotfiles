@@ -225,9 +225,6 @@ in
         # Pin a window (shows on all wkspcs)
         "$mod_SHIFT, P, pin"
 
-        # Change the split mode (dwidnle,hy3)
-        "$mod, D, togglesplit"
-
         # focus window
         "$mod, Z, layoutmsg, focus"
 

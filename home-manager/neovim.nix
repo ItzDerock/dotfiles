@@ -13,7 +13,7 @@
   programs.nvchad = {
     enable = true;
     extraPackages = with pkgs; [
-      nodePackages.bash-language-server
+      bash-language-server
       nixd
       clang-tools
       nil

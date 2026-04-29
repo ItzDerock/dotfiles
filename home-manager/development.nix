@@ -15,7 +15,7 @@ in {
     with pkgs; [
       # include some scripting languages for ease
       nodejs_20
-      nodePackages.pnpm
+      pnpm
       bun
       python3
 

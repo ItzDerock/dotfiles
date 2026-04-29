@@ -7,6 +7,11 @@
   # You can change versions, add patches, set compilation flags, anything really.
   # https://nixos.wiki/wiki/Overlays
   modifications = final: prev: {
+    # openldap build error
+    openldap = prev.openldap.overrideAttrs (old: {
+      doCheck = false;
+    });
+
     app2unit = prev.app2unit.overrideAttrs (oldAttrs: rec {
       version = "1.0.2";
       src = oldAttrs.src.override {

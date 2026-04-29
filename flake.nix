@@ -39,14 +39,16 @@
 
     # - HYPRLAND STUFF
     hyprland = {
-      url = "github:hyprwm/Hyprland?ref=v0.54.0";
+      url = "github:hyprwm/Hyprland?ref=22f3032575fd218f31f4c5b39b08a223c8174e30";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     hyprpicker.url = "github:hyprwm/hyprpicker";
 
     hyprland-plugins = {
-      url = "github:hyprwm/hyprland-plugins";
+      # url = "github:hyprwm/hyprland-plugins";
+      # pr: https://github.com/hyprwm/hyprland-plugins/pull/640
+      url = "github:imperishableSecret/hyprland-plugins?ref=4a3cfcbc34908ecd2c512825cabbcfd358c1df56";
       inputs.hyprland.follows = "hyprland";
     };
 
