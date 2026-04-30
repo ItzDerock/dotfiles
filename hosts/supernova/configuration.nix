@@ -113,6 +113,14 @@ in
       username = "derock";
     };
 
+    workserver = {
+      enable = true;
+      ollamaOrigins = [
+        "http://localhost:3000"
+        "https://ai.goliath.derock.sh"
+      ];
+    };
+
     duke = {
       enable = true;
       netid = secrets.duke-netid;

@@ -33,6 +33,7 @@
     ./hardware/razer.nix
     ./hardware/sharge.nix
     ./dolphin-extract.nix
+    ./workserver.nix
   ];
 
   # Apply overlays

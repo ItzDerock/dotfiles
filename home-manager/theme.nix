@@ -252,10 +252,23 @@ in
           {
             name = "Sleep";
             icon = "bedtime";
+            description = "Suspend to RAM";
+            command = [
+              "systemctl"
+              "suspend"
+              "--ignore-inhibitors"
+            ];
+            enabled = true;
+            dangerous = false;
+          }
+          {
+            name = "Suspend";
+            icon = "night_shelter";
             description = "Suspend then hibernate";
             command = [
               "systemctl"
               "suspend-then-hibernate"
+              "--ignore-inhibitors"
             ];
             enabled = true;
             dangerous = false;
