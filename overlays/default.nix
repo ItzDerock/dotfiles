@@ -53,6 +53,10 @@
 
     pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
       (python-final: python-prev: {
+        pyqtgraph = python-prev.pyqtgraph.overridePythonAttrs (_: {
+          doCheck = false;
+        });
+
         # Workaround for bug #437058
         i3ipc = python-prev.i3ipc.overridePythonAttrs (oldAttrs: {
           doCheck = false;

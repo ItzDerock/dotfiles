@@ -41,6 +41,10 @@ in {
       # lsps
       nil
       ccls
+  
+      # rf
+      gnuradio
+      sdrangel
     ];
 
   programs = {
