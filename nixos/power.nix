@@ -50,9 +50,9 @@ in {
           };
 
           sysfs = {
-            # "/sys/class/drm/card1/gt_min_freq_mhz" = 300;
-            "/sys/class/drm/card1/gt_max_freq_mhz" = 400;
-            "/sys/class/drm/card1/gt_boost_freq_mhz" = 500;
+            # "/sys/bus/pci/devices/0000:00:02.0/drm/card*/gt_min_freq_mhz" = 300;
+            "/sys/bus/pci/devices/0000:00:02.0/drm/card*/gt_max_freq_mhz" = 400;
+            "/sys/bus/pci/devices/0000:00:02.0/drm/card*/gt_boost_freq_mhz" = 500;
           };
         };
 
@@ -62,8 +62,8 @@ in {
           };
 
           sysfs = {
-            "/sys/class/drm/card1/gt_max_freq_mhz" = 800;
-            "/sys/class/drm/card1/gt_boost_freq_mhz" = 800;
+            "/sys/bus/pci/devices/0000:00:02.0/drm/card*/gt_max_freq_mhz" = 800;
+            "/sys/bus/pci/devices/0000:00:02.0/drm/card*/gt_boost_freq_mhz" = 800;
           };
         };
       };

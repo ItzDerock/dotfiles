@@ -37,6 +37,14 @@ in
   hardware.enableAllFirmware = true;
   hardware.cpu.intel.updateMicrocode = true;
 
+  # Stable symlink for the iGPU's DRM node. The kernel-assigned card1/card2
+  # ordering races between i915 and nvidia at boot, and Aquamarine parses
+  # AQ_DRM_DEVICES as a colon-separated list (so /dev/dri/by-path/... is
+  # unusable because the PCI slot itself contains colons).
+  services.udev.extraRules = ''
+    SUBSYSTEM=="drm", KERNEL=="card[0-9]*", KERNELS=="0000:00:02.0", SYMLINK+="dri/igpu"
+  '';
+
   # Enable networking
   networking.networkmanager = {
     enable = true;

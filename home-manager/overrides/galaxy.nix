@@ -14,7 +14,7 @@ in
   };
 
   home.sessionVariables = {
-    AQ_DRM_DEVICES = "/dev/dri/card1";
+    AQ_DRM_DEVICES = "/dev/dri/igpu";
   };
 
   # configure winapps

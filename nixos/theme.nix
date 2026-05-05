@@ -42,7 +42,7 @@ in
     };
 
     home-manager.sharedModules = [
-      {
+      ({ config, ... }: {
         stylix = {
           enable = true;
 
@@ -61,7 +61,12 @@ in
             kde.enable = false;
           };
         };
-      }
+
+        # stylix's gtk target writes gtk.css as a regular file; without force,
+        # activation fails when a stale .bak from a previous run is present.
+        home.file."${config.xdg.configHome}/gtk-3.0/gtk.css".force = lib.mkForce true;
+        home.file."${config.xdg.configHome}/gtk-4.0/gtk.css".force = lib.mkForce true;
+      })
     ];
   };
 }

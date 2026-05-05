@@ -23,7 +23,9 @@ in
     };
 
     # cuda
-    nixpkgs.config.cudaSupport = true;
+    # Note: cudaSupport is NOT enabled globally — that flips it on for every
+    # package with the option (onnxruntime, opencv, ffmpeg, ...) and pulls them
+    # off cache.nixos.org. Opt in per-package via overlays/default.nix instead.
     environment.systemPackages = with pkgs; [
       cudaPackages.cudatoolkit
       nv-codec-headers

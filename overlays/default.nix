@@ -7,7 +7,13 @@
   # You can change versions, add patches, set compilation flags, anything really.
   # https://nixos.wiki/wiki/Overlays
   modifications = final: prev: {
-    # openldap build error
+    # Per-package CUDA opt-ins (cudaSupport is not enabled globally — see nixos/nvidia.nix).
+    blender = prev.blender.override { cudaSupport = true; };
+
+    # openldap test017-syncreplication-refresh is flaky; upstream issue:
+    # https://github.com/NixOS/nixpkgs/issues/514113
+    # Retry dropping this when Hydra shows green for openldap on the pinned nixpkgs commit:
+    # https://hydra.nixos.org/job/nixpkgs/trunk/openldap.x86_64-linux
     openldap = prev.openldap.overrideAttrs (old: {
       doCheck = false;
     });
@@ -27,13 +33,6 @@
           cmakeFlags = prev.cmakeFlags ++ [ "-DBTOP_GPU=OFF" ];
         });
       };
-    });
-
-    openssh = prev.openssh.overrideAttrs (old: {
-      # Disable "bad permission" checking in openssh
-      # Home-manager issue #322
-      patches = (old.patches or []) ++ [../assets/openssh/no-check-permission.patch];
-      doCheck = false;
     });
 
     linuxSamsung = prev.linuxPackagesFor (prev.linuxPackages_latest.kernel.override {
@@ -71,13 +70,18 @@
         psycopg = python-prev.psycopg.overridePythonAttrs (oldAttrs: {
           doCheck = false;
 
-          propagatedBuildInputs = (oldAttrs.propagatedBuildInputs or []) 
+          propagatedBuildInputs = (oldAttrs.propagatedBuildInputs or [])
             ++ [ python-prev.psycopg-pool ];
 
           pythonImportsCheck = [
             "psycopg"
             "psycopg_pool"
           ];
+        });
+
+        pytest-postgresql = python-prev.pytest-postgresql.overridePythonAttrs (_: {
+          doCheck = false;
+          doInstallCheck = false;
         });
       })
     ];

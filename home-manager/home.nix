@@ -29,6 +29,7 @@ in
     ./waybar.nix
     ./git.nix
     ./1password.nix
+    ./ssh.nix
     ./neovim.nix
     ./xdg.nix
     ./wofi.nix
