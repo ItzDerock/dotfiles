@@ -61,6 +61,7 @@ in
 
     # Ollama
     services.ollama = {
+      package = pkgs.ollama-rocm;
       enable = true;
       host = "0.0.0.0";
       port = 11434;
