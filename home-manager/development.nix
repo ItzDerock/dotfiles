@@ -33,7 +33,7 @@ in {
       devenv
 
       # pcb design
-      kicad-unstable
+      nixpkgs-master.kicad
 
       # terminals
       fish
