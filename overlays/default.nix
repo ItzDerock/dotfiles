@@ -83,6 +83,49 @@
     ];
   };
 
+  # Fix dolphin "Open with" menu outside KDE — upstream overlay used libsForQt5.kservice which was removed
+  dolphinFix = final: prev: {
+    kdePackages = prev.kdePackages.overrideScope (kfinal: kprev: {
+      dolphin = prev.symlinkJoin {
+        name = "dolphin-wrapped";
+        paths = [ kprev.dolphin ];
+        nativeBuildInputs = [ prev.makeWrapper ];
+        postBuild = ''
+          rm $out/bin/dolphin
+          makeWrapper ${kprev.dolphin}/bin/dolphin $out/bin/dolphin \
+            --set XDG_CONFIG_DIRS "${prev.kdePackages.kservice}/etc/xdg:$XDG_CONFIG_DIRS" \
+            --run "${kprev.kservice}/bin/kbuildsycoca6 --noincremental ${prev.kdePackages.kservice}/etc/xdg/menus/applications.menu"
+        '';
+      };
+    });
+  };
+
+  # hyprexpo-plus — fork of hyprexpo after it was dropped from hyprland-plugins
+  hyprexpoPlus = final: prev: {
+    hyprexpo-plus =
+      let
+        hyprlandPkg = inputs.hyprland.packages.${prev.stdenv.hostPlatform.system}.hyprland;
+      in
+      prev.hyprlandPlugins.mkHyprlandPlugin {
+        pluginName = "hyprexpo-plus";
+        version = "0-unstable-2025-05-14";
+        src = prev.fetchFromGitHub {
+          owner = "sandwichfarm";
+          repo = "hyprexpo-plus";
+          rev = "60a7f3541ff0cf03313368b61d53aecda783b70b";
+          hash = "sha256-KmwRoizMS83b6+RPWANBqIDSkBiZ0Lr/lUPBz3Q2o/o=";
+        };
+        hyprland = hyprlandPkg;
+        nativeBuildInputs = [ prev.cmake ];
+        meta = with prev.lib; {
+          homepage = "https://github.com/sandwichfarm/hyprexpo-plus";
+          description = "Enhanced Hyprland workspaces overview plugin (fork of hyprexpo)";
+          license = licenses.bsd3;
+          platforms = platforms.linux;
+        };
+      };
+  };
+
   # When applied, the unstable nixpkgs set (declared in the flake inputs) will
   # be accessible through 'pkgs.unstable'
   unstable-packages = final: _prev: {

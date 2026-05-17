@@ -40,7 +40,8 @@
   nixpkgs.overlays = [
     outputs.overlays.additions
     outputs.overlays.modifications
-    inputs.dolphin-overlay.overlays.default
+    outputs.overlays.dolphinFix
+    outputs.overlays.hyprexpoPlus
     inputs.cachyos-kernel.overlays.pinned
   ];
 

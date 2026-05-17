@@ -50,7 +50,8 @@ in
       outputs.overlays.additions
       outputs.overlays.modifications
       outputs.overlays.unstable-packages
-      inputs.dolphin-overlay.overlays.default
+      outputs.overlays.dolphinFix
+      outputs.overlays.hyprexpoPlus
     ];
     # Configure your nixpkgs instance
     config = {

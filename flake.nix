@@ -7,13 +7,11 @@
       "https://hyprland.cachix.org"
       "https://cuda-maintainers.cachix.org"
       "https://devenv.cachix.org"
-      "https://attic.xuyh0120.win/lantian" # cachyos kernel
     ];
     extra-trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
       "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E="
-      "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" # cachyos kernel
     ];
 
     trustedUsers = [
@@ -39,16 +37,14 @@
 
     # - HYPRLAND STUFF
     hyprland = {
-      url = "github:hyprwm/Hyprland?ref=22f3032575fd218f31f4c5b39b08a223c8174e30";
+      url = "github:hyprwm/Hyprland?ref=v0.55.1";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     hyprpicker.url = "github:hyprwm/hyprpicker";
 
     hyprland-plugins = {
-      # url = "github:hyprwm/hyprland-plugins";
-      # pr: https://github.com/hyprwm/hyprland-plugins/pull/640
-      url = "github:imperishableSecret/hyprland-plugins?ref=4a3cfcbc34908ecd2c512825cabbcfd358c1df56";
+      url = "github:hyprwm/hyprland-plugins";
       inputs.hyprland.follows = "hyprland";
     };
 
@@ -57,10 +53,7 @@
       inputs.hyprland.follows = "hyprland";
     };
 
-    hyprsplit = {
-      url = "github:shezdy/hyprsplit";
-      inputs.hyprland.follows = "hyprland";
-    };
+    hyprsplit.url = "github:shezdy/hyprsplit";
 
     hyprqt6engine = {
       url = "github:hyprwm/hyprqt6engine";
@@ -69,7 +62,8 @@
 
     # Shell
     caelestia = {
-      url = "github:caelestia-dots/shell";
+      # url = "github:caelestia-dots/shell";
+      url = "path:./external/caelestia-shell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -108,12 +102,6 @@
 
     lanzaboote = {
       url = "github:nix-community/lanzaboote";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # fix for dolphin file associations
-    dolphin-overlay = {
-      url = "github:rumboon/dolphin-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

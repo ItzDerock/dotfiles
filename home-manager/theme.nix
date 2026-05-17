@@ -90,6 +90,17 @@ in
 
         actions = [
           {
+            name = "Windows";
+            icon = "tab";
+            description = "Switch to an open window";
+            command = [
+              "autocomplete"
+              "windows"
+            ];
+            enabled = true;
+            dangerous = false;
+          }
+          {
             name = "Remove Image Background";
             icon = "ink_eraser";
             description = "Remove the background from the image in the clipboard.";

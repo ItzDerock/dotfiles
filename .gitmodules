@@ -1,0 +1,3 @@
+[submodule "external/caelestia-shell"]
+	path = external/caelestia-shell
+	url = https://github.com/ItzDerock/caelestia-shell
