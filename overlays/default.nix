@@ -26,6 +26,34 @@
       };
     });
 
+    # Fork with SDCP support for the LighTuning ETU905A80-E reader.
+    # Without SDCP, prints are never persisted to device storage and verify
+    # fails with "Print was not found on the devices storage".
+    # https://github.com/TenSeventy7/libfprint-egismoc-sdcp
+    libfprint = prev.libfprint.overrideAttrs (_old: {
+      version = "1.94.9-egismoc-sdcp-unstable-2025-07-29";
+      src = prev.fetchFromGitHub {
+        owner = "TenSeventy7";
+        repo = "libfprint-egismoc-sdcp";
+        rev = "4d128d4f6f0b46182572126e84df88a73ac27859";
+        hash = "sha256-ij+g5iuWJqMNTDvqTTYWB9BD3Zi+1PzG075rcFULC4w=";
+      };
+      # Fork is based on a pre-1.94.10 tree that has no tests/test-runner.sh.
+      # It also added device id 1C7A:05A5 to the egismoc driver without
+      # regenerating data/autosuspend.hwdb, so the udev-hwdb install-check
+      # would fail; sync the hwdb here.
+      postPatch = ''
+        patchShebangs \
+          tests/unittest_inspector.py \
+          tests/virtual-image.py \
+          tests/umockdev-test.py \
+          tests/test-generated-hwdb.sh
+
+        substituteInPlace data/autosuspend.hwdb \
+          --replace-fail "usb:v1C7Ap05A1*" $'usb:v1C7Ap05A1*\nusb:v1C7Ap05A5*'
+      '';
+    });
+
     btop = prev.btop.overrideAttrs (old: {
       passthru = (old.passthru or {}) // {
         # `withoutGpu` is a new package variant of btop.
