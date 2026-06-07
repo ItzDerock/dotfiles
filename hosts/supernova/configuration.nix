@@ -126,6 +126,8 @@ in
       netid = secrets.duke-netid;
     };
 
+    sunshine.enable = true;
+
     hardware = {
       razer.enable = true;
       sharge.enable = true;

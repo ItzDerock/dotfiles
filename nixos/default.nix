@@ -34,6 +34,7 @@
     ./hardware/sharge.nix
     ./dolphin-extract.nix
     ./workserver.nix
+    ./sunshine.nix
   ];
 
   # Apply overlays
