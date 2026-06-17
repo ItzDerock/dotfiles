@@ -14,7 +14,7 @@ in {
     in
     with pkgs; [
       # include some scripting languages for ease
-      nodejs_20
+      nodejs
       pnpm
       bun
       python3
@@ -27,7 +27,6 @@ in {
       # cli tools
       imagemagick
       ffmpeg-full
-      nodejs_20
       libsecret
 
       devenv
