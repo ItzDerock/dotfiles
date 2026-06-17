@@ -90,6 +90,7 @@ in
     useRoutingFeatures = "client";
     openFirewall = true;
   };
+  services.flatpak.enable = true;
 
   # dm.lemurs.enable = true;
   wm.hyprland.enable = true;

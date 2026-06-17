@@ -78,6 +78,8 @@ in
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowBroken = true;
 
+  services.flatpak.enable = true;
+
   wm.hyprland.enable = true;
 
   rockcfg = {

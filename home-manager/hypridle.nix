@@ -21,8 +21,8 @@
         }
         {
           timeout = 330; # 5.5 mins
-          on-timeout = "hyprctl dispatch dpms off";
-          on-resume = "hyprctl dispatch dpms on";
+          on-timeout = "hyprctl eval \"hl.dispatch(hl.dsp.dpms({ action = 'disable' }))\"";
+          on-resume = "hyprctl eval \"hl.dispatch(hl.dsp.dpms({ action = 'enable' }))\"";
         }
         {
           timeout = 1800; # 30 mins
