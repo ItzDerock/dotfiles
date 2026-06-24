@@ -60,7 +60,19 @@ in
     options iwlmvm power_scheme=3
     options iwlwifi uapsd_disable=0
   '';
-  boot.kernelParams = [ "pcie_aspm=force" ];
+  boot.kernelParams = [
+    "pcie_aspm=force"
+    # Kernel 7.1 regressed i915 eDP backlight selection. This panel advertises
+    # Intel's proprietary DPCD backlight interface (DPCD 0x340=01, NITS cap +
+    # SDR-AUX cap set) but has no HDR static metadata in its EDID and lacks the
+    # VESA DP_EDP_BACKLIGHT_AUX_ENABLE_CAP bit. 7.1's stricter gates
+    # (intel_dp_aux_supports_hdr_backlight requires EDID HDR metadata;
+    # check_if_vesa_backlight_possible requires AUX_ENABLE) reject BOTH AUX paths,
+    # so it falls back to native PWM -- which this panel ignores (brightness is
+    # on/off only). FORCE_INTEL (=3) is the only value that bypasses the HDR
+    # metadata gate and selects the Intel interface, restoring granular dimming.
+    "i915.enable_dpcd_backlight=3"
+  ];
 
   services.windscribe.enable = true;
 
@@ -241,6 +253,12 @@ in
 
   services.fprintd.enable = true;
   # services.fprintd.tod.enable = true;
+
+  # vpn
+  programs.throne = {
+    enable = true;
+    tunMode.enable = true;
+  };
 
   system.stateVersion = "23.11"; # dont change me
 }
