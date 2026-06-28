@@ -172,6 +172,7 @@ in
     linuxPackages.v4l2loopback
     btop.withoutGpu
     sbctl
+    openfreebuds
   ];
 
   virtualisation.waydroid.enable = true;

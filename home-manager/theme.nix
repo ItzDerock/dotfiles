@@ -68,6 +68,15 @@ in
 
     ".config/caelestia/shell.json".text = builtins.toJSON {
       paths.wallpaperDir = "/home/derock/NixOS/assets/wallpapers/";
+
+      appearance = {
+        transparency = {
+          enabled = true;
+          base = 0.85;
+          layers = 0.4;
+        };
+      };
+
       bar = {
         clock.showIcon = false;
         scrollActions = {

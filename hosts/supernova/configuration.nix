@@ -174,6 +174,7 @@ in
     lm_sensors
     btop
     openrgb-with-all-plugins
+    openfreebuds
   ];
 
   # corsair

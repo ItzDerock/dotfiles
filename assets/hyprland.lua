@@ -14,6 +14,9 @@ hl.config({
         ["col.active_border"] = "rgb(101415)",
         ["col.inactive_border"] = "rgb(101415)",
     },
+    scrolling = {
+        follow_focus = false,
+    },
     decoration = {
         rounding = 0,
     },

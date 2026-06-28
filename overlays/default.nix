@@ -54,6 +54,19 @@
       '';
     });
 
+    # nixpkgs ships openfreebuds; override only the source to track an open PR
+    # adding HUAWEI FreeBuds Pro 5 support, not yet merged upstream.
+    # https://github.com/Sherzod-Norkulov/OpenFreebuds/tree/pr/freebuds-pro-5
+    openfreebuds = prev.openfreebuds.overrideAttrs (_old: {
+      version = "0.17.3-unstable-2026-05-31";
+      src = prev.fetchFromGitHub {
+        owner = "Sherzod-Norkulov";
+        repo = "OpenFreebuds";
+        rev = "56e5f21b83e5b36c9d63c4189f9abcafe7664e00";
+        hash = "sha256-FMH+mvHenXXAvYWeolDECGC8WO0Tlsfh8r2+lB3ZrB8=";
+      };
+    });
+
     btop = prev.btop.overrideAttrs (old: {
       passthru = (old.passthru or {}) // {
         # `withoutGpu` is a new package variant of btop.

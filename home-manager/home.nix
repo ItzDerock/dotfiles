@@ -115,7 +115,7 @@ in
       wineWowPackages.waylandFull
       prismlauncher
       gamescope
-      bottles
+      #bottles - use flatpak instead flatpak install flathub com.usebottles.bottles
       lutris
 
       # vpn
