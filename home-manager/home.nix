@@ -112,7 +112,8 @@ in
       # gaymin
       steam
       mangohud
-      wineWowPackages.waylandFull
+      wineWow64Packages.staging
+      winetricks
       prismlauncher
       gamescope
       #bottles - use flatpak instead flatpak install flathub com.usebottles.bottles
