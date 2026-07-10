@@ -1516,6 +1516,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-darktable": {
+      "locked": {
+        "lastModified": 1782759047,
+        "narHash": "sha256-gQ/N/HrpH0Ngu/grtG8FV44XzoHaGESOXPM3qMiunSc=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "c139b96a3e91971991dcb8a692b6cea9f9421e0e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "c139b96a3e91971991dcb8a692b6cea9f9421e0e",
+        "type": "github"
+      }
+    },
     "nixpkgs-lib": {
       "locked": {
         "lastModified": 1777168982,
@@ -1868,6 +1884,7 @@
         "hyprsplit": "hyprsplit",
         "lanzaboote": "lanzaboote",
         "nixpkgs": "nixpkgs_5",
+        "nixpkgs-darktable": "nixpkgs-darktable",
         "nixpkgs-master": "nixpkgs-master",
         "nixvim": "nixvim",
         "nvchad4nix": "nvchad4nix",

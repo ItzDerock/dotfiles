@@ -28,6 +28,11 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-master.url = "github:nixos/nixpkgs/master";
 
+    # darktable 5.6.0 (withAi) landed via nixpkgs#534312, only in
+    # nixos-unstable-small so far. Pin the merge commit and pull just the
+    # package expression; deps still come from `nixpkgs` above (see overlays).
+    nixpkgs-darktable.url = "github:nixos/nixpkgs/c139b96a3e91971991dcb8a692b6cea9f9421e0e";
+
     # Home manager
     home-manager = {
       # unstable

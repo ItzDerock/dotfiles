@@ -10,6 +10,15 @@
     # Per-package CUDA opt-ins (cudaSupport is not enabled globally — see nixos/nvidia.nix).
     blender = prev.blender.override { cudaSupport = true; };
 
+    # darktable 5.6.0 with AI features (nixpkgs#534312), not yet in our nixpkgs
+    # channel. callPackage the pinned expression against `final` so only
+    # darktable rebuilds — all deps (incl. onnxruntime for withAi) resolve from
+    # our existing nixpkgs pin, keeping cache hits and disk use down.
+    # Drop this once nixos-unstable ships darktable >= 5.6.
+    darktable = final.callPackage "${inputs.nixpkgs-darktable}/pkgs/by-name/da/darktable/package.nix" {
+      withAi = true;
+    };
+
     # openldap test017-syncreplication-refresh is flaky; upstream issue:
     # https://github.com/NixOS/nixpkgs/issues/514113
     # Retry dropping this when Hydra shows green for openldap on the pinned nixpkgs commit:

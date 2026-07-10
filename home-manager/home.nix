@@ -102,6 +102,7 @@ in
       mpv
       obsidian
       inkscape-with-extensions
+      darktable # 5.6.0 withAi, via overlays/default.nix
       leela
       handbrake
 
@@ -147,6 +148,16 @@ in
 
       comma
     ];
+
+  # darktable AI (withAi) needs an ONNX Runtime lib it can find. darktable
+  # ignores LD_LIBRARY_PATH and only globs FHS paths (empty on NixOS) and
+  # ~/.local/lib/onnxruntime-*/ recursively for libonnxruntime.so.* — so expose
+  # the nixpkgs CPU build here. CPU EP already uses Intel-optimized kernels; the
+  # parked NVIDIA dGPU (PRIME offload) isn't worth the battery for occasional
+  # per-image inference. For GPU later: override onnxruntime with cudaSupport
+  # and set darktable's plugins/ai/ort_library_path to that .so.
+  home.file.".local/lib/onnxruntime-${pkgs.onnxruntime.version}/libonnxruntime.so.${pkgs.onnxruntime.version}".source =
+    "${pkgs.lib.getLib pkgs.onnxruntime}/lib/libonnxruntime.so.${pkgs.onnxruntime.version}";
 
   # my cfg stuff
   rockcfg = {
