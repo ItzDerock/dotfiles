@@ -97,6 +97,7 @@ hl.on("hyprland.start", function()
   hl.exec_cmd("playerctld")
   hl.exec_cmd("wl-paste --watch cliphist store")
   hl.exec_cmd("1password --silent")
+  hl.exec_cmd("thunderbird")
   clamshell.reconcile()
 end)
 
@@ -118,6 +119,7 @@ hl.bind(mod .. " + G", hl.dsp.layout("promote"))
 hl.bind(mod .. " + I", hl.dsp.exec_cmd("firefox"))
 hl.bind(mod .. " + T", hl.dsp.exec_cmd("foot"))
 hl.bind(mod .. " + period", hl.dsp.exec_cmd("wofi-emoji"))
+hl.bind(mod .. " + M", hl.dsp.workspace.toggle_special("mail"))
 
 -- Session / lock
 hl.bind("CTRL + ALT + Delete", hl.dsp.exec_cmd("caelestia shell drawers toggle session"))
@@ -224,6 +226,12 @@ hl.define_submap("dwindle", function()
   end)
   hl.bind("catchall", hl.dsp.submap("reset"))
 end)
+
+-- Thunderbird lives on the mail special workspace, opened silently (no focus steal)
+hl.window_rule({
+  match = { class = "thunderbird" },
+  workspace = "special:mail silent",
+})
 
 -- Window rules (tag-setters first, then tag-consumers)
 hl.window_rule({
