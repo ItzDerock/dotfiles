@@ -146,6 +146,8 @@ in
       zotero
       localsend
 
+      teams-for-linux
+
       comma
     ];
 
