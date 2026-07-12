@@ -10,6 +10,13 @@ let
   cursorTheme = inputs.rose-pine-hyprcursor.packages.${pkgs.system}.default;
   caelestia = inputs.caelestia.packages.${pkgs.system}.default;
   caelestia-cli = inputs.caelestia.inputs.caelestia-cli.packages.${pkgs.system}.default;
+  hyprlandReload = ''
+    for instance in /run/user/$(id -u)/hypr/*/; do
+      [ -S "$instance/.socket.sock" ] || continue
+      HYPRLAND_INSTANCE_SIGNATURE=$(basename "$instance") \
+        ${inputs.hyprland.packages.${pkgs.system}.hyprland}/bin/hyprctl reload || true
+    done
+  '';
 in
 {
   # programs.bash.profileExtra = ''
@@ -107,9 +114,19 @@ in
     extraConfig = ''require("hyprland-user")'';
   };
 
-  home.file.".config/hypr/hyprland-user.lua".source = ../assets/hyprland.lua;
+  # HM only auto-reloads Hyprland when its own generated config changes, so
+  # reload manually whenever these deployed files change. Discovers the
+  # instance via the runtime dir since activation may run without session env
+  # (e.g. nixos-rebuild).
+  home.file.".config/hypr/hyprland-user.lua" = {
+    source = ../assets/hyprland.lua;
+    onChange = hyprlandReload;
+  };
 
-  home.file.".config/hypr/clamshell.lua".source = ../assets/clamshell.lua;
+  home.file.".config/hypr/clamshell.lua" = {
+    source = ../assets/clamshell.lua;
+    onChange = hyprlandReload;
+  };
 
   home.file.".config/hypr/hyprsplit/init.lua".source = "${inputs.hyprsplit}/init.lua";
 
