@@ -4,7 +4,7 @@
 
     settings = {
       general = {
-        after_sleep_cmd = "hyprctl dispatch dpms on";
+        after_sleep_cmd = "hyprctl eval \"clamshell_wake()\"";
         before_sleep_cmd = "loginctl lock-session";
         lock_cmd = "pidof hyprlock || hyprlock";
       };
@@ -22,7 +22,7 @@
         {
           timeout = 330; # 5.5 mins
           on-timeout = "hyprctl eval \"hl.dispatch(hl.dsp.dpms({ action = 'disable' }))\"";
-          on-resume = "hyprctl eval \"hl.dispatch(hl.dsp.dpms({ action = 'enable' }))\"";
+          on-resume = "hyprctl eval \"clamshell_wake()\"";
         }
         {
           timeout = 1800; # 30 mins

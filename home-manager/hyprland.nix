@@ -10,7 +10,6 @@ let
   cursorTheme = inputs.rose-pine-hyprcursor.packages.${pkgs.system}.default;
   caelestia = inputs.caelestia.packages.${pkgs.system}.default;
   caelestia-cli = inputs.caelestia.inputs.caelestia-cli.packages.${pkgs.system}.default;
-  clamshell = pkgs.writeScriptBin "clamshell" (builtins.readFile ../assets/scripts/clamshell.sh);
 in
 {
   # programs.bash.profileExtra = ''
@@ -49,8 +48,6 @@ in
 
     # display window
     nwg-displays
-
-    clamshell
   ];
 
   services.network-manager-applet.enable = true;
@@ -111,6 +108,8 @@ in
   };
 
   home.file.".config/hypr/hyprland-user.lua".source = ../assets/hyprland.lua;
+
+  home.file.".config/hypr/clamshell.lua".source = ../assets/clamshell.lua;
 
   home.file.".config/hypr/hyprsplit/init.lua".source = "${inputs.hyprsplit}/init.lua";
 

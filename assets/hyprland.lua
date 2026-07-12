@@ -3,6 +3,7 @@
 pcall(require, "monitors")
 
 local hs = require("hyprsplit")
+local clamshell = require("clamshell")
 local mod = "SUPER"
 
 hl.config({
@@ -38,6 +39,9 @@ hl.config({
     middle_click_paste = false,
     enable_swallow = true,
     swallow_regex = "^(kitty|foot*)$",
+
+    -- child windows follow parent wksp
+    initial_workspace_tracking = true,
   },
   dwindle = {
     smart_split = true,
@@ -93,6 +97,7 @@ hl.on("hyprland.start", function()
   hl.exec_cmd("playerctld")
   hl.exec_cmd("wl-paste --watch cliphist store")
   hl.exec_cmd("1password --silent")
+  clamshell.reconcile()
 end)
 
 -- Mouse binds
@@ -178,9 +183,7 @@ hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true 
 hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("caelestia shell brightness set +0.1"), { locked = true })
 hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("caelestia shell brightness set 0.1-"), { locked = true })
 
--- Lid switch
-hl.bind("switch:on:Lid Switch", hl.dsp.exec_cmd("clamshell close"), { locked = true })
-hl.bind("switch:off:Lid Switch", hl.dsp.exec_cmd("clamshell open"), { locked = true })
+-- Lid switch binds live in clamshell.lua
 
 -- Workspaces 1-10 (hyprsplit: per-monitor workspace tracks)
 for i = 1, 10 do
