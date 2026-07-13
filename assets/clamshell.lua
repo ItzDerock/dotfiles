@@ -1,4 +1,5 @@
--- Clamshell: lid closed + AC connected -> DPMS internal panel off.
+-- Clamshell: lid closed + AC connected -> disable the internal panel entirely,
+-- so it drops out of the layout and windows can't land on the dark screen.
 -- Probes hardware at load; machines without a lid (desktop) get no-op stubs.
 local M = {}
 
@@ -61,15 +62,15 @@ end
 
 local last
 
-local function apply(desired)
-  if desired == last then
-    return
+-- true when a monitor other than the internal panel is enabled. get_monitors()
+-- returns only enabled outputs, so a disabled monitor never counts here.
+local function other_monitor_enabled()
+  for _, m in ipairs(hl.get_monitors()) do
+    if m.name ~= INTERNAL then
+      return true
+    end
   end
-  last = desired
-  -- dpms must not be dispatched directly from bind context; defer via oneshot timer
-  hl.timer(function()
-    hl.dispatch(hl.dsp.dpms({ action = desired, monitor = INTERNAL }))
-  end, { timeout = 500, type = "oneshot" })
+  return false
 end
 
 if lid_path == nil then
@@ -79,16 +80,25 @@ if lid_path == nil then
   end
 else
   function M.reconcile()
-    apply((lid_closed() and on_ac()) and "off" or "on")
+    -- Defer out of the switch/monitor-event callback and re-read state when the
+    -- timer fires, so a monitor hotplug has settled. Guard: never disable the
+    -- internal panel if it would leave no enabled monitor (blank session).
+    hl.timer(function()
+      local disabled = lid_closed() and on_ac() and other_monitor_enabled()
+      if disabled == last then
+        return
+      end
+      last = disabled
+      hl.monitor({ output = INTERNAL, disabled = disabled })
+    end, { timeout = 500, type = "oneshot" })
   end
 
-  -- resume / idle-wake: light every monitor except the internal one,
-  -- then let policy decide the internal panel (avoids closed-lid flash)
+  -- resume / idle-wake: undo DPMS-off on every enabled monitor, then reconcile.
+  -- A clamshell-disabled internal panel is absent from get_monitors(), so it is
+  -- never lit here (no closed-lid flash); policy re-asserts it below.
   function M.wake()
     for _, m in ipairs(hl.get_monitors()) do
-      if m.name ~= INTERNAL then
-        hl.dispatch(hl.dsp.dpms({ action = "on", monitor = m.name }))
-      end
+      hl.dispatch(hl.dsp.dpms({ action = "on", monitor = m.name }))
     end
     last = nil
     M.reconcile()
@@ -96,6 +106,10 @@ else
 
   hl.bind("switch:on:Lid Switch", M.reconcile, { locked = true })
   hl.bind("switch:off:Lid Switch", M.reconcile, { locked = true })
+
+  -- external hotplug flips whether disabling the internal panel is safe
+  hl.on("monitor.added", M.reconcile)
+  hl.on("monitor.removed", M.reconcile)
 end
 
 -- entry points for hypridle via hyprctl eval
