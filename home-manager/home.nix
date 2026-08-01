@@ -103,6 +103,7 @@ in
       obsidian
       inkscape-with-extensions
       darktable # 5.6.0 withAi, via overlays/default.nix
+      interactive-bg-remover # pkgs/interactive-bg-remover.nix
       leela
       handbrake
 
