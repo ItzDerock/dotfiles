@@ -66,13 +66,14 @@
     # nixpkgs ships openfreebuds; override only the source to track an open PR
     # adding HUAWEI FreeBuds Pro 5 support, not yet merged upstream.
     # https://github.com/Sherzod-Norkulov/OpenFreebuds/tree/pr/freebuds-pro-5
+    # ^ above got deleted, now using: https://github.com/melianmiko/OpenFreebuds/pull/116
     openfreebuds = prev.openfreebuds.overrideAttrs (_old: {
       version = "0.17.3-unstable-2026-05-31";
       src = prev.fetchFromGitHub {
-        owner = "Sherzod-Norkulov";
+        owner = "JehuAlv";
         repo = "OpenFreebuds";
-        rev = "56e5f21b83e5b36c9d63c4189f9abcafe7664e00";
-        hash = "sha256-FMH+mvHenXXAvYWeolDECGC8WO0Tlsfh8r2+lB3ZrB8=";
+        rev = "9bc5e90d198dc2c261c75e4be2ce3fe5a9f31244";
+        hash = "sha256-jzg/pgaHbf8J7GM711ZX4VhcygpkXLyWK0J3oOqIB0s=";
       };
     });
 
