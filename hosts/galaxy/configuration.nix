@@ -178,16 +178,17 @@ in
   virtualisation.waydroid.enable = true;
   powerManagement.enable = true;
 
-  # TODO: switch back to linux_zen once kernel ver 6.15 is available
-  # 6.15 merges the required Samsung Galaxybook driver
-  # 6.14 doesn't have, and the out-of-tree module does not support 6.14 either.
   boot = {
-    kernelPackages = pkgs.linuxSamsung;
+    # stock kernel ships CONFIG_SAMSUNG_GALAXYBOOK=m since 6.14; custom
+    # linuxSamsung overlay no longer needed (and never hits the binary cache)
+    kernelPackages = pkgs.linuxPackages_latest;
     # kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest-lto-x86_64-v3;
 
     kernelModules = [
       "v4l2loopback"
+      "acpi_call"
     ];
+    extraModulePackages = [ config.boot.kernelPackages.acpi_call ];
 
     kernel.sysctl."kernel.sysrq" = 438;
     kernel.sysctl."kernel.panic" = 60;
