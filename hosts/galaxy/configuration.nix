@@ -181,8 +181,7 @@ in
   boot = {
     # stock kernel ships CONFIG_SAMSUNG_GALAXYBOOK=m since 6.14; custom
     # linuxSamsung overlay no longer needed (and never hits the binary cache)
-    kernelPackages = pkgs.linuxPackages_latest;
-    # kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest-lto-x86_64-v3;
+    kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest-lto-x86_64-v3;
 
     kernelModules = [
       "v4l2loopback"
