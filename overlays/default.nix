@@ -43,29 +43,42 @@
       };
     });
 
-    # Fork with SDCP support for the LighTuning ETU905A80-E reader.
-    # Without SDCP, prints are never persisted to device storage and verify
-    # fails with "Print was not found on the devices storage".
+    # SDCP support for the LighTuning ETU905A80-E reader (1C7A:05A5). Without
+    # SDCP, prints are never persisted to device storage and verify fails with
+    # "Print was not found on the devices storage".
+    #
+    # Applied as a patch on top of nixpkgs' libfprint rather than by overriding
+    # `src`, so we keep the 1.94.10 base and all of nixpkgs' backported USB-ID
+    # patches. The patch is the fork's 18 commits rebased onto v1.94.10:
+    #   git clone https://gitlab.freedesktop.org/libfprint/libfprint.git
+    #   git remote add fork https://github.com/TenSeventy7/libfprint-egismoc-sdcp
+    #   git fetch fork && git checkout -b sdcp <fork-rev> && git rebase v1.94.10
+    #   git diff v1.94.10 sdcp -- . ':!tests/egismoc/custom.pcapng' \
+    #     > patches/libfprint-egismoc-sdcp.patch
+    # Regenerate on every fork update *and* every nixpkgs libfprint bump.
+    # Rebase notes: two fork commits (1c7a:0584 support) are already in 1.94.10
+    # and drop out; the only conflict is egismoc_id_table, resolved as the union
+    # (fork's MAX_ENROLL_STAGES_15 on 0583, upstream's 0584/0588 kept).
     # https://github.com/TenSeventy7/libfprint-egismoc-sdcp
-    libfprint = prev.libfprint.overrideAttrs (_old: {
-      version = "1.94.9-egismoc-sdcp-unstable-2025-07-29";
-      src = prev.fetchFromGitHub {
-        owner = "TenSeventy7";
-        repo = "libfprint-egismoc-sdcp";
-        rev = "4d128d4f6f0b46182572126e84df88a73ac27859";
-        hash = "sha256-ij+g5iuWJqMNTDvqTTYWB9BD3Zi+1PzG075rcFULC4w=";
-      };
-      # Fork is based on a pre-1.94.10 tree that has no tests/test-runner.sh.
-      # It also added device id 1C7A:05A5 to the egismoc driver without
-      # regenerating data/autosuspend.hwdb, so the udev-hwdb install-check
-      # would fail; sync the hwdb here.
-      postPatch = ''
-        patchShebangs \
-          tests/unittest_inspector.py \
-          tests/virtual-image.py \
-          tests/umockdev-test.py \
-          tests/test-generated-hwdb.sh
+    libfprint = prev.libfprint.overrideAttrs (old: {
+      # Mark the fork in the store path via pname, not version: nixpkgs derives
+      # the src rev from `v${finalAttrs.version}`, so overriding version would
+      # silently point fetchFromGitLab at a nonexistent tag.
+      pname = "${old.pname}-egismoc-sdcp";
 
+      patches = (old.patches or []) ++ [ ../patches/libfprint-egismoc-sdcp.patch ];
+
+      # tests/egismoc/custom.pcapng is a binary umockdev fixture the SDCP work
+      # re-recorded. GNU patch can't apply git binary diffs, so it is excluded
+      # from the patch above and copied in here instead.
+      postPatch = (old.postPatch or "") + ''
+        cp ${prev.fetchurl {
+          url = "https://raw.githubusercontent.com/TenSeventy7/libfprint-egismoc-sdcp/4d128d4f6f0b46182572126e84df88a73ac27859/tests/egismoc/custom.pcapng";
+          hash = "sha256-6Fnud2PebDBryQnN722M4EkTKxN1aeaumTRd48ZaMTw=";
+        }} tests/egismoc/custom.pcapng
+
+        # The fork adds 1C7A:05A5 to the egismoc driver without regenerating
+        # data/autosuspend.hwdb, which the udev-hwdb install-check diffs exactly.
         substituteInPlace data/autosuspend.hwdb \
           --replace-fail "usb:v1C7Ap05A1*" $'usb:v1C7Ap05A1*\nusb:v1C7Ap05A5*'
       '';
