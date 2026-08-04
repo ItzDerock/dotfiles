@@ -42,7 +42,7 @@
 
     # - HYPRLAND STUFF
     hyprland = {
-      url = "github:hyprwm/Hyprland?ref=v0.55.4";
+      url = "github:hyprwm/Hyprland?ref=v0.56.1";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -81,7 +81,7 @@
       # input.nixpkgs.follows = "nixpkgs";
     };
 
-    nvchad4nix = {
+    nix4nvchad = {
       url = "github:nix-community/nix4nvchad";
       inputs.nixpkgs.follows = "nixpkgs";
     };

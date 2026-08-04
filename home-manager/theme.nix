@@ -33,7 +33,6 @@ in
     hyprqt6
     kdePackages.breeze
 
-    ayu-theme-gtk
     (catppuccin-kvantum.override {
       accent = "lavender";
       variant = "mocha";

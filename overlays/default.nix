@@ -28,11 +28,18 @@
       doCheck = false;
     });
 
-    app2unit = prev.app2unit.overrideAttrs (oldAttrs: rec {
-      version = "1.0.2";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "as";
+    # nixpkgs pins app2unit 1.4.2, whose app2unit.1.scd has nested inline
+    # formatting that scdoc >= 1.11.5 rejects:
+    #   Error at 70:17: Cannot nest inline formatting (began with _ at 69:43)
+    # Upstream fixed the manpage in 1.4.3 ("docs: fix manpage syntax for newer
+    # scdoc, fixes #18"). Bump to 1.4.4; drop once nixpkgs catches up.
+    app2unit = prev.app2unit.overrideAttrs (_old: {
+      version = "1.4.4";
+      src = prev.fetchFromGitHub {
+        owner = "Vladimir-csp";
+        repo = "app2unit";
+        tag = "v1.4.4";
+        hash = "sha256-TIY+/9ekGub+10uyqXy5aYU+2NLysMtaQnD1PIjBCFA=";
       };
     });
 
@@ -108,6 +115,18 @@
           doCheck = false;
         });
 
+        # tests/test_qthreadexec.py stale-reference tests depend on CPython GC
+        # timing and fail on python 3.14 ("Stale reference to executor result
+        # not collected within timeout"). Skip just those two — doCheck = false
+        # would also drop nativeCheckInputs, breaking pythonImportsCheck
+        # ("No Qt implementations found").
+        qasync = python-prev.qasync.overridePythonAttrs (old: {
+          disabledTests = (old.disabledTests or []) ++ [
+            "test_no_stale_reference_as_argument"
+            "test_no_stale_reference_as_result"
+          ];
+        });
+
         # Workaround for bug #437058
         i3ipc = python-prev.i3ipc.overridePythonAttrs (oldAttrs: {
           doCheck = false;
@@ -156,25 +175,31 @@
     });
   };
 
-  # hyprexpo-plus — fork of hyprexpo after it was dropped from hyprland-plugins
+  # hyprexpo-plus — fork of hyprexpo after it was dropped from hyprland-plugins.
+  # Upstream renamed the repo sandwichfarm/hyprexpo-plus -> sandwichfarm/hyprexpo
+  # and tracks Hyprland releases in its VERSION file, so bump this together with
+  # the hyprland flake input. pluginName must match the CMake target
+  # (add_library(hyprexpo ...)) because home-manager loads
+  # ${plugin}/lib/lib${pname}.so.
   hyprexpoPlus = final: prev: {
     hyprexpo-plus =
       let
         hyprlandPkg = inputs.hyprland.packages.${prev.stdenv.hostPlatform.system}.hyprland;
       in
       prev.hyprlandPlugins.mkHyprlandPlugin {
-        pluginName = "hyprexpo-plus";
-        version = "0-unstable-2025-05-14";
+        pluginName = "hyprexpo";
+        version = "0.56.1-unstable-2026-08-03";
         src = prev.fetchFromGitHub {
           owner = "sandwichfarm";
-          repo = "hyprexpo-plus";
-          rev = "60a7f3541ff0cf03313368b61d53aecda783b70b";
-          hash = "sha256-KmwRoizMS83b6+RPWANBqIDSkBiZ0Lr/lUPBz3Q2o/o=";
+          repo = "hyprexpo";
+          rev = "53f391fa14db776bb65c39361a344d18528539ae";
+          hash = "sha256-p9lPjSDkcZf+FKrvnQliDmutt++zB/DdrQXyALN/6s0=";
         };
         hyprland = hyprlandPkg;
-        nativeBuildInputs = [ prev.cmake ];
+        # same set upstream's default.nix uses (cmake, pkg-config, scanners)
+        inherit (hyprlandPkg) nativeBuildInputs;
         meta = with prev.lib; {
-          homepage = "https://github.com/sandwichfarm/hyprexpo-plus";
+          homepage = "https://github.com/sandwichfarm/hyprexpo";
           description = "Enhanced Hyprland workspaces overview plugin (fork of hyprexpo)";
           license = licenses.bsd3;
           platforms = platforms.linux;

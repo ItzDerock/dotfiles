@@ -9,7 +9,12 @@
 let
   cursorTheme = inputs.rose-pine-hyprcursor.packages.${pkgs.system}.default;
   caelestia = inputs.caelestia.packages.${pkgs.system}.default;
-  caelestia-cli = inputs.caelestia.inputs.caelestia-cli.packages.${pkgs.system}.default;
+  # Flake output is built against plain nixpkgs, so our overlays/default.nix
+  # app2unit fix (nixpkgs' 1.4.2 manpage fails to build with scdoc >= 1.11.5)
+  # never reaches it — inject it here.
+  caelestia-cli = inputs.caelestia.inputs.caelestia-cli.packages.${pkgs.system}.default.override {
+    inherit (pkgs) app2unit;
+  };
   hyprlandReload = ''
     for instance in /run/user/$(id -u)/hypr/*/; do
       [ -S "$instance/.socket.sock" ] || continue

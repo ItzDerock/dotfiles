@@ -1,12 +1,12 @@
 { pkgs, inputs, ... }:
 {
   imports = [
-    inputs.nvchad4nix.homeManagerModule
+    inputs.nix4nvchad.homeManagerModules.default
   ];
 
-  home.packages = with pkgs; [ 
-    ripgrep 
-    ripgrep-all 
+  home.packages = with pkgs; [
+    ripgrep
+    ripgrep-all
     # inputs.nvchad4nix.packages."${pkgs.system}".nvchad;
   ];
 
@@ -17,10 +17,12 @@
       nixd
       clang-tools
       nil
-      (python3.withPackages(ps: with ps; [
-        python-lsp-server
-      	flake8
-      ]))
+      (python3.withPackages (
+        ps: with ps; [
+          python-lsp-server
+          flake8
+        ]
+      ))
 
       vimPlugins.kanagawa-nvim
     ];
@@ -61,7 +63,7 @@
           opts = {
             automatic_installation = true,
             handlers = {
-              -- This 'default handler' setup is the key. 
+              -- This 'default handler' setup is the key.
               -- It runs .setup{} for EVERY server Mason installs.
               function(server_name)
                 require("lspconfig")[server_name].setup({
@@ -76,6 +78,6 @@
       }
 
       return M
-    ''; 
+    '';
   };
 }

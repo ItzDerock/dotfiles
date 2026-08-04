@@ -224,16 +224,12 @@ in
   powerManagement.enable = true;
   powerManagement.cpuFreqGovernor = "performance";
 
-  # native compiler optimizations
-  boot.kernelPatches = [
-    {
-      name = "compiler-optimizations";
-      patch = null;
-      extraConfig = ''
-        X86_NATIVE_CPU y
-      '';
-    }
-  ];
+  # CPU optimization level comes from the kernel package variant above
+  # (x86_64-v3 -> CONFIG_GENERIC_CPU=y + CONFIG_X86_64_VERSION=3). Do not set
+  # X86_NATIVE_CPU here: since 7.1 it is part of the same kconfig choice as
+  # GENERIC_CPU, so two "y" answers make generate-config.pl abort with
+  # "conflicting answers!". For a real native build override the variant with
+  # `processorOpt = "native"` instead (impure, -march=native, no substitutes).
 
   hardware.enableRedistributableFirmware = true;
 
