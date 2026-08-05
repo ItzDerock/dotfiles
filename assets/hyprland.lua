@@ -185,6 +185,9 @@ hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true 
 hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("caelestia shell brightness set +0.1"), { locked = true })
 hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("caelestia shell brightness set 0.1-"), { locked = true })
 
+-- Notifs
+hl.bind(mod .. " + N", hl.dsp.exec_cmd("caelestia shell drawers toggle sidebar"))
+
 -- Lid switch binds live in clamshell.lua
 
 -- Workspaces 1-10 (hyprsplit: per-monitor workspace tracks)
