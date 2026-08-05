@@ -54,6 +54,12 @@ in
     };
   };
 
+  # KDE Connect
+  networking.firewall = {
+    allowedTCPPortRanges = [ { from = 1714; to = 1764; } ];
+    allowedUDPPortRanges = [ { from = 1714; to = 1764; } ];
+  };
+
   # power saving
   boot.extraModprobeConfig = ''
     options iwlwifi power_save=1

@@ -1,5 +1,12 @@
 { pkgs, lib, ... }:
 let
+  # mimeapps.list is written as a real, writable file rather than a store symlink
+  # (see the activation script below) so KDE's "Remember application association"
+  # checkbox can actually persist a choice. Every rebuild restores this generated
+  # content, so anything you want to keep belongs in allAssociations.
+  mkSection = attrs: lib.concatStrings (
+    lib.mapAttrsToList (type: handlers: "${type}=${lib.concatStringsSep ";" handlers};\n") attrs
+  );
 
   # To find .desktop locations:
   # for p in ${XDG_DATA_DIRS//:/ }; do find $p/applications -name '*.desktop'; done
@@ -16,29 +23,43 @@ let
 
   terminalApplication = "foot.desktop";
 
-  # image/ auto-appended
+  # image/ auto-appended — these subtypes are all real
   imageTypes = [
     "png"
     "jpeg"
     "heic"
+    "heif"
     "bmp"
     "gif"
+    "webp"
+    "tiff"
+    "svg+xml"
+    "avif"
   ];
 
-  # video/ auto-appended
+  # Full mime names — these must match shared-mime-info exactly. Container
+  # extensions are NOT mime subtypes: .mkv is video/x-matroska, .mov is
+  # video/quicktime, .ts is video/mp2t, and video/{mkv,mov,wmv,mpg,ogv,ts}
+  # match nothing at all. Check with:
+  #   grep -o 'type="video/[^"]*"' $(nix eval --raw nixpkgs#shared-mime-info)/share/mime/packages/freedesktop.org.xml
   videoTypes = [
-    "mp4"
-    "mkv"
-    "avi"
-    "mov"
-    "webm"
-    "flv"
-    "wmv"
-    "mpeg"
-    "mpg"
-    "3gp"
-    "ogv"
-    "ts"
+    "video/mp4"
+    "video/x-matroska"
+    "video/x-msvideo"
+    "video/msvideo"
+    "video/avi"
+    "video/quicktime"
+    "video/webm"
+    "video/x-flv"
+    "video/flv"
+    "video/x-ms-wmv"
+    "video/mpeg"
+    "video/3gpp"
+    "video/3gpp2"
+    "video/ogg"
+    "video/mp2t"
+    "video/x-mpegurl"
+    "video/vnd.mpegurl"
   ];
 
   browserTypes = [
@@ -71,10 +92,17 @@ let
   # [lowest prio ... highest prio]
   allAssociations =
     (makeMimeAssociations "zen.desktop" "" browserTypes)
-    // (makeMimeAssociations "mpv.desktop" "video/" videoTypes)
+    // (makeMimeAssociations "mpv.desktop" "" videoTypes)
     // (makeMimeAssociations "org.kde.gwenview.desktop" "image/" imageTypes)
     // (makeMimeAssociations "nvim.desktop" "" textTypes)
     // extraAssociations;
+
+  mimeappsList = pkgs.writeText "mimeapps.list" ''
+    [Default Applications]
+    ${mkSection allAssociations}
+    [Added Associations]
+    ${mkSection allAssociations}
+  '';
 in
 {
   home.packages = with pkgs; [
@@ -85,11 +113,9 @@ in
   xdg = {
     enable = true;
 
-    mimeApps = {
-      enable = true;
-      defaultApplications = allAssociations;
-      associations.added = allAssociations;
-    };
+    # Deliberately off: it would link mimeapps.list into the read-only store.
+    # The activation script below installs a writable copy instead.
+    mimeApps.enable = false;
 
     userDirs = {
       enable = true;
@@ -100,11 +126,15 @@ in
       pictures = "$HOME/Pictures/";
     };
 
-    # force override
-    configFile."mimeapps.list".force = true;
-
     terminal-exec.settings.default = [ terminalApplication ];
   };
+
+  # Writable mimeapps.list — replaces any prior store symlink, and stays a plain
+  # file so KDE/GIO can rewrite it when you pick "remember this application".
+  home.activation.writableMimeApps = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+    run rm -f "$HOME/.config/mimeapps.list" "$HOME/.local/share/applications/mimeapps.list"
+    run install -Dm644 ${mimeappsList} "$HOME/.config/mimeapps.list"
+  '';
 
   # Set default terminal
   home.file.".config/xdg-terminals.list" = {

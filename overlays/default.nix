@@ -171,7 +171,11 @@
     ];
   };
 
-  # Fix dolphin "Open with" menu outside KDE — upstream overlay used libsForQt5.kservice which was removed
+  # Fix dolphin's empty "Open with" list outside KDE by refreshing ksycoca before launch.
+  # Do NOT pass a menu file: kservice >= 6.28 dropped $out/etc/xdg/menus/applications.menu,
+  # and handing kbuildsycoca6 a nonexistent menu makes it emit a sycoca with zero service
+  # groups — exactly the empty application list. With no argument it discovers the menu
+  # itself and the app tree is populated.
   dolphinFix = final: prev: {
     kdePackages = prev.kdePackages.overrideScope (kfinal: kprev: {
       dolphin = prev.symlinkJoin {
@@ -181,8 +185,7 @@
         postBuild = ''
           rm $out/bin/dolphin
           makeWrapper ${kprev.dolphin}/bin/dolphin $out/bin/dolphin \
-            --set XDG_CONFIG_DIRS "${prev.kdePackages.kservice}/etc/xdg:$XDG_CONFIG_DIRS" \
-            --run "${kprev.kservice}/bin/kbuildsycoca6 --noincremental ${prev.kdePackages.kservice}/etc/xdg/menus/applications.menu"
+            --run "${kprev.kservice}/bin/kbuildsycoca6 --noincremental >/dev/null 2>&1 || true"
         '';
       };
     });
