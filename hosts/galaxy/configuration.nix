@@ -199,7 +199,11 @@ in
     kernel.sysctl."kernel.panic" = 60;
   };
 
-  services.throttled.enable = true;
+  # throttled is deliberately NOT enabled. It exists to work around Lenovo's
+  # BD PROCHOT bug, which this machine does not have, and its stock [BATTERY]
+  # profile rewrites MSR_PKG_POWER_LIMIT to PL1=29W/PL2=44W every 30s --
+  # overriding the platform's own DPTF limits and pinning battery draw high.
+  # Leave package power to thermald + the Raptor Lake DPTF participant.
 
   # more intel stuff
   hardware.graphics = {

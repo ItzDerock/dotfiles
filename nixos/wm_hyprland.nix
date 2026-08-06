@@ -52,6 +52,19 @@ in
       };
     };
 
+    # Outside a Plasma session nothing installs an XDG application menu, and
+    # XDG_MENU_PREFIX is unset — so kbuildsycoca6 finds no root menu and every
+    # KDE app list built from KServiceGroup comes up empty. Most visibly,
+    # Dolphin's "Open with" dialog shows zero programs. Reusing Plasma's menu
+    # as the unprefixed applications.menu populates the tree; plasma-workspace
+    # is already in the system closure via xdg-desktop-portal-kde, so this
+    # costs nothing. Verify with:
+    #   kbuildsycoca6 --noincremental && \
+    #     strings -a -eb $(ls -t ~/.cache/ksycoca6* | head -1) | grep -c '\.directory'
+    # 1 means the menu was not found; ~44 means the tree built.
+    environment.etc."xdg/menus/applications.menu".source =
+      "${pkgs.kdePackages.plasma-workspace}/etc/xdg/menus/plasma-applications.menu";
+
     rockcfg = {
       wayland.enable = true;
     };

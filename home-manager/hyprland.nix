@@ -8,7 +8,31 @@
 }:
 let
   cursorTheme = inputs.rose-pine-hyprcursor.packages.${pkgs.system}.default;
-  caelestia = inputs.caelestia.packages.${pkgs.system}.default;
+
+  # caelestia is a relative `path:` input (see flake.nix), which has no git
+  # identity of its own -- so the `rev = self.rev or self.dirtyRev` in its
+  # flake.nix falls through to THIS repo's rev. That bakes our commit into
+  # -DGIT_REVISION for all four caelestia derivations, forcing a full C++/QML
+  # rebuild on every dotfiles commit and every clean->dirty flip.
+  #
+  # Substitute a rev derived from caelestia's own tree instead: same store path
+  # the package already uses for `src`, so it changes when (and only when)
+  # caelestia's sources change. GIT_REVISION is cosmetic -- extras/version.cpp
+  # prints it for `--version` and nothing else reads it.
+  #
+  # Keeping the `path:` input (rather than a git ref) is deliberate: it means
+  # edits under external/caelestia-shell are picked up on the next rebuild with
+  # no commit, push, or `nix flake update`.
+  caelestiaRev = builtins.substring 0 32 (
+    builtins.baseNameOf (builtins.path {
+      path = inputs.caelestia.outPath;
+      name = "caelestia-shell";
+    })
+  );
+
+  caelestia = inputs.caelestia.packages.${pkgs.system}.default.override {
+    rev = caelestiaRev;
+  };
   # Flake output is built against plain nixpkgs, so our overlays/default.nix
   # app2unit fix (nixpkgs' 1.4.2 manpage fails to build with scdoc >= 1.11.5)
   # never reaches it — inject it here.

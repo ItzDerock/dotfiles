@@ -43,6 +43,32 @@ in {
 
     services.tuned = {
       enable = true;
+
+      # ppdSupport defaults to true, which means tuned picks its profile from
+      # this map rather than from `recommend` -- without it the profiles below
+      # are defined but never selected (tuned lands on vendored
+      # "balanced-battery" and the gt_max_freq_mhz caps never apply).
+      #
+      # `profiles` is the on-AC map; `battery` overrides it on DC. Only the
+      # battery entry uses intel-balanced-power, since it includes the
+      # balanced-battery base which has no business running on AC.
+      ppdSettings = {
+        profiles = {
+          power-saver = "intel-powersave";
+          balanced = "balanced";
+          performance = "throughput-performance";
+        };
+
+        battery.balanced = "intel-balanced-power";
+      };
+
+      # RAPL note: firmware leaves the MSR package domain effectively unlimited
+      # (PL1 200W / PL2 115W), so the binding limit is the MMIO domain at
+      # 45W/60W -- too high for battery, and enough to hold TSR1 over the 48C
+      # EC fan trip indefinitely. Clamping the MSR path below MMIO makes it the
+      # effective limit, since the hardware honours min(MSR, MMIO). tuned
+      # restores the firmware values when the profile is deactivated, so this
+      # stays scoped to battery without needing a separate daemon.
       profiles = {
         intel-powersave = {
           main = {
@@ -53,6 +79,9 @@ in {
             # "/sys/bus/pci/devices/0000:00:02.0/drm/card*/gt_min_freq_mhz" = 300;
             "/sys/bus/pci/devices/0000:00:02.0/drm/card*/gt_max_freq_mhz" = 400;
             "/sys/bus/pci/devices/0000:00:02.0/drm/card*/gt_boost_freq_mhz" = 500;
+
+            "/sys/class/powercap/intel-rapl:0/constraint_0_power_limit_uw" = 15000000;
+            "/sys/class/powercap/intel-rapl:0/constraint_1_power_limit_uw" = 30000000;
           };
         };
 
@@ -64,6 +93,9 @@ in {
           sysfs = {
             "/sys/bus/pci/devices/0000:00:02.0/drm/card*/gt_max_freq_mhz" = 800;
             "/sys/bus/pci/devices/0000:00:02.0/drm/card*/gt_boost_freq_mhz" = 800;
+
+            "/sys/class/powercap/intel-rapl:0/constraint_0_power_limit_uw" = 20000000;
+            "/sys/class/powercap/intel-rapl:0/constraint_1_power_limit_uw" = 35000000;
           };
         };
       };
