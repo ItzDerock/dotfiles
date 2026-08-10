@@ -57,6 +57,7 @@
     nerd-fonts.iosevka
     corefonts
     vista-fonts
+    atkinson-hyperlegible-next
   ];
 
   environment.systemPackages =
