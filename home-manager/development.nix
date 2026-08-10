@@ -44,6 +44,9 @@ in {
       # rf
       gnuradio
       sdrangel
+
+      # reverse engineering
+      ghidra-scaled # ghidra + uiScale=2, via overlays/default.nix
     ];
 
   programs = {

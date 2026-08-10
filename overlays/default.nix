@@ -98,6 +98,33 @@
       };
     });
 
+    # Ghidra has no declarative knob for HiDPI scaling: support/launch.properties
+    # (which pins VMARGS_LINUX=-Dsun.java2d.uiScale=1) lives read-only in the store.
+    # ghidraRun appends $GHIDRA_JAVA_OPTIONS to the java command line *after* the
+    # launch.properties args, and for -D the last one wins, so the env var is enough.
+    #
+    # Wrapped rather than overrideAttrs'd on purpose: ghidra is a multi-hour gradle
+    # build, and touching its derivation would throw away the binary cache hit.
+    #
+    # uiScale scales the whole UI (fonts + icons + widgets). For fonts only, swap in
+    # -Dfont.size.override=<absolute px>, which is a size not a multiplier.
+    # NOTE: must NOT be named `ghidra`. ghidra's own derivation resolves
+    # `ghidra-extensions` (and through it its gradle mitmCache) out of the *final*
+    # package set, so overriding `pkgs.ghidra` feeds this wrapper's name back into
+    # the inner build, renaming ghidra-deps -> ghidra-<wrapper>-deps and turning a
+    # cache hit into a multi-hour gradle build from source.
+    ghidra-scaled = prev.symlinkJoin {
+      name = "ghidra-scaled-${prev.ghidra.version}";
+      paths = [ prev.ghidra ];
+      nativeBuildInputs = [ prev.makeWrapper ];
+      postBuild = ''
+        rm $out/bin/ghidra
+        makeWrapper ${prev.ghidra}/bin/ghidra $out/bin/ghidra \
+          --set-default GHIDRA_JAVA_OPTIONS "-Dsun.java2d.uiScale=2"
+      '';
+      inherit (prev.ghidra) meta;
+    };
+
     btop = prev.btop.overrideAttrs (old: {
       passthru = (old.passthru or {}) // {
         # `withoutGpu` is a new package variant of btop.
