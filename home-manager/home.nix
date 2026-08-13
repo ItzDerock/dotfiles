@@ -13,14 +13,6 @@ let
   );
   screenshot = pkgs.writeScriptBin "screenshot" (builtins.readFile ../assets/scripts/screenshot.sh);
   quick-rmbg = pkgs.writeScriptBin "quick-rmbg" (builtins.readFile ../assets/scripts/quick-rmbg.sh);
-
-  # vesktop fork with replaced shaggy.gif so its not weird
-  customVesktop = pkgs.vesktop.overrideAttrs (oldAttrs: {
-    postPatch = ''
-      ${oldAttrs.postPatch or ""}
-      cp ${../assets/vesktop/loading.gif} static/shiggy.gif
-    '';
-  });
 in
 {
   imports = [
@@ -108,7 +100,7 @@ in
       handbrake
 
       # social media
-      customVesktop
+      (discord.override { withVencord = true; })
       nixpkgs-master.thunderbird # need >145 for Exchange
 
       # gaymin
