@@ -55,6 +55,7 @@ in {
       shellAliases = {
         "☕" = "ssh terminal.shop";
         "zed" = "zeditor -n";
+        "cat" = "bat";
       };
 
       bashrcExtra = (builtins.readFile ../assets/.bashrc) + ''
@@ -64,6 +65,20 @@ in {
         # source
         source ${../assets/scripts/tssh.sh}
       '';
+    };
+
+    eza = {
+      enable = true;
+      enableBashIntegration = true;
+      git = true;
+      icons = "auto";
+    };
+
+    bat = {
+      enable = true;
+      config = {
+        pager = "";
+      };
     };
 
     zoxide = {
