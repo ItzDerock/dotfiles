@@ -282,4 +282,6 @@ in
   # openrgb for corsair
   hardware.i2c.enable = true;
   services.hardware.openrgb.enable = true;
+
+  hardware.amdgpu.opencl.enable = true;
 }
