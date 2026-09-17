@@ -19,9 +19,9 @@ in
     # Hyprland
     programs.hyprland = {
       enable = true;
-      package = inputs.hyprland.packages."${pkgs.system}".hyprland;
+      package = pkgs.hyprland;
       xwayland.enable = true;
-      portalPackage = inputs.hyprland.packages."${pkgs.system}".xdg-desktop-portal-hyprland;
+      portalPackage = pkgs.xdg-desktop-portal-hyprland;
     };
 
     hardware.graphics = {

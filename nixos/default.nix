@@ -42,7 +42,7 @@
     outputs.overlays.additions
     outputs.overlays.modifications
     outputs.overlays.dolphinFix
-    outputs.overlays.hyprexpoPlus
+    outputs.overlays.hyprland
     inputs.cachyos-kernel.overlays.pinned
   ];
 
@@ -100,7 +100,6 @@
       ffmpegthumbnailer # videos
       ftgl # font
       libgsf # .odf
-      nufraw-thumbnailer # .raw
       gnome-epub-thumbnailer # .epub, .mobi
       nixpkgs-master.f3d
 

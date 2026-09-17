@@ -13,9 +13,23 @@ let
     builtins.readFile ../assets/scripts/wpaudiochange.py
   );
 
-  # https://github.com/hyprwm/hyprqt6engine/blob/0021cc218fc23862a5688b7b217adba09d44ef1c/common/common.cpp#L26C1-L29C7
-  # .config support requries additional libs
-  hyprqt6 = inputs.hyprqt6engine.packages.${pkgs.system}.default.overrideAttrs (old: {
+  # Qt loads this plugin into apps built with nixpkgs' default compiler.
+  # Upstream uses GCC 16, which requires GLIBCXX_3.4.36 and cannot load into
+  # GCC 15 apps. Align the plugin and both Hypr dependencies with the host.
+  hyprqtInputs = inputs.hyprqt6engine.inputs;
+  qtHyprutils = hyprqtInputs.hyprutils.packages.${pkgs.system}.default.override {
+    inherit (pkgs) stdenv;
+  };
+  qtHyprlang = hyprqtInputs.hyprlang.packages.${pkgs.system}.default.override {
+    inherit (pkgs) stdenv;
+    hyprutils = qtHyprutils;
+  };
+  hyprqt6 = (inputs.hyprqt6engine.packages.${pkgs.system}.default.override {
+    inherit (pkgs) stdenv;
+    hyprutils = qtHyprutils;
+    hyprlang = qtHyprlang;
+  }).overrideAttrs (old: {
+    # Enable support for Caelestia's KDE .colors files.
     buildInputs = old.buildInputs ++ [
       pkgs.kdePackages.kconfig
       pkgs.kdePackages.kcolorscheme
@@ -71,8 +85,8 @@ in
       appearance = {
         transparency = {
           enabled = true;
-          base = 0.85;
-          layers = 0.4;
+          base = 0.8;
+          layers = 0.35;
         };
       };
 
@@ -84,13 +98,44 @@ in
           volume = false;
         };
 
-        status.showAudio = true;
+        statusIcons = [
+          {
+            id = "lockStatus";
+            enabled = true;
+          }
+          {
+            id = "audio";
+            enabled = true;
+          }
+          {
+            id = "microphone";
+            enabled = false;
+          }
+          {
+            id = "kbLayout";
+            enabled = false;
+          }
+          {
+            id = "network";
+            enabled = true;
+          }
+          {
+            id = "bluetooth";
+            enabled = true;
+          }
+          {
+            id = "battery";
+            enabled = true;
+          }
+        ];
         showOnHover = false;
 
         popouts = {
           activeWindow = false;
         };
       };
+
+      dashboard.showClockSeconds = true;
 
       launcher = {
         vimKeybinds = true;

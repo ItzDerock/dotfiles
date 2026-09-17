@@ -42,7 +42,7 @@
 
     # - HYPRLAND STUFF
     hyprland = {
-      url = "github:hyprwm/Hyprland?ref=v0.56.1";
+      url = "github:hyprwm/Hyprland?ref=7ebf13abb3c391604c60c9f627c7a403bcec8d17";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -63,6 +63,11 @@
     hyprqt6engine = {
       url = "github:hyprwm/hyprqt6engine";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    hyprexpo = {
+      url = "github:sandwichfarm/hyprexpo";
+      inputs.hyprland.follows = "hyprland";
     };
 
     # Shell

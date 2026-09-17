@@ -1,0 +1,418 @@
+--- a/src/Dispatchers.cpp
++++ b/src/Dispatchers.cpp
+@@ -13,10 +13,11 @@
+ #include <hyprland/src/debug/log/Logger.hpp>
+ #include <hyprland/src/desktop/state/FocusState.hpp>
+ #include <hyprland/src/desktop/state/GlobalWindowController.hpp>
+-#include <hyprland/src/desktop/view/Window.hpp>
++#include <hyprland/src/desktop/view/window/Window.hpp>
+ #include <hyprland/src/helpers/Color.hpp>
+ #include <hyprland/src/output/Monitor.hpp>
+-#include <hyprland/src/managers/KeybindManager.hpp>
++#include <hyprland/src/keybinds/Manager.hpp>
++#include <hyprland/src/keybinds/Resolver.hpp>
+ #include <hyprland/src/managers/SeatManager.hpp>
+ #include <hyprland/src/managers/input/InputManager.hpp>
+ #include <hyprland/src/managers/input/trackpad/GestureTypes.hpp>
+@@ -141,7 +142,7 @@
+     const auto& windows = Desktop::windowState()->windows();
+     for (auto it = windows.rbegin(); it != windows.rend(); ++it) {
+         const auto& window = *it;
+-        if (!window || window->m_workspace != workspace || !window->m_isMapped || window->isHidden())
++        if (!window || window->m_workspace != workspace || !window->mapped() || window->isHidden())
+             continue;
+
+         return window;
+@@ -529,9 +530,9 @@
+     if (direction == TRACKPAD_GESTURE_DIR_NONE)
+         return {.success = false, .error = std::format("invalid direction '{}'", directionName)};
+
+-    uint32_t modMask = 0;
++    Input::ModifierMask modMask = Input::HL_MODIFIER_NONE;
+     if (!mods.empty())
+-        modMask = g_pKeybindManager->stringToModMask(mods);
++        modMask = Keybinds::modMaskFromString(mods);
+
+     deltaScale = std::clamp(deltaScale, 0.1F, 10.F);
+
+@@ -556,7 +557,7 @@
+ }
+
+ static void reportGestureConfigError(const std::string& error) {
+-    Log::logger->log(Log::ERR, "[hyprexpo] {}", error);
++    LOG(Log::ERR, "[hyprexpo] {}", error);
+     HyprlandAPI::addNotification(PHANDLE, "[hyprexpo] " + error, CHyprColor{1.0, 0.2, 0.2, 1.0}, 5000);
+ }
+
+@@ -691,7 +692,7 @@
+     if (!emission.validRequest)
+         return {.success = false, .error = emission.error};
+
+-    Log::logger->log(Log::INFO, "HYPREXPO_SCROLLING_DIAGNOSTIC {}", emission.json);
++    LOG(Log::INFO, "HYPREXPO_SCROLLING_DIAGNOSTIC {}", emission.json);
+     if (!emission.success)
+         return {.success = false, .error = emission.error};
+     return {};
+@@ -709,7 +710,7 @@
+     const auto emission = OV->injectScrollingInput(arg);
+     if (!emission)
+         return {.success = false, .error = emission.error()};
+-    Log::logger->log(Log::INFO, "HYPREXPO_SCROLLING_INPUT {}", *emission);
++    LOG(Log::INFO, "HYPREXPO_SCROLLING_INPUT {}", *emission);
+     return {};
+ }
+
+@@ -726,7 +727,7 @@
+     if (!result)
+         return {.success = false, .error = result.error()};
+     const auto diagnostic = Hyprexpo::Scrolling::mutationDiagnosticJson(*result);
+-    Log::logger->log(result->outcome == Hyprexpo::Scrolling::EMutationOutcome::RollbackFailed ? Log::ERR : Log::INFO,
++    LOG(result->outcome == Hyprexpo::Scrolling::EMutationOutcome::RollbackFailed ? Log::ERR : Log::INFO,
+                      "HYPREXPO_SCROLLING_MUTATION {}", diagnostic);
+     if (result->outcome == Hyprexpo::Scrolling::EMutationOutcome::RollbackFailed || result->outcome == Hyprexpo::Scrolling::EMutationOutcome::Rejected)
+         return {.success = false, .error = result->error};
+--- a/src/IOverviewSession.cpp
++++ b/src/IOverviewSession.cpp
+@@ -15,7 +15,7 @@
+ namespace {
+
+ void notifyScrollingFailure(const std::string& message) {
+-    Log::logger->log(Log::ERR, "[hyprexpo] {}", message);
++    LOG(Log::ERR, "[hyprexpo] {}", message);
+     HyprlandAPI::addNotification(PHANDLE, "[hyprexpo] " + message, CHyprColor{1.0, 0.2, 0.2, 1.0}, 5000);
+ }
+
+--- a/src/Overview.cpp
++++ b/src/Overview.cpp
+@@ -17,7 +17,8 @@
+ #include <hyprland/src/config/shared/animation/AnimationTree.hpp>
+ #include <hyprland/src/config/shared/workspace/WorkspaceRuleManager.hpp>
+ #include <hyprland/src/desktop/state/FocusState.hpp>
+-#include <hyprland/src/desktop/view/Window.hpp>
++#include <hyprland/src/desktop/view/window/Window.hpp>
++#include <hyprland/src/desktop/view/window/WindowPresentation.hpp>
+ #include <hyprland/src/layout/LayoutManager.hpp>
+ #include <hyprland/src/layout/space/Space.hpp>
+ #include <hyprland/src/animation/AnimationManager.hpp>
+@@ -468,11 +469,11 @@
+     }
+
+     for (const auto& window : Desktop::windowState()->windows()) {
+-        if (!window || !window->m_isMapped || window->isHidden() || window->m_pinned || !window->m_workspace || window->m_workspace->m_monitor != monitor)
+-            continue;
+-
+-        window->alpha(Desktop::View::WINDOW_ALPHA_MOVE_FROM_WORKSPACE)->setValueAndWarp(1.F);
+-        *window->alpha(Desktop::View::WINDOW_ALPHA_MOVE_FROM_WORKSPACE) = 1.F;
++        if (!window || !window->mapped() || window->isHidden() || static_cast<bool>(window->m_state & Desktop::View::WINDOW_STATE_PINNED) || !window->m_workspace || window->m_workspace->m_monitor != monitor)
++            continue;
++
++        window->presentation().alpha(Desktop::View::WINDOW_ALPHA_MOVE_FROM_WORKSPACE)->setValueAndWarp(1.F);
++        *window->presentation().alpha(Desktop::View::WINDOW_ALPHA_MOVE_FROM_WORKSPACE) = 1.F;
+     }
+ }
+
+@@ -487,16 +488,16 @@
+         return states;
+
+     for (const auto& window : Desktop::windowState()->windows()) {
+-        if (!window || !window->m_isMapped || !window->m_pinned)
++        if (!window || !window->mapped() || !static_cast<bool>(window->m_state & Desktop::View::WINDOW_STATE_PINNED))
+             continue;
+
+         states.push_back({
+             .window = window,
+             .workspace = window->m_workspace,
+-            .pinned = window->m_pinned,
++            .pinned = static_cast<bool>(window->m_state & Desktop::View::WINDOW_STATE_PINNED),
+         });
+
+-        window->m_pinned = false;
++        window->m_state &= ~Desktop::View::WindowState{Desktop::View::WINDOW_STATE_PINNED};
+         window->m_workspace.reset();
+     }
+
+@@ -509,7 +510,8 @@
+             continue;
+
+         state.window->m_workspace = state.workspace;
+-        state.window->m_pinned    = state.pinned;
++        state.window->m_state = (state.window->m_state & ~Desktop::View::WindowState{Desktop::View::WINDOW_STATE_PINNED}) |
++            Desktop::View::WindowState{state.pinned ? Desktop::View::WINDOW_STATE_PINNED : Desktop::View::WINDOW_STATE_NONE};
+     }
+ }
+
+@@ -520,19 +522,19 @@
+ }
+
+ bool windowVisibleOnWorkspace(const PHLWINDOW& window, const PHLWORKSPACE& workspace) {
+-    return window && workspace && window->m_workspace == workspace && window->m_isMapped && !window->isHidden() && !window->m_pinned;
++    return window && workspace && window->m_workspace == workspace && window->mapped() && !window->isHidden() && !static_cast<bool>(window->m_state & Desktop::View::WINDOW_STATE_PINNED);
+ }
+
+ void settleWorkspaceMoveAnimation(const PHLWINDOW& window) {
+     if (!window)
+         return;
+
+-    window->alpha(Desktop::View::WINDOW_ALPHA_MOVE_TO_WORKSPACE)->resetAllCallbacks();
+-    window->alpha(Desktop::View::WINDOW_ALPHA_MOVE_TO_WORKSPACE)->setValueAndWarp(1.F);
+-    *window->alpha(Desktop::View::WINDOW_ALPHA_MOVE_TO_WORKSPACE) = 1.F;
+-    window->alpha(Desktop::View::WINDOW_ALPHA_MOVE_FROM_WORKSPACE)->setValueAndWarp(1.F);
+-    *window->alpha(Desktop::View::WINDOW_ALPHA_MOVE_FROM_WORKSPACE) = 1.F;
+-    window->m_monitorMovedFrom                                      = -1;
++    window->presentation().alpha(Desktop::View::WINDOW_ALPHA_MOVE_TO_WORKSPACE)->resetAllCallbacks();
++    window->presentation().alpha(Desktop::View::WINDOW_ALPHA_MOVE_TO_WORKSPACE)->setValueAndWarp(1.F);
++    *window->presentation().alpha(Desktop::View::WINDOW_ALPHA_MOVE_TO_WORKSPACE) = 1.F;
++    window->presentation().alpha(Desktop::View::WINDOW_ALPHA_MOVE_FROM_WORKSPACE)->setValueAndWarp(1.F);
++    *window->presentation().alpha(Desktop::View::WINDOW_ALPHA_MOVE_FROM_WORKSPACE) = 1.F;
++    window->presentation().resetMonitorMovedFrom();
+ }
+
+ void settleWorkspaceMoveAnimations() {
+@@ -540,8 +542,8 @@
+         if (!window)
+             continue;
+
+-        const bool movingWorkspace = window->m_monitorMovedFrom != -1 || window->alpha(Desktop::View::WINDOW_ALPHA_MOVE_TO_WORKSPACE)->isBeingAnimated() ||
+-            window->alpha(Desktop::View::WINDOW_ALPHA_MOVE_FROM_WORKSPACE)->isBeingAnimated();
++        const bool movingWorkspace = window->presentation().movingFromMonitor() || window->presentation().alpha(Desktop::View::WINDOW_ALPHA_MOVE_TO_WORKSPACE)->isBeingAnimated() ||
++            window->presentation().alpha(Desktop::View::WINDOW_ALPHA_MOVE_FROM_WORKSPACE)->isBeingAnimated();
+         if (!movingWorkspace)
+             continue;
+
+@@ -996,7 +998,7 @@
+
+     int methodStartID = monitor->activeWorkspaceID();
+     if (!parsed.valid) {
+-        Log::logger->log(Log::ERR, "[hyprexpo] invalid workspace_method for monitor {}: {} ({})", monitorName, configStr, parsed.error);
++        LOG(Log::ERR, "[hyprexpo] invalid workspace_method for monitor {}: {} ({})", monitorName, configStr, parsed.error);
+         return {true, methodStartID};
+     }
+
+@@ -1252,7 +1254,7 @@
+             visibleWorkspaceIDs = *expandedWorkspaceIDs;
+         else {
+             visibleWorkspaceIDs = *Hyprexpo::expandDynamicWorkspaceIDs(visibleWorkspaceIDs, false, HyprexpoConfig::DYNAMIC_GRID_MAX_TILES);
+-            Log::logger->log(Log::ERR, "[hyprexpo] fill_gaps range exceeds {} tiles; using sparse workspace IDs", HyprexpoConfig::DYNAMIC_GRID_MAX_TILES);
++            LOG(Log::ERR, "[hyprexpo] fill_gaps range exceeds {} tiles; using sparse workspace IDs", HyprexpoConfig::DYNAMIC_GRID_MAX_TILES);
+         }
+
+         if (**PMRUSORT) {
+--- a/src/OverviewCapture.cpp
++++ b/src/OverviewCapture.cpp
+@@ -143,7 +143,7 @@
+         std::scoped_lock lock{g_budgetLogMutex};
+         const auto generation = g_budgetGeneration.load(std::memory_order_relaxed);
+         if (g_lastLoggedBudgetGeneration != generation) {
+-            Log::logger->log(Log::ERR, "[hyprexpo] scrolling_thumbnail_budget {} is outside {}..{}; clamping to {}", raw, HyprexpoConfig::SCROLLING_THUMBNAIL_BUDGET_MIN,
++            LOG(Log::ERR, "[hyprexpo] scrolling_thumbnail_budget {} is outside {}..{}; clamping to {}", raw, HyprexpoConfig::SCROLLING_THUMBNAIL_BUDGET_MIN,
+                              HyprexpoConfig::SCROLLING_THUMBNAIL_BUDGET_MAX, clamped);
+             g_lastLoggedBudgetGeneration = generation;
+         }
+--- a/src/OverviewInteraction.cpp
++++ b/src/OverviewInteraction.cpp
+@@ -9,7 +9,7 @@
+ #include <hyprland/src/pointer/cursor/CursorShapeOverrideController.hpp>
+ #include <hyprland/src/managers/input/InputManager.hpp>
+ #include <hyprland/src/managers/eventLoop/EventLoopManager.hpp>
+-#include <hyprland/src/managers/KeybindManager.hpp>
++#include <hyprland/src/keybinds/Manager.hpp>
+ #include <hyprland/src/state/WorkspaceState.hpp>
+ #include <hyprland/src/config/shared/actions/ConfigActions.hpp>
+ #include <algorithm>
+@@ -322,7 +322,7 @@
+
+             const auto TARGETWS = TARGETOV->ensureWorkspaceForTile(TARGET);
+             if (TARGETWS && TARGETWS->m_monitor.lock() != TARGETMON)
+-                Log::logger->log(Log::ERR, "[hyprexpo] rejected drag target workspace on the wrong monitor");
++                LOG(Log::ERR, "[hyprexpo] rejected drag target workspace on the wrong monitor");
+             else if (windowVisibleOnWorkspace(g_overviewDrag.window, SOURCEWS) && TARGETWS && TARGETWS != SOURCEWS) {
+                 const int64_t SOURCEWORKSPACEID = SOURCEOV->images[SOURCE].workspaceID;
+                 const int64_t TARGETWORKSPACEID = TARGETOV->images[TARGET].workspaceID;
+@@ -657,7 +657,7 @@
+         return;
+
+     const bool movedOnOverviewMonitor = window->m_monitor == monitor || (window->m_workspace && window->m_workspace->m_monitor == monitor) || (workspace && workspace->m_monitor == monitor);
+-    if (!Hyprexpo::shouldAbortOverviewCloseForWorkspaceMove(window->m_pinned, movedOnOverviewMonitor))
++    if (!Hyprexpo::shouldAbortOverviewCloseForWorkspaceMove(static_cast<bool>(window->m_state & Desktop::View::WINDOW_STATE_PINNED), movedOnOverviewMonitor))
+         return;
+
+     externalWorkspaceMoveDuringClose = true;
+@@ -760,7 +760,7 @@
+         //
+         // The capture is global, not per-overview: only the first overview to open sees
+         // the user's real submap. The others would capture "hyprexpo" and restore that.
+-        g_previousSubmap = g_pKeybindManager->getCurrentSubmap().name;
++        g_previousSubmap = Keybinds::mgr()->currentSubmap();
+         // switch to a dedicated submap for hyprexpo navigation
+         (void)Config::Actions::setSubmap("hyprexpo");
+     }
+--- a/src/OverviewRender.cpp
++++ b/src/OverviewRender.cpp
+@@ -192,7 +192,7 @@
+
+         const auto CHANGE = Config::Actions::changeWorkspace(NEWIDWS);
+         if (!CHANGE)
+-            Log::logger->log(Log::ERR, "[hyprexpo] failed to change workspace: {}", CHANGE.error().message);
++            LOG(Log::ERR, "[hyprexpo] failed to change workspace: {}", CHANGE.error().message);
+
+         if (CHANGE && OLDWS != MON->m_activeWorkspace) {
+             Animation::Workspace::startAnimation(MON->m_activeWorkspace, Animation::Workspace::ANIMATION_TYPE_IN, true, true);
+@@ -508,7 +508,7 @@
+                 CHyprColor color{parsedColor.r, parsedColor.g, parsedColor.b, parsedColor.a};
+                 Render::GL::g_pHyprOpenGL->renderBorder(box, color, {.round = roundScaled, .roundingPower = ROUND_PWR, .borderSize = BWIDTH});
+             } else {
+-                Log::logger->log(Log::ERR, "[hyprexpo] invalid border color config: {}", effectiveSpec);
++                LOG(Log::ERR, "[hyprexpo] invalid border color config: {}", effectiveSpec);
+             }
+         }
+     };
+@@ -536,7 +536,7 @@
+
+         Hyprexpo::SColorRGBA parsedColor;
+         if (!Hyprexpo::parseSolidColorSpec(effectiveSpec, parsedColor)) {
+-            Log::logger->log(Log::ERR, "[hyprexpo] invalid drag_drop_proxy_border_color config: {}", effectiveSpec);
++            LOG(Log::ERR, "[hyprexpo] invalid drag_drop_proxy_border_color config: {}", effectiveSpec);
+             return;
+         }
+
+--- a/src/ScrollingLayoutAdapter.cpp
++++ b/src/ScrollingLayoutAdapter.cpp
+@@ -3,7 +3,8 @@
+ #include <hyprland/src/desktop/Workspace.hpp>
+ #include <hyprland/src/desktop/state/GlobalWindowController.hpp>
+ #include <hyprland/src/desktop/state/FocusState.hpp>
+-#include <hyprland/src/desktop/view/Window.hpp>
++#include <hyprland/src/desktop/view/window/Window.hpp>
++#include <hyprland/src/desktop/view/window/WindowMetadata.hpp>
+ #include <hyprland/src/layout/algorithm/Algorithm.hpp>
+ #include <hyprland/src/layout/algorithm/tiled/scrolling/ScrollingAlgorithm.hpp>
+ #include <hyprland/src/layout/supplementary/WorkspaceAlgoMatcher.hpp>
+@@ -82,12 +83,12 @@
+         .proportion = proportion,
+         .targetFingerprint = fingerprint(target),
+         .windowFingerprint = fingerprint(window),
+-        .windowStableID = window ? window->m_stableID : 0,
++        .windowStableID = window ? window->metadata().stableID() : 0,
+         .layoutBox = layoutBox,
+         .group = target->type() == Layout::TARGET_TYPE_GROUP,
+         .floating = target->floating(),
+         .fullscreen = window && Fullscreen::controller() && Fullscreen::controller()->isFullscreen(window),
+-        .pinned = window && window->m_pinned,
++        .pinned = window && static_cast<bool>(window->m_state & Desktop::View::WINDOW_STATE_PINNED),
+         .visible = visible,
+         .targetRef = target,
+         .windowRef = window,
+--- a/src/ScrollingOverview.cpp
++++ b/src/ScrollingOverview.cpp
+@@ -241,7 +241,7 @@
+                 const auto result = moveScrollingTarget(sourceRow->workspace, destinationRow ? destinationRow->workspace : PHLWORKSPACE{}, MON, request);
+                 const auto diagnostic = mutationDiagnosticJson(result);
+                 if (result.outcome == EMutationOutcome::RollbackFailed) {
+-                    Log::logger->log(Log::ERR, "HYPREXPO_SCROLLING_MUTATION {}", diagnostic);
++                    LOG(Log::ERR, "HYPREXPO_SCROLLING_MUTATION {}", diagnostic);
+                     const auto generation = m_sessionGeneration;
+                     const auto monitorKey = overviewMonitorKey(m_monitor.lock());
+                     setClosing(true);
+@@ -250,7 +250,7 @@
+                             OV->close(false);
+                     });
+                 } else {
+-                    Log::logger->log(Log::INFO, "HYPREXPO_SCROLLING_MUTATION {}", diagnostic);
++                    LOG(Log::INFO, "HYPREXPO_SCROLLING_MUTATION {}", diagnostic);
+                     switch (result.outcome) {
+                         case EMutationOutcome::Committed:
+                         case EMutationOutcome::RolledBack:
+--- a/tests/OverviewSourceTests.cpp
++++ b/tests/OverviewSourceTests.cpp
+@@ -171,7 +171,7 @@
+
+     const auto enterSubmap = extractFunction(interactionSource, "void enterOverviewSubmap(bool& submapActive) {");
+     expect(!enterSubmap.empty(), "keyboard navigation submap entry function exists");
+-    const auto captureSubmapPos = enterSubmap.find("g_previousSubmap = g_pKeybindManager->getCurrentSubmap().name;");
++    const auto captureSubmapPos = enterSubmap.find("g_previousSubmap = Keybinds::mgr()->currentSubmap();");
+     const auto firstSubmapRef   = enterSubmap.find("if (g_submapRefs++ == 0)");
+     const auto shareSubmapPos   = captureSubmapPos;
+     const auto enterSubmapPos   = enterSubmap.find("Config::Actions::setSubmap(\"hyprexpo\");");
+@@ -211,7 +211,7 @@
+     const auto workspaceMoveHandler = extractFunction(interactionSource, "void COverview::onWindowMoveToWorkspace(");
+     expect(!workspaceMoveHandler.empty(), "workspace-move close handler exists");
+     const auto monitorRelevancePos = workspaceMoveHandler.find("const bool movedOnOverviewMonitor");
+-    const auto classifierPos       = workspaceMoveHandler.find("Hyprexpo::shouldAbortOverviewCloseForWorkspaceMove(window->m_pinned, movedOnOverviewMonitor)");
++    const auto classifierPos       = workspaceMoveHandler.find("Hyprexpo::shouldAbortOverviewCloseForWorkspaceMove(static_cast<bool>(window->m_state & Desktop::View::WINDOW_STATE_PINNED), movedOnOverviewMonitor)");
+     const auto abortFlagPos        = workspaceMoveHandler.find("externalWorkspaceMoveDuringClose = true;");
+     const auto workspaceDamagePos  = workspaceMoveHandler.find("damage();", abortFlagPos);
+     const auto scheduleFramePos    = workspaceMoveHandler.find("monitor->scheduleFrame();", workspaceDamagePos);
+@@ -618,39 +618,39 @@
+                incompleteBlock.find("close(") == std::string::npos,
+            "incomplete swipe still resets animation state and leaves the overview open");
+
+-    expect(source.find("#include <hyprland/src/desktop/view/Window.hpp>") != std::string::npos &&
+-               source.find("#include <hyprland/src/desktop/view/window/Window.hpp>") == std::string::npos &&
+-               source.find("#include <hyprland/src/desktop/view/window/WindowPresentation.hpp>") == std::string::npos,
+-           "overview capture uses the tagged Hyprland release window header");
+-    expect(source.find("window->m_isMapped") != std::string::npos &&
+-               source.find("window->m_pinned") != std::string::npos &&
+-               source.find("window->alpha(") != std::string::npos &&
+-               source.find("window->m_monitorMovedFrom != -1") != std::string::npos &&
+-               source.find("window->m_monitorMovedFrom                                      = -1;") != std::string::npos,
+-           "overview capture uses release mapped, pinned, alpha, and moved-monitor APIs");
+-    expect(source.find("window->mapped()") == std::string::npos && source.find("WINDOW_STATE_PINNED") == std::string::npos &&
+-               source.find("->presentation()") == std::string::npos,
+-           "overview capture does not reintroduce git-only Hyprland window APIs");
++    expect(source.find("#include <hyprland/src/desktop/view/Window.hpp>") == std::string::npos &&
++               source.find("#include <hyprland/src/desktop/view/window/Window.hpp>") != std::string::npos &&
++               source.find("#include <hyprland/src/desktop/view/window/WindowPresentation.hpp>") != std::string::npos,
++           "overview capture uses the pinned Hyprland window and presentation headers");
++    expect(source.find("window->mapped()") != std::string::npos &&
++               source.find("static_cast<bool>(window->m_state & Desktop::View::WINDOW_STATE_PINNED)") != std::string::npos &&
++               source.find("window->presentation().alpha(") != std::string::npos &&
++               source.find("window->presentation().movingFromMonitor()") != std::string::npos &&
++               source.find("window->presentation().resetMonitorMovedFrom();") != std::string::npos,
++           "overview capture uses pinned Hyprland mapped, pinned, alpha, and moved-monitor APIs");
++    expect(source.find("window->m_isMapped") == std::string::npos && source.find("window->m_pinned") == std::string::npos &&
++               source.find("window->m_monitorMovedFrom") == std::string::npos,
++           "overview capture does not reintroduce removed Hyprland window APIs");
+
+     const auto applyPinnedState = extractFunction(source, "std::vector<SPinnedWindowPreviewState> applyPinnedWindowPreviewState(");
+     const auto restorePinnedState = extractFunction(source, "void restorePinnedWindowPreviewState(");
+-    expect(applyPinnedState.find(".pinned = window->m_pinned") != std::string::npos &&
+-               applyPinnedState.find("window->m_pinned = false") != std::string::npos &&
++    expect(applyPinnedState.find(".pinned = static_cast<bool>(window->m_state & Desktop::View::WINDOW_STATE_PINNED)") != std::string::npos &&
++               applyPinnedState.find("window->m_state &= ~Desktop::View::WindowState{Desktop::View::WINDOW_STATE_PINNED}") != std::string::npos &&
+                applyPinnedState.find("window->m_workspace.reset()") != std::string::npos,
+            "pinned preview suppression saves and clears pinned state and temporarily detaches the workspace");
+     expect(restorePinnedState.find("state.window->m_workspace = state.workspace") != std::string::npos &&
+-               restorePinnedState.find("state.window->m_pinned    = state.pinned") != std::string::npos,
++               restorePinnedState.find("state.window->m_state = (state.window->m_state & ~Desktop::View::WindowState{Desktop::View::WINDOW_STATE_PINNED})") != std::string::npos,
+            "pinned preview suppression restores workspace ownership and the saved pinned state");
+
+-    expect(dispatchersSource.find("uint32_t modMask = 0") != std::string::npos &&
+-               dispatchersSource.find("g_pKeybindManager->stringToModMask(mods)") != std::string::npos &&
+-               dispatchersSource.find("Keybinds::modMaskFromString") == std::string::npos,
+-           "gesture registration uses the tagged Hyprland release modifier parser and mask type");
+-    expect(interactionSource.find("#include <hyprland/src/managers/KeybindManager.hpp>") != std::string::npos &&
+-               interactionSource.find("g_pKeybindManager->getCurrentSubmap().name") != std::string::npos &&
+-               interactionSource.find("#include <hyprland/src/keybinds/Manager.hpp>") == std::string::npos &&
+-               interactionSource.find("Keybinds::mgr()") == std::string::npos,
+-           "submap ownership uses the tagged Hyprland release keybind manager API");
++    expect(dispatchersSource.find("Input::ModifierMask modMask = Input::HL_MODIFIER_NONE") != std::string::npos &&
++               dispatchersSource.find("g_pKeybindManager->stringToModMask(mods)") == std::string::npos &&
++               dispatchersSource.find("Keybinds::modMaskFromString") != std::string::npos,
++           "gesture registration uses the pinned Hyprland modifier parser and mask type");
++    expect(interactionSource.find("#include <hyprland/src/managers/KeybindManager.hpp>") == std::string::npos &&
++               interactionSource.find("g_pKeybindManager->getCurrentSubmap().name") == std::string::npos &&
++               interactionSource.find("#include <hyprland/src/keybinds/Manager.hpp>") != std::string::npos &&
++               interactionSource.find("Keybinds::mgr()->currentSubmap()") != std::string::npos,
++           "submap ownership uses the pinned Hyprland keybind manager API");
+
+     const auto exitFunction = extractFunction(mainSource, "APICALL EXPORT void PLUGIN_EXIT(");
+     expect(!exitFunction.empty(), "PLUGIN_EXIT exists");
+@@ -743,7 +743,7 @@
+     expectContains(scrollingSource, "EMutationOutcome::Committed", "committed mutation refreshes the scrolling session");
+     expectContains(scrollingSource, "EMutationOutcome::RolledBack", "rolled-back mutation refreshes the scrolling session");
+     expectContains(scrollingSource, "EMutationOutcome::RollbackFailed", "fatal rollback failure safe-closes the scrolling session");
+-    expectContains(scrollingSource, "Log::logger->log(Log::ERR", "fatal mutation emits a high-severity diagnostic");
++    expectContains(scrollingSource, "LOG(Log::ERR", "fatal mutation emits a high-severity diagnostic");
+     const auto applyEffects = extractFunction(scrollingSource, "void CScrollingOverview::applyInputEffects(");
+     expectOrder(applyEffects, "m_pendingDropIntent.reset()", "moveScrollingTarget(", "release consumes the retained transaction intent before native mutation");
+     expectLastOrder(applyEffects, "moveScrollingTarget(", "refreshAfterMutation();", "commit/rollback refresh happens after the exact-once transaction result");

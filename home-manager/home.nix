@@ -44,7 +44,7 @@ in
       outputs.overlays.modifications
       outputs.overlays.unstable-packages
       outputs.overlays.dolphinFix
-      outputs.overlays.hyprexpoPlus
+      outputs.overlays.hyprland
     ];
     # Configure your nixpkgs instance
     config = {

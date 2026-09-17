@@ -1,5 +1,5 @@
 # This file defines overlays
-{inputs, ...}: {
+{ inputs, ... }: {
   # This one brings our custom packages from the 'pkgs' directory
   # pkgs/default.nix takes pkgs positionally, not as {pkgs = ...;}
   additions = final: _prev: import ../pkgs final;
@@ -66,16 +66,18 @@
       # silently point fetchFromGitLab at a nonexistent tag.
       pname = "${old.pname}-egismoc-sdcp";
 
-      patches = (old.patches or []) ++ [ ../patches/libfprint-egismoc-sdcp.patch ];
+      patches = (old.patches or [ ]) ++ [ ../patches/libfprint-egismoc-sdcp.patch ];
 
       # tests/egismoc/custom.pcapng is a binary umockdev fixture the SDCP work
       # re-recorded. GNU patch can't apply git binary diffs, so it is excluded
       # from the patch above and copied in here instead.
       postPatch = (old.postPatch or "") + ''
-        cp ${prev.fetchurl {
-          url = "https://raw.githubusercontent.com/TenSeventy7/libfprint-egismoc-sdcp/4d128d4f6f0b46182572126e84df88a73ac27859/tests/egismoc/custom.pcapng";
-          hash = "sha256-6Fnud2PebDBryQnN722M4EkTKxN1aeaumTRd48ZaMTw=";
-        }} tests/egismoc/custom.pcapng
+        cp ${
+          prev.fetchurl {
+            url = "https://raw.githubusercontent.com/TenSeventy7/libfprint-egismoc-sdcp/4d128d4f6f0b46182572126e84df88a73ac27859/tests/egismoc/custom.pcapng";
+            hash = "sha256-6Fnud2PebDBryQnN722M4EkTKxN1aeaumTRd48ZaMTw=";
+          }
+        } tests/egismoc/custom.pcapng
 
         # The fork adds 1C7A:05A5 to the egismoc driver without regenerating
         # data/autosuspend.hwdb, which the udev-hwdb install-check diffs exactly.
@@ -126,28 +128,32 @@
     };
 
     btop = prev.btop.overrideAttrs (old: {
-      passthru = (old.passthru or {}) // {
+      passthru = (old.passthru or { }) // {
         # `withoutGpu` is a new package variant of btop.
-        withoutGpu = prev.btop.overrideAttrs (final: prev: {
-          cmakeFlags = prev.cmakeFlags ++ [ "-DBTOP_GPU=OFF" ];
-        });
+        withoutGpu = prev.btop.overrideAttrs (
+          final: prev: {
+            cmakeFlags = prev.cmakeFlags ++ [ "-DBTOP_GPU=OFF" ];
+          }
+        );
       };
     });
 
-    linuxSamsung = prev.linuxPackagesFor (prev.linuxPackages_latest.kernel.override {
-      structuredExtraConfig = with prev.lib.kernel; {
-        SAMSUNG_GALAXYBOOK = module;
+    linuxSamsung = prev.linuxPackagesFor (
+      prev.linuxPackages_latest.kernel.override {
+        structuredExtraConfig = with prev.lib.kernel; {
+          SAMSUNG_GALAXYBOOK = module;
 
-        # following are dependencies of SAMSUNG_GALAXYBOOK
-        # ACPI = yes;
-        # ACPI_BATTERY = yes;
-        # INPUT = yes;
-        # LEDS_CLASS = yes;
-        # SERIO_I8042 = yes;
-      };
+          # following are dependencies of SAMSUNG_GALAXYBOOK
+          # ACPI = yes;
+          # ACPI_BATTERY = yes;
+          # INPUT = yes;
+          # LEDS_CLASS = yes;
+          # SERIO_I8042 = yes;
+        };
 
-      ignoreConfigErrors = true;
-    });
+        ignoreConfigErrors = true;
+      }
+    );
 
     pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
       (python-final: python-prev: {
@@ -161,7 +167,7 @@
         # would also drop nativeCheckInputs, breaking pythonImportsCheck
         # ("No Qt implementations found").
         qasync = python-prev.qasync.overridePythonAttrs (old: {
-          disabledTests = (old.disabledTests or []) ++ [
+          disabledTests = (old.disabledTests or [ ]) ++ [
             "test_no_stale_reference_as_argument"
             "test_no_stale_reference_as_result"
           ];
@@ -181,8 +187,7 @@
         psycopg = python-prev.psycopg.overridePythonAttrs (oldAttrs: {
           doCheck = false;
 
-          propagatedBuildInputs = (oldAttrs.propagatedBuildInputs or [])
-            ++ [ python-prev.psycopg-pool ];
+          propagatedBuildInputs = (oldAttrs.propagatedBuildInputs or [ ]) ++ [ python-prev.psycopg-pool ];
 
           pythonImportsCheck = [
             "psycopg"
@@ -204,51 +209,37 @@
   # groups — exactly the empty application list. With no argument it discovers the menu
   # itself and the app tree is populated.
   dolphinFix = final: prev: {
-    kdePackages = prev.kdePackages.overrideScope (kfinal: kprev: {
-      dolphin = prev.symlinkJoin {
-        name = "dolphin-wrapped";
-        paths = [ kprev.dolphin ];
-        nativeBuildInputs = [ prev.makeWrapper ];
-        postBuild = ''
-          rm $out/bin/dolphin
-          makeWrapper ${kprev.dolphin}/bin/dolphin $out/bin/dolphin \
-            --run "${kprev.kservice}/bin/kbuildsycoca6 --noincremental >/dev/null 2>&1 || true"
-        '';
-      };
-    });
+    kdePackages = prev.kdePackages.overrideScope (
+      kfinal: kprev: {
+        dolphin = prev.symlinkJoin {
+          name = "dolphin-wrapped";
+          paths = [ kprev.dolphin ];
+          nativeBuildInputs = [ prev.makeWrapper ];
+          postBuild = ''
+            rm $out/bin/dolphin
+            makeWrapper ${kprev.dolphin}/bin/dolphin $out/bin/dolphin \
+              --run "${kprev.kservice}/bin/kbuildsycoca6 --noincremental >/dev/null 2>&1 || true"
+          '';
+        };
+      }
+    );
   };
 
-  # hyprexpo-plus — fork of hyprexpo after it was dropped from hyprland-plugins.
-  # Upstream renamed the repo sandwichfarm/hyprexpo-plus -> sandwichfarm/hyprexpo
-  # and tracks Hyprland releases in its VERSION file, so bump this together with
-  # the hyprland flake input. pluginName must match the CMake target
-  # (add_library(hyprexpo ...)) because home-manager loads
-  # ${plugin}/lib/lib${pname}.so.
-  hyprexpoPlus = final: prev: {
-    hyprexpo-plus =
-      let
-        hyprlandPkg = inputs.hyprland.packages.${prev.stdenv.hostPlatform.system}.hyprland;
-      in
-      prev.hyprlandPlugins.mkHyprlandPlugin {
-        pluginName = "hyprexpo";
-        version = "0.56.1-unstable-2026-08-03";
-        src = prev.fetchFromGitHub {
-          owner = "sandwichfarm";
-          repo = "hyprexpo";
-          rev = "53f391fa14db776bb65c39361a344d18528539ae";
-          hash = "sha256-p9lPjSDkcZf+FKrvnQliDmutt++zB/DdrQXyALN/6s0=";
-        };
-        hyprland = hyprlandPkg;
-        # same set upstream's default.nix uses (cmake, pkg-config, scanners)
-        inherit (hyprlandPkg) nativeBuildInputs;
-        meta = with prev.lib; {
-          homepage = "https://github.com/sandwichfarm/hyprexpo";
-          description = "Enhanced Hyprland workspaces overview plugin (fork of hyprexpo)";
-          license = licenses.bsd3;
-          platforms = platforms.linux;
-        };
-      };
-  };
+  # Use Hyprland's upstream package graph and only align GUI utils with the
+  # GCC 16 libstdc++ used by hyprtoolkit in current nixpkgs.
+  hyprland =
+    final: _prev:
+    let
+      upstream = inputs.hyprland.packages.${final.stdenv.hostPlatform.system};
+      guiutils =
+        inputs.hyprland.inputs.hyprland-guiutils.packages.${final.stdenv.hostPlatform.system}.default.override
+          { stdenv = final.gcc16Stdenv; };
+    in
+    {
+      hyprland = upstream.hyprland.override { hyprland-guiutils = guiutils; };
+      hyprland-guiutils = guiutils;
+      xdg-desktop-portal-hyprland = upstream.xdg-desktop-portal-hyprland;
+    };
 
   # When applied, the unstable nixpkgs set (declared in the flake inputs) will
   # be accessible through 'pkgs.unstable'

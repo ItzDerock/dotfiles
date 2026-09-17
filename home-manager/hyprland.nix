@@ -24,26 +24,23 @@ let
   # edits under external/caelestia-shell are picked up on the next rebuild with
   # no commit, push, or `nix flake update`.
   caelestiaRev = builtins.substring 0 32 (
-    builtins.baseNameOf (builtins.path {
-      path = inputs.caelestia.outPath;
-      name = "caelestia-shell";
-    })
+    builtins.baseNameOf (
+      builtins.path {
+        path = inputs.caelestia.outPath;
+        name = "caelestia-shell";
+      }
+    )
   );
 
   caelestia = inputs.caelestia.packages.${pkgs.system}.default.override {
     rev = caelestiaRev;
   };
-  # Flake output is built against plain nixpkgs, so our overlays/default.nix
-  # app2unit fix (nixpkgs' 1.4.2 manpage fails to build with scdoc >= 1.11.5)
-  # never reaches it — inject it here.
-  caelestia-cli = inputs.caelestia.inputs.caelestia-cli.packages.${pkgs.system}.default.override {
-    inherit (pkgs) app2unit;
-  };
+  caelestia-cli = inputs.caelestia.inputs.caelestia-cli.packages.${pkgs.system}.default;
   hyprlandReload = ''
     for instance in /run/user/$(id -u)/hypr/*/; do
       [ -S "$instance/.socket.sock" ] || continue
       HYPRLAND_INSTANCE_SIGNATURE=$(basename "$instance") \
-        ${inputs.hyprland.packages.${pkgs.system}.hyprland}/bin/hyprctl reload || true
+        ${pkgs.hyprland}/bin/hyprctl reload || true
     done
   '';
 in
@@ -135,7 +132,12 @@ in
 
     plugins = [
       # WIN + TAB, show all workspaces
-      pkgs.hyprexpo-plus
+      (inputs.hyprexpo.packages.${pkgs.system}.hyprexpo.overrideAttrs (old: {
+        # Adapt hyprexpo 7cc7378 to the window, keybind and logging APIs at
+        # our Hyprland pin (7ebf13a). Remove once upstream supports these APIs.
+        patches = (old.patches or [ ]) ++ [ ../patches/hyprexpo-hyprland-api.patch ];
+        doCheck = true;
+      }))
     ];
 
     settings = { };
