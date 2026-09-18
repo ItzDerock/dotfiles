@@ -1,8 +1,8 @@
 diff --git a/doc/libfprint-2-sections.txt b/doc/libfprint-2-sections.txt
-index 0fb0cfab..9d1ed99b 100644
+index d37d840..5a8f35e 100644
 --- a/doc/libfprint-2-sections.txt
 +++ b/doc/libfprint-2-sections.txt
-@@ -215,6 +215,26 @@ fpi_image_device_retry_scan
+@@ -345,6 +345,26 @@ fpi_image_device_retry_scan
  fpi_image_device_set_bz3_threshold
  </SECTION>
  
@@ -30,7 +30,7 @@ index 0fb0cfab..9d1ed99b 100644
  <FILE>fpi-log</FILE>
  fp_dbg
 diff --git a/doc/libfprint-docs.xml b/doc/libfprint-docs.xml
-index 0a57efb4..01a50bf0 100644
+index 09bb826..dc5b476 100644
 --- a/doc/libfprint-docs.xml
 +++ b/doc/libfprint-docs.xml
 @@ -38,6 +38,7 @@
@@ -42,7 +42,7 @@ index 0a57efb4..01a50bf0 100644
  
      <chapter id="driver-helpers">
 diff --git a/libfprint/drivers/egismoc/egismoc.c b/libfprint/drivers/egismoc/egismoc.c
-index 06f445d4..651660e0 100644
+index 6aae556..9de81d8 100644
 --- a/libfprint/drivers/egismoc/egismoc.c
 +++ b/libfprint/drivers/egismoc/egismoc.c
 @@ -30,6 +30,7 @@
@@ -129,7 +129,7 @@ index 06f445d4..651660e0 100644
  static gboolean
  egismoc_validate_response_prefix (const guchar *buffer_in,
                                    const gsize   buffer_in_len,
-@@ -382,31 +347,125 @@ egismoc_exec_cmd (FpDevice         *device,
+@@ -388,31 +353,125 @@ egismoc_exec_cmd (FpDevice         *device,
  }
  
  static void
@@ -163,11 +163,11 @@ index 06f445d4..651660e0 100644
 +                             GError         *error)
 +{
 +  fp_dbg ("Finger on sensor callback");
-+
-+  g_return_if_fail (transfer->ssm);
  
 -  if (user_id)
 -    fill_user_id = g_strdup (user_id);
++  g_return_if_fail (transfer->ssm);
++
 +  if (error) {
 +    fpi_ssm_mark_failed (transfer->ssm, error);
 +    return;
@@ -189,8 +189,7 @@ index 06f445d4..651660e0 100644
 +      fpi_ssm_jump_to_state (transfer->ssm, WAIT_FINGER_NOT_ON_SENSOR);
 +    }
 +}
- 
--  fpi_print_fill_from_user_id (print, fill_user_id);
++
 +static void
 +egismoc_wait_finger_run_state (FpiSsm   *ssm,
 +                               FpDevice *device)
@@ -246,7 +245,8 @@ index 06f445d4..651660e0 100644
 +  self->wait_finger_ssm = fpi_ssm_new (device, egismoc_wait_finger_run_state, WAIT_FINGER_STATES);
 +  fpi_ssm_start (self->wait_finger_ssm, egismoc_wait_finger_ssm_done);
 +}
-+
+ 
+-  fpi_print_fill_from_user_id (print, fill_user_id);
 +static void
 +egismoc_set_print_data (FpPrint      *print,
 +                        const guchar *enrollment_id)
@@ -272,7 +272,7 @@ index 06f445d4..651660e0 100644
    g_object_set (print, "fpi-data", fpi_data, NULL);
  }
  
-@@ -423,13 +482,166 @@ egismoc_get_enrolled_prints (FpDevice *device)
+@@ -429,13 +488,166 @@ egismoc_get_enrolled_prints (FpDevice *device)
    for (guint i = 0; i < self->enrolled_ids->len; i++)
      {
        FpPrint *print = fp_print_new (device);
@@ -440,7 +440,7 @@ index 06f445d4..651660e0 100644
  static void
  egismoc_list_fill_enrolled_ids_cb (FpDevice *device,
                                     guchar   *buffer_in,
-@@ -438,6 +650,12 @@ egismoc_list_fill_enrolled_ids_cb (FpDevice *device,
+@@ -444,6 +656,12 @@ egismoc_list_fill_enrolled_ids_cb (FpDevice *device,
  {
    fp_dbg ("List callback");
    FpiDeviceEgisMoc *self = FPI_DEVICE_EGISMOC (device);
@@ -453,7 +453,7 @@ index 06f445d4..651660e0 100644
  
    if (error)
      {
-@@ -448,32 +666,30 @@ egismoc_list_fill_enrolled_ids_cb (FpDevice *device,
+@@ -454,32 +672,30 @@ egismoc_list_fill_enrolled_ids_cb (FpDevice *device,
    g_clear_pointer (&self->enrolled_ids, g_ptr_array_unref);
    self->enrolled_ids = g_ptr_array_new_with_free_func (g_free);
  
@@ -497,7 +497,7 @@ index 06f445d4..651660e0 100644
      }
  
    fp_info ("Number of currently enrolled fingerprints on the device is %d",
-@@ -526,11 +742,10 @@ egismoc_get_delete_cmd (FpDevice *device,
+@@ -532,11 +748,10 @@ egismoc_get_delete_cmd (FpDevice *device,
    FpiDeviceEgisMoc *self = FPI_DEVICE_EGISMOC (device);
    g_auto(FpiByteWriter) writer = {0};
    g_autoptr(GVariant) print_data = NULL;
@@ -513,7 +513,7 @@ index 06f445d4..651660e0 100644
    g_autofree guchar *result = NULL;
    gboolean written = TRUE;
  
-@@ -554,11 +769,9 @@ egismoc_get_delete_cmd (FpDevice *device,
+@@ -560,8 +775,7 @@ egismoc_get_delete_cmd (FpDevice *device,
    else if (self->enrolled_ids)
      num_to_delete = self->enrolled_ids->len;
  
@@ -521,13 +521,9 @@ index 06f445d4..651660e0 100644
 -                            num_to_delete;
 +  const gsize body_length = sizeof (guchar) * SDCP_ENROLLMENT_ID_SIZE * num_to_delete;
    /* total_length is the 6 various bytes plus prefix and body payload */
--  const gsize total_length = (sizeof (guchar) * 6) + cmd_delete_prefix_len +
--                             body_length;
-+  const gsize total_length = (sizeof (guchar) * 6) + cmd_delete_prefix_len + body_length;
- 
-   /* pre-fill entire payload with 00s */
-   fpi_byte_writer_init_with_size (&writer, total_length, TRUE);
-@@ -600,11 +813,11 @@ egismoc_get_delete_cmd (FpDevice *device,
+   const gsize total_length = (sizeof (guchar) * 6) + G_N_ELEMENTS (cmd_delete_prefix) +
+                              body_length;
+@@ -606,11 +820,11 @@ egismoc_get_delete_cmd (FpDevice *device,
        written &= fpi_byte_writer_put_uint8 (&writer, num_to_delete * 0x20);
      }
  
@@ -541,32 +537,32 @@ index 06f445d4..651660e0 100644
        g_object_get (delete_print, "fpi-data", &print_data, NULL);
  
        if (!g_variant_check_format_string (print_data, "(@ay)", FALSE))
-@@ -614,18 +827,14 @@ egismoc_get_delete_cmd (FpDevice *device,
+@@ -620,18 +834,14 @@ egismoc_get_delete_cmd (FpDevice *device,
            return NULL;
          }
  
 -      g_variant_get (print_data, "(@ay)", &print_data_id_var);
 -      print_data_id = g_variant_get_fixed_array (print_data_id_var,
 -                                                 &print_data_id_len, sizeof (guchar));
+-
+-      if (!g_str_has_prefix (print_description, "FP"))
+-        fp_dbg ("Fingerprint '%s' was not created by libfprint; deleting anyway.",
+-                print_description);
 +      g_variant_get (print_data, "(@ay)", &enrollment_id_var);
 +      enrollment_id = g_variant_get_fixed_array (enrollment_id_var,
 +                                                 &enrollment_id_len, sizeof (guchar));
  
--      if (!g_str_has_prefix (print_description, "FP"))
--        fp_dbg ("Fingerprint '%s' was not created by libfprint; deleting anyway.",
--                print_description);
+-      fp_info ("Delete fingerprint %s (%s)", print_description, print_data_id);
 +      enrollment_id_hex = OPENSSL_buf2hexstr (enrollment_id, SDCP_ENROLLMENT_ID_SIZE);
 +      fp_info ("Delete enrollment ID %s", enrollment_id_hex);
  
--      fp_info ("Delete fingerprint %s (%s)", print_description, print_data_id);
--
 -      written &= fpi_byte_writer_put_data (&writer, print_data_id,
 -                                           EGISMOC_FINGERPRINT_DATA_SIZE);
 +      written &= fpi_byte_writer_put_data (&writer, enrollment_id, SDCP_ENROLLMENT_ID_SIZE);
      }
    /* Otherwise assume this is a "clear" - just loop through and append all enrolled IDs */
    else if (self->enrolled_ids)
-@@ -634,7 +843,7 @@ egismoc_get_delete_cmd (FpDevice *device,
+@@ -640,7 +850,7 @@ egismoc_get_delete_cmd (FpDevice *device,
          {
            written &= fpi_byte_writer_put_data (&writer,
                                                 g_ptr_array_index (self->enrolled_ids, i),
@@ -575,7 +571,7 @@ index 06f445d4..651660e0 100644
          }
      }
  
-@@ -681,7 +890,7 @@ egismoc_delete_cb (FpDevice *device,
+@@ -687,7 +897,7 @@ egismoc_delete_cb (FpDevice *device,
          {
            fpi_ssm_mark_failed (self->task_ssm,
                                 fpi_device_error_new_msg (FP_DEVICE_ERROR_PROTO,
@@ -584,7 +580,7 @@ index 06f445d4..651660e0 100644
          }
      }
    else
-@@ -696,8 +905,10 @@ static void
+@@ -702,8 +912,10 @@ static void
  egismoc_delete_run_state (FpiSsm   *ssm,
                            FpDevice *device)
  {
@@ -595,7 +591,7 @@ index 06f445d4..651660e0 100644
  
    switch (fpi_ssm_get_cur_state (ssm))
      {
-@@ -709,10 +920,24 @@ egismoc_delete_run_state (FpiSsm   *ssm,
+@@ -715,10 +927,24 @@ egismoc_delete_run_state (FpiSsm   *ssm,
  
      case DELETE_DELETE:
        if (fpi_device_get_current_action (device) == FPI_DEVICE_ACTION_DELETE)
@@ -623,7 +619,7 @@ index 06f445d4..651660e0 100644
  
        egismoc_exec_cmd (device, g_steal_pointer (&payload), payload_length,
                          g_free, egismoc_delete_cb);
-@@ -751,6 +976,38 @@ egismoc_delete (FpDevice *device)
+@@ -757,6 +983,38 @@ egismoc_delete (FpDevice *device)
    fpi_ssm_start (self->task_ssm, egismoc_task_ssm_done);
  }
  
@@ -647,9 +643,9 @@ index 06f445d4..651660e0 100644
 +  if (!egismoc_validate_response_suffix (buffer_in,
 +                                         length_in,
 +                                         rsp_commit_success_suffix,
-+                                         rsp_commit_success_suffix_len))
++                                         G_N_ELEMENTS (rsp_commit_success_suffix)))
 +    {
-+      fpi_ssm_mark_failed (self->task_ssm, 
++      fpi_ssm_mark_failed (self->task_ssm,
 +                           fpi_device_error_new_msg (FP_DEVICE_ERROR_DATA_INVALID,
 +                                                     "Enrollment was rejected "
 +                                                     "by the device"));
@@ -662,33 +658,33 @@ index 06f445d4..651660e0 100644
  static void
  egismoc_enroll_status_report (FpDevice    *device,
                                EnrollPrint *enroll_print,
-@@ -810,11 +1067,7 @@ egismoc_read_capture_cb (FpDevice *device,
+@@ -816,11 +1074,7 @@ egismoc_read_capture_cb (FpDevice *device,
      }
  
    /* Check that the read payload indicates "success" */
 -  if (egismoc_validate_response_prefix (buffer_in,
 -                                        length_in,
 -                                        rsp_read_success_prefix,
--                                        rsp_read_success_prefix_len) &&
+-                                        G_N_ELEMENTS (rsp_read_success_prefix)) &&
 -      egismoc_validate_response_suffix (buffer_in,
 +  if (egismoc_validate_response_suffix (buffer_in,
                                          length_in,
                                          rsp_read_success_suffix,
-                                         rsp_read_success_suffix_len))
-@@ -827,11 +1080,7 @@ egismoc_read_capture_cb (FpDevice *device,
+                                         G_N_ELEMENTS (rsp_read_success_suffix)))
+@@ -833,11 +1087,7 @@ egismoc_read_capture_cb (FpDevice *device,
        /* If not success then the sensor can either report "off center" or "sensor is dirty" */
  
        /* "Off center" */
 -      if (egismoc_validate_response_prefix (buffer_in,
 -                                            length_in,
 -                                            rsp_read_offcenter_prefix,
--                                            rsp_read_offcenter_prefix_len) &&
+-                                            G_N_ELEMENTS (rsp_read_offcenter_prefix)) &&
 -          egismoc_validate_response_suffix (buffer_in,
 +      if (egismoc_validate_response_suffix (buffer_in,
                                              length_in,
                                              rsp_read_offcenter_suffix,
-                                             rsp_read_offcenter_suffix_len))
-@@ -860,6 +1109,47 @@ egismoc_read_capture_cb (FpDevice *device,
+                                             G_N_ELEMENTS (rsp_read_offcenter_suffix)))
+@@ -866,6 +1116,47 @@ egismoc_read_capture_cb (FpDevice *device,
      fpi_ssm_jump_to_state (self->task_ssm, ENROLL_CAPTURE_SENSOR_RESET);
  }
  
@@ -711,9 +707,9 @@ index 06f445d4..651660e0 100644
 +  if (!egismoc_validate_response_suffix (buffer_in,
 +                                        length_in,
 +                                        rsp_enroll_starting_suffix,
-+                                        rsp_enroll_starting_suffix_len))
++                                        G_N_ELEMENTS (rsp_enroll_starting_suffix)))
 +    {
-+      fpi_ssm_mark_failed (self->task_ssm, 
++      fpi_ssm_mark_failed (self->task_ssm,
 +                           fpi_device_error_new_msg (FP_DEVICE_ERROR_PROTO,
 +                                                     "Invalid response when "
 +                                                     "starting enrollment"));
@@ -736,7 +732,7 @@ index 06f445d4..651660e0 100644
  static void
  egismoc_enroll_check_cb (FpDevice *device,
                           guchar   *buffer_in,
-@@ -911,15 +1201,14 @@ egismoc_get_check_cmd (FpDevice *device,
+@@ -917,15 +1208,14 @@ egismoc_get_check_cmd (FpDevice *device,
     * 3) Hard-coded prefix (cmd_check_prefix)
     * 4) 2-byte size indiciator, 20*Number of enrolled identifiers without plus 9
     *    ((enrolled_ids->len + 1) * 0x20)
@@ -754,16 +750,16 @@ index 06f445d4..651660e0 100644
  
    /* prefix length can depend on the type */
    const gsize check_prefix_length = (fpi_device_get_driver_data (device) &
-@@ -931,7 +1220,7 @@ egismoc_get_check_cmd (FpDevice *device,
+@@ -937,7 +1227,7 @@ egismoc_get_check_cmd (FpDevice *device,
     * the body payload */
    const gsize total_length = (sizeof (guchar) * 6)
                               + check_prefix_length
 -                             + EGISMOC_CMD_CHECK_SEPARATOR_LENGTH
 +                             + SDCP_NONCE_SIZE
                               + body_length
-                              + cmd_check_suffix_len;
+                              + G_N_ELEMENTS (cmd_check_suffix);
  
-@@ -985,15 +1274,15 @@ egismoc_get_check_cmd (FpDevice *device,
+@@ -991,15 +1281,15 @@ egismoc_get_check_cmd (FpDevice *device,
                                              (self->enrolled_ids->len + 1) * 0x20);
      }
  
@@ -783,7 +779,7 @@ index 06f445d4..651660e0 100644
      }
  
    /* command suffix */
-@@ -1013,14 +1302,27 @@ egismoc_enroll_run_state (FpiSsm   *ssm,
+@@ -1019,14 +1309,27 @@ egismoc_enroll_run_state (FpiSsm   *ssm,
  {
    g_auto(FpiByteWriter) writer = {0};
    FpiDeviceEgisMoc *self = FPI_DEVICE_EGISMOC (device);
@@ -812,8 +808,8 @@ index 06f445d4..651660e0 100644
 +
      case ENROLL_GET_ENROLLED_IDS:
        /* get enrolled_ids from device for use in check stages below */
-       egismoc_exec_cmd (device, cmd_list, cmd_list_len,
-@@ -1048,7 +1350,7 @@ egismoc_enroll_run_state (FpiSsm   *ssm,
+       egismoc_exec_cmd (device, cmd_list, G_N_ELEMENTS (cmd_list),
+@@ -1054,7 +1357,7 @@ egismoc_enroll_run_state (FpiSsm   *ssm,
        break;
  
      case ENROLL_WAIT_FINGER:
@@ -822,16 +818,16 @@ index 06f445d4..651660e0 100644
        break;
  
      case ENROLL_SENSOR_CHECK:
-@@ -1064,7 +1366,7 @@ egismoc_enroll_run_state (FpiSsm   *ssm,
+@@ -1070,7 +1373,7 @@ egismoc_enroll_run_state (FpiSsm   *ssm,
  
      case ENROLL_START:
-       egismoc_exec_cmd (device, cmd_enroll_starting, cmd_enroll_starting_len,
+       egismoc_exec_cmd (device, cmd_enroll_starting, G_N_ELEMENTS (cmd_enroll_starting),
 -                        NULL, egismoc_task_ssm_next_state_cb);
 +                        NULL, egismoc_enroll_starting_cb);
        break;
  
      case ENROLL_CAPTURE_SENSOR_RESET:
-@@ -1079,7 +1381,12 @@ egismoc_enroll_run_state (FpiSsm   *ssm,
+@@ -1085,7 +1388,12 @@ egismoc_enroll_run_state (FpiSsm   *ssm,
        break;
  
      case ENROLL_CAPTURE_WAIT_FINGER:
@@ -845,7 +841,7 @@ index 06f445d4..651660e0 100644
        break;
  
      case ENROLL_CAPTURE_READ_RESPONSE:
-@@ -1093,11 +1400,9 @@ egismoc_enroll_run_state (FpiSsm   *ssm,
+@@ -1099,11 +1407,9 @@ egismoc_enroll_run_state (FpiSsm   *ssm,
        break;
  
      case ENROLL_COMMIT:
@@ -860,7 +856,7 @@ index 06f445d4..651660e0 100644
  
        fpi_byte_writer_init (&writer);
        if (!fpi_byte_writer_put_data (&writer, cmd_new_print_prefix,
-@@ -1106,8 +1411,7 @@ egismoc_enroll_run_state (FpiSsm   *ssm,
+@@ -1112,8 +1418,7 @@ egismoc_enroll_run_state (FpiSsm   *ssm,
            fpi_ssm_mark_failed (ssm, fpi_device_error_new (FP_DEVICE_ERROR_PROTO));
            break;
          }
@@ -870,7 +866,7 @@ index 06f445d4..651660e0 100644
          {
            fpi_ssm_mark_failed (ssm, fpi_device_error_new (FP_DEVICE_ERROR_PROTO));
            break;
-@@ -1115,11 +1419,11 @@ egismoc_enroll_run_state (FpiSsm   *ssm,
+@@ -1121,11 +1426,11 @@ egismoc_enroll_run_state (FpiSsm   *ssm,
  
        payload_length = fpi_byte_writer_get_size (&writer);
        egismoc_exec_cmd (device, fpi_byte_writer_reset_and_get_data (&writer),
@@ -881,10 +877,10 @@ index 06f445d4..651660e0 100644
  
      case ENROLL_COMMIT_SENSOR_RESET:
 +      g_clear_pointer (&self->enrollment_nonce, g_free);
-       egismoc_exec_cmd (device, cmd_sensor_reset, cmd_sensor_reset_len,
+       egismoc_exec_cmd (device, cmd_sensor_reset, G_N_ELEMENTS (cmd_sensor_reset),
                          NULL, egismoc_task_ssm_next_state_cb);
        break;
-@@ -1155,9 +1459,15 @@ egismoc_identify_check_cb (FpDevice *device,
+@@ -1161,8 +1466,15 @@ egismoc_identify_check_cb (FpDevice *device,
  {
    fp_dbg ("Identify check callback");
    FpiDeviceEgisMoc *self = FPI_DEVICE_EGISMOC (device);
@@ -896,13 +892,13 @@ index 06f445d4..651660e0 100644
 +  guchar enrollment_id[SDCP_ENROLLMENT_ID_SIZE];
 +  g_autofree gchar *enrollment_id_hex = NULL;
    FpPrint *print = NULL;
-   FpPrint *verify_print = NULL;
++  FpPrint *verify_print = NULL;
 +  g_autofree gchar *verify_print_finger_str = NULL;
    GPtrArray *prints;
    gboolean found = FALSE;
    guint index;
-@@ -1175,29 +1485,50 @@ egismoc_identify_check_cb (FpDevice *device,
-                                         rsp_identify_match_suffix_len))
+@@ -1180,10 +1492,12 @@ egismoc_identify_check_cb (FpDevice *device,
+                                         G_N_ELEMENTS (rsp_identify_match_suffix)))
      {
        /*
 -         On success, there is a 32 byte array of "something"(?) in chars 14-45
@@ -911,6 +907,16 @@ index 06f445d4..651660e0 100644
 +        but on egismoc devices there is a prefix, followed by (m,id) (yes, it
 +        is backwards), followed by a suffix.
         */
+-      if (length_in < EGISMOC_IDENTIFY_RESPONSE_PRINT_ID_OFFSET + EGISMOC_FINGERPRINT_DATA_SIZE)
++      if (length_in < EGISMOC_IDENTIFY_RESPONSE_PREFIX_SIZE + SDCP_DIGEST_SIZE +
++                      SDCP_ENROLLMENT_ID_SIZE + G_N_ELEMENTS (rsp_identify_match_suffix))
+         {
+           fpi_ssm_mark_failed (self->task_ssm,
+                                fpi_device_error_new_msg (FP_DEVICE_ERROR_PROTO,
+@@ -1191,37 +1505,74 @@ egismoc_identify_check_cb (FpDevice *device,
+           return;
+         }
+ 
 -      memcpy (device_print_id,
 -              buffer_in + EGISMOC_IDENTIFY_RESPONSE_PRINT_ID_OFFSET,
 -              EGISMOC_FINGERPRINT_DATA_SIZE);
@@ -930,7 +936,7 @@ index 06f445d4..651660e0 100644
 +      fp_dbg ("Enrollment ID identified by the device: %s", enrollment_id_hex);
 +      fp_dbg ("AuthorizedIdentity MAC: %s", device_mac_hex);
 +
-+      /* 
++      /*
 +        Create a new print from this enrollment_id and then see if it matches
 +        the one indicated.
         */
@@ -949,6 +955,12 @@ index 06f445d4..651660e0 100644
          }
  
 -      fp_info ("Identify successful for: %s", fp_print_get_description (print));
+-
+-      fpi_device_get_identify_data (device, &prints);
+-      found = g_ptr_array_find_with_equal_func (prints,
+-                                                print,
+-                                                (GEqualFunc) fp_print_equal,
+-                                                &index);
 +      /* Ensure the returned identity is valid per SDCP. */
 +      if (!fpi_sdcp_verify_authorized_identity (sdcp_dev, host_nonce,
 +                                                enrollment_id, device_mac))
@@ -960,22 +972,50 @@ index 06f445d4..651660e0 100644
 +          return;
 +        }
  
-       if (fpi_device_get_current_action (device) == FPI_DEVICE_ACTION_IDENTIFY)
-         {
-@@ -1215,7 +1546,11 @@ egismoc_identify_check_cb (FpDevice *device,
+-      if (found)
+-        fpi_device_identify_report (device, g_ptr_array_index (prints, index), print, NULL);
++      if (fpi_device_get_current_action (device) == FPI_DEVICE_ACTION_IDENTIFY)
++        {
++          fpi_device_get_identify_data (device, &prints);
++          found = g_ptr_array_find_with_equal_func (prints,
++                                                    print,
++                                                    (GEqualFunc) fp_print_equal,
++                                                    &index);
++
++          if (found)
++            fpi_device_identify_report (device, g_ptr_array_index (prints, index), print, NULL);
++          else
++            fpi_device_identify_report (device, NULL, print, NULL);
++        }
        else
-         {
-           fpi_device_get_verify_data (device, &verify_print);
--          fp_info ("Verifying against: %s", fp_print_get_description (verify_print));
+-        fpi_device_identify_report (device, NULL, print, NULL);
++        {
++          fpi_device_get_verify_data (device, &verify_print);
 +          verify_print_finger_str = g_enum_to_string (FP_TYPE_FINGER,
 +                                                      fp_print_get_finger (verify_print));
 +          fp_info ("Verifying print matches %s for user %s",
 +                   verify_print_finger_str,
 +                   fp_print_get_username (verify_print));
++
++          if (fp_print_equal (verify_print, print))
++            fpi_device_verify_report (device, FPI_MATCH_SUCCESS, print, NULL);
++          else
++            fpi_device_verify_report (device, FPI_MATCH_FAIL, print, NULL);
++        }
+     }
+   /* If device was successfully read but it was a "not matched" */
+   else if (egismoc_validate_response_suffix (buffer_in,
+@@ -1231,13 +1582,16 @@ egismoc_identify_check_cb (FpDevice *device,
+     {
+       fp_info ("Print was not identified by the device");
  
-           if (fp_print_equal (verify_print, print))
-             fpi_device_verify_report (device, FPI_MATCH_SUCCESS, print, NULL);
-@@ -1240,7 +1575,7 @@ egismoc_identify_check_cb (FpDevice *device,
+-      fpi_device_identify_report (device, NULL, NULL, NULL);
++      if (fpi_device_get_current_action (device) == FPI_DEVICE_ACTION_VERIFY)
++        fpi_device_verify_report (device, FPI_MATCH_FAIL, NULL, NULL);
++      else
++        fpi_device_identify_report (device, NULL, NULL, NULL);
+     }
+   else
      {
        fpi_ssm_mark_failed (self->task_ssm,
                             fpi_device_error_new_msg (FP_DEVICE_ERROR_PROTO,
@@ -984,7 +1024,7 @@ index 06f445d4..651660e0 100644
        return;
      }
  
-@@ -1252,11 +1587,25 @@ egismoc_identify_run_state (FpiSsm   *ssm,
+@@ -1249,11 +1603,25 @@ egismoc_identify_run_state (FpiSsm   *ssm,
                              FpDevice *device)
  {
    FpiDeviceEgisMoc *self = FPI_DEVICE_EGISMOC (device);
@@ -1009,8 +1049,8 @@ index 06f445d4..651660e0 100644
 +
      case IDENTIFY_GET_ENROLLED_IDS:
        /* get enrolled_ids from device for use in check stages below */
-       egismoc_exec_cmd (device, cmd_list, cmd_list_len,
-@@ -1284,7 +1633,7 @@ egismoc_identify_run_state (FpiSsm   *ssm,
+       egismoc_exec_cmd (device, cmd_list, G_N_ELEMENTS (cmd_list),
+@@ -1281,7 +1649,7 @@ egismoc_identify_run_state (FpiSsm   *ssm,
        break;
  
      case IDENTIFY_WAIT_FINGER:
@@ -1019,7 +1059,40 @@ index 06f445d4..651660e0 100644
        break;
  
      case IDENTIFY_SENSOR_CHECK:
-@@ -1362,7 +1711,7 @@ egismoc_fw_version_cb (FpDevice *device,
+@@ -1303,14 +1671,17 @@ egismoc_identify_run_state (FpiSsm   *ssm,
+     /*
+      * In Windows, the driver seems at this point to then immediately take
+      * another read from the sensor; this is suspected to be an on-chip
+-     * "identify". However, because the user's finger is still on the sensor from
++     * "verify". However, because the user's finger is still on the sensor from
+      * the identify, then it seems to always return positive. We will consider
+      * this extra step unnecessary and just skip it in this driver. This driver
+      * will instead handle matching of the FpPrint from the gallery in the
+-     * callback egismoc_identify_check_cb.
++     * "verify" case of the callback egismoc_identify_check_cb.
+      */
+     case IDENTIFY_COMPLETE:
+-      fpi_device_identify_complete (device, NULL);
++      if (fpi_device_get_current_action (device) == FPI_DEVICE_ACTION_IDENTIFY)
++        fpi_device_identify_complete (device, NULL);
++      else
++        fpi_device_verify_complete (device, NULL);
+ 
+       fpi_ssm_mark_completed (ssm);
+       break;
+@@ -1318,9 +1689,9 @@ egismoc_identify_run_state (FpiSsm   *ssm,
+ }
+ 
+ static void
+-egismoc_identify (FpDevice *device)
++egismoc_identify_verify (FpDevice *device)
+ {
+-  fp_dbg ("Identify");
++  fp_dbg ("Identify or Verify");
+   FpiDeviceEgisMoc *self = FPI_DEVICE_EGISMOC (device);
+ 
+   g_assert (self->task_ssm == NULL);
+@@ -1356,7 +1727,7 @@ egismoc_fw_version_cb (FpDevice *device,
        fpi_ssm_mark_failed (self->task_ssm,
                             fpi_device_error_new_msg (FP_DEVICE_ERROR_PROTO,
                                                       "Device firmware response "
@@ -1028,7 +1101,7 @@ index 06f445d4..651660e0 100644
        return;
      }
  
-@@ -1472,6 +1821,7 @@ egismoc_probe (FpDevice *device)
+@@ -1475,6 +1846,7 @@ egismoc_probe (FpDevice *device)
    GError *error = NULL;
    g_autofree gchar *serial = NULL;
    FpiDeviceEgisMoc *self = FPI_DEVICE_EGISMOC (device);
@@ -1036,7 +1109,7 @@ index 06f445d4..651660e0 100644
  
    fp_dbg ("%s enter --> ", G_STRFUNC);
  
-@@ -1517,8 +1867,11 @@ egismoc_probe (FpDevice *device)
+@@ -1520,8 +1892,11 @@ egismoc_probe (FpDevice *device)
        return;
      }
  
@@ -1050,7 +1123,7 @@ index 06f445d4..651660e0 100644
    else
      self->max_enroll_stages = EGISMOC_MAX_ENROLL_STAGES_DEFAULT;
  
-@@ -1603,6 +1956,7 @@ static void
+@@ -1606,6 +1981,7 @@ static void
  fpi_device_egismoc_class_init (FpiDeviceEgisMocClass *klass)
  {
    FpDeviceClass *dev_class = FP_DEVICE_CLASS (klass);
@@ -1058,7 +1131,17 @@ index 06f445d4..651660e0 100644
  
    dev_class->id = FP_COMPONENT;
    dev_class->full_name = EGISMOC_DRIVER_FULLNAME;
-@@ -1628,4 +1982,8 @@ fpi_device_egismoc_class_init (FpiDeviceEgisMocClass *klass)
+@@ -1622,7 +1998,8 @@ fpi_device_egismoc_class_init (FpiDeviceEgisMocClass *klass)
+   dev_class->cancel = egismoc_cancel;
+   dev_class->suspend = egismoc_suspend;
+   dev_class->close = egismoc_close;
+-  dev_class->identify = egismoc_identify;
++  dev_class->identify = egismoc_identify_verify;
++  dev_class->verify = egismoc_identify_verify;
+   dev_class->enroll = egismoc_enroll;
+   dev_class->delete = egismoc_delete;
+   dev_class->clear_storage = egismoc_clear_storage;
+@@ -1630,4 +2007,8 @@ fpi_device_egismoc_class_init (FpiDeviceEgisMocClass *klass)
  
    fpi_device_class_auto_initialize_features (dev_class);
    dev_class->features |= FP_DEVICE_FEATURE_DUPLICATES_CHECK;
@@ -1068,7 +1151,7 @@ index 06f445d4..651660e0 100644
 +  sdcp_dev_class->claim_expiration_seconds = 86400;
  }
 diff --git a/libfprint/drivers/egismoc/egismoc.h b/libfprint/drivers/egismoc/egismoc.h
-index ef31d2cd..f9cba5d4 100644
+index 6c06f54..73ac226 100644
 --- a/libfprint/drivers/egismoc/egismoc.h
 +++ b/libfprint/drivers/egismoc/egismoc.h
 @@ -27,16 +27,17 @@
@@ -1104,50 +1187,40 @@ index ef31d2cd..f9cba5d4 100644
  #define EGISMOC_LIST_RESPONSE_PREFIX_SIZE 14
  #define EGISMOC_LIST_RESPONSE_SUFFIX_SIZE 2
  
-@@ -72,6 +77,9 @@ static gsize cmd_fw_version_len = sizeof (cmd_fw_version) / sizeof (cmd_fw_versi
+@@ -68,6 +73,9 @@ static guchar egismoc_read_prefix[] = {'S', 'I', 'G', 'E', 0x00, 0x00, 0x00, 0x0
+ static guchar cmd_fw_version[] = {0x00, 0x00, 0x00, 0x07, 0x50, 0x7f, 0x00, 0x00, 0x00, 0x00, 0x0c};
  static guchar rsp_fw_version_suffix[] = {0x90, 0x00};
- static gsize rsp_fw_version_suffix_len = sizeof (rsp_fw_version_suffix) / sizeof (rsp_fw_version_suffix[0]);
  
 +static guchar rsp_sensor_has_finger_suffix[] = {0x90, 0x00, 0x90, 0x00};
 +static gsize rsp_sensor_has_finger_suffix_len = sizeof (rsp_sensor_has_finger_suffix) / sizeof (rsp_sensor_has_finger_suffix[0]);
 +
  static guchar cmd_list[] = {0x00, 0x00, 0x00, 0x07, 0x50, 0x19, 0x04, 0x00, 0x00, 0x01, 0x40};
- static gsize cmd_list_len = sizeof (cmd_list) / sizeof (cmd_list[0]);
  
-@@ -93,18 +101,19 @@ static gsize cmd_sensor_enroll_len = sizeof (cmd_sensor_enroll) / sizeof (cmd_se
+ static guchar cmd_sensor_reset[] = {0x00, 0x00, 0x00, 0x04, 0x50, 0x1a, 0x00, 0x00};
+@@ -81,17 +89,20 @@ static guchar rsp_identify_notmatch_suffix[] = {0x90, 0x04};
+ static guchar cmd_sensor_enroll[] = {0x00, 0x00, 0x00, 0x04, 0x50, 0x17, 0x01, 0x00};
  
  static guchar cmd_enroll_starting[] = {0x00, 0x00, 0x00, 0x07, 0x50, 0x16, 0x01, 0x00, 0x00, 0x00, 0x20};
- static gsize cmd_enroll_starting_len = sizeof (cmd_enroll_starting) / sizeof (cmd_enroll_starting[0]);
 +static guchar rsp_enroll_starting_suffix[] = {0x90, 0x00};
-+static gsize rsp_enroll_starting_suffix_len = sizeof (rsp_enroll_starting_suffix) / sizeof (rsp_enroll_starting_suffix[0]);
  
  static guchar cmd_sensor_start_capture[] = {0x00, 0x00, 0x00, 0x04, 0x50, 0x16, 0x02, 0x01};
- static gsize cmd_sensor_start_capture_len = sizeof (cmd_sensor_start_capture) / sizeof (cmd_sensor_start_capture[0]);
  
 +static guchar cmd_capture_post_wait_finger[] = {0x00, 0x00, 0x00, 0x07, 0x50, 0x7a, 0x00, 0x00, 0x00, 0x00, 0x80};
 +static gsize cmd_capture_post_wait_finger_len = sizeof (cmd_capture_post_wait_finger) / sizeof (cmd_capture_post_wait_finger[0]);
 +
  static guchar cmd_read_capture[] = {0x00, 0x00, 0x00, 0x07, 0x50, 0x16, 0x02, 0x02, 0x00, 0x00, 0x02};
- static gsize cmd_read_capture_len = sizeof (cmd_read_capture) / sizeof (cmd_read_capture[0]);
 -static guchar rsp_read_success_prefix[] = {0x00, 0x00, 0x00, 0x04};
--static gsize rsp_read_success_prefix_len = sizeof (rsp_read_success_prefix) / sizeof (rsp_read_success_prefix[0]);
  static guchar rsp_read_success_suffix[] = {0x90, 0x00};
- static gsize rsp_read_success_suffix_len = sizeof (rsp_read_success_suffix) / sizeof (rsp_read_success_suffix[0]);
 -static guchar rsp_read_offcenter_prefix[] = {0x00, 0x00, 0x00, 0x04};
--static gsize rsp_read_offcenter_prefix_len = sizeof (rsp_read_offcenter_prefix) / sizeof (rsp_read_offcenter_prefix[0]);
  static guchar rsp_read_offcenter_suffix[] = {0x64, 0x91};
- static gsize rsp_read_offcenter_suffix_len = sizeof (rsp_read_offcenter_suffix) / sizeof (rsp_read_offcenter_suffix[0]);
  static guchar rsp_read_dirty_prefix[] = {0x00, 0x00, 0x00, 0x02, 0x64};
-@@ -112,6 +121,8 @@ static gsize rsp_read_dirty_prefix_len = sizeof (rsp_read_dirty_prefix) / sizeof
  
  static guchar cmd_commit_starting[] = {0x00, 0x00, 0x00, 0x07, 0x50, 0x16, 0x05, 0x00, 0x00, 0x00, 0x20};
- static gsize cmd_commit_starting_len = sizeof (cmd_commit_starting) / sizeof (cmd_commit_starting[0]);
 +static guchar rsp_commit_success_suffix[] = {0x90, 0x00};
-+static gsize rsp_commit_success_suffix_len = sizeof (rsp_commit_success_suffix) / sizeof (rsp_commit_success_suffix[0]);
  
  
  /* commands which exist on the device but are currently not used */
-@@ -130,8 +141,13 @@ static gsize cmd_commit_starting_len = sizeof (cmd_commit_starting) / sizeof (cm
+@@ -110,8 +121,13 @@ static guchar cmd_commit_starting[] = {0x00, 0x00, 0x00, 0x07, 0x50, 0x16, 0x05,
  /* prefixes/suffixes and other things for dynamically created command payloads */
  
  #define EGISMOC_CHECK_BYTES_LENGTH 2
@@ -1162,8 +1235,8 @@ index ef31d2cd..f9cba5d4 100644
 +static gsize rsp_sdcp_connect_success_suffix_len = sizeof (rsp_sdcp_connect_success_suffix) / sizeof (rsp_sdcp_connect_success_suffix[0]);
  
  static guchar cmd_new_print_prefix[] = {0x00, 0x00, 0x00, 0x27, 0x50, 0x16, 0x03, 0x00, 0x00, 0x00, 0x20};
- static gsize cmd_new_print_prefix_len = sizeof (cmd_new_print_prefix) / sizeof (cmd_new_print_prefix[0]);
-@@ -170,6 +186,13 @@ typedef enum {
+ 
+@@ -143,6 +159,13 @@ typedef enum {
  } DeviceInitStates;
  
  typedef enum {
@@ -1177,7 +1250,7 @@ index ef31d2cd..f9cba5d4 100644
    IDENTIFY_GET_ENROLLED_IDS,
    IDENTIFY_CHECK_ENROLLED_NUM,
    IDENTIFY_SENSOR_RESET,
-@@ -183,6 +206,7 @@ typedef enum {
+@@ -156,6 +179,7 @@ typedef enum {
  } IdentifyStates;
  
  typedef enum {
@@ -1185,7 +1258,7 @@ index ef31d2cd..f9cba5d4 100644
    ENROLL_GET_ENROLLED_IDS,
    ENROLL_CHECK_ENROLLED_NUM,
    ENROLL_SENSOR_RESET,
-@@ -194,6 +218,7 @@ typedef enum {
+@@ -167,6 +191,7 @@ typedef enum {
    ENROLL_CAPTURE_SENSOR_RESET,
    ENROLL_CAPTURE_SENSOR_START_CAPTURE,
    ENROLL_CAPTURE_WAIT_FINGER,
@@ -1195,7 +1268,7 @@ index ef31d2cd..f9cba5d4 100644
    ENROLL_COMMIT,
 diff --git a/libfprint/fpi-sdcp-device-private.h b/libfprint/fpi-sdcp-device-private.h
 new file mode 100644
-index 00000000..33d816ac
+index 0000000..33d816a
 --- /dev/null
 +++ b/libfprint/fpi-sdcp-device-private.h
 @@ -0,0 +1,50 @@
@@ -1251,7 +1324,7 @@ index 00000000..33d816ac
 +void fpi_sdcp_device_delete_cached_claim (FpiSdcpDevice *self);
 diff --git a/libfprint/fpi-sdcp-device.c b/libfprint/fpi-sdcp-device.c
 new file mode 100644
-index 00000000..ff783778
+index 0000000..ff78377
 --- /dev/null
 +++ b/libfprint/fpi-sdcp-device.c
 @@ -0,0 +1,1466 @@
@@ -2723,7 +2796,7 @@ index 00000000..ff783778
 +}
 diff --git a/libfprint/fpi-sdcp-device.h b/libfprint/fpi-sdcp-device.h
 new file mode 100644
-index 00000000..792c828b
+index 0000000..792c828
 --- /dev/null
 +++ b/libfprint/fpi-sdcp-device.h
 @@ -0,0 +1,156 @@
@@ -2884,18 +2957,18 @@ index 00000000..792c828b
 +
 +G_END_DECLS
 diff --git a/libfprint/meson.build b/libfprint/meson.build
-index 34494813..b471489d 100644
+index f11533c..3455061 100644
 --- a/libfprint/meson.build
 +++ b/libfprint/meson.build
-@@ -22,6 +22,7 @@ libfprint_private_sources = [
-     'fpi-image-device.c',
+@@ -23,6 +23,7 @@ libfprint_private_sources = [
      'fpi-image.c',
+     'fpi-log.c',
      'fpi-print.c',
 +    'fpi-sdcp-device.c',
      'fpi-ssm.c',
      'fpi-usb-transfer.c',
  ] + spi_sources
-@@ -48,6 +49,7 @@ libfprint_private_headers = [
+@@ -49,6 +50,7 @@ libfprint_private_headers = [
      'fpi-minutiae.h',
      'fpi-print.h',
      'fpi-usb-transfer.h',
@@ -2904,18 +2977,18 @@ index 34494813..b471489d 100644
  ] + spi_headers
  
 diff --git a/meson.build b/meson.build
-index 14fb11f2..000209a2 100644
+index ab09dc1..856c2d5 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -95,6 +95,7 @@ gio_dep = dependency('gio-unix-2.0', version: '>=' + glib_min_version)
- gobject_dep = dependency('gobject-2.0', version: '>=' + glib_min_version)
+@@ -98,6 +98,7 @@ gobject_dep = dependency('gobject-2.0', version: '>=' + glib_min_version)
+ gmodule_dep = dependency('gmodule-2.0', version: '>=' + glib_min_version)
  gusb_dep = dependency('gusb', version: '>= 0.2.0')
  mathlib_dep = cc.find_library('m', required: false)
 +openssl_dep = dependency('openssl', version: '>= 3.0.8') # 3.0.8 or higher as SDCP requires using uncompressed EC keys
  
  # The following dependencies are only used for tests
  sh = find_program('sh', required: true)
-@@ -267,7 +268,7 @@ foreach i : driver_helpers
+@@ -237,7 +238,7 @@ foreach i : driver_helpers
          libfprint_conf.set10('HAVE_PIXMAN', true)
          optional_deps += imaging_dep
      elif i == 'openssl'
@@ -2925,11 +2998,11 @@ index 14fb11f2..000209a2 100644
              error('OpenSSL is required for @0@ and possibly others'.format(driver))
          endif
 diff --git a/tests/egismoc/custom.py b/tests/egismoc/custom.py
-index 3a662380..e2b915dd 100755
+index b9afecf..44c4585 100755
 --- a/tests/egismoc/custom.py
 +++ b/tests/egismoc/custom.py
 @@ -1,9 +1,71 @@
- #!/usr/bin/python3
+ #!/usr/bin/env python3
  
 +# In order for all of the payloads to match, the SDCP connection claim from when the capture is
 +# taken needs to be the same as every time that the test is executed.
@@ -3042,7 +3115,7 @@ index 3a662380..e2b915dd 100755
 +# Clean up dummy cached SDCP claim file
 +remove(claim_file_path)
 diff --git a/tests/egismoc/device b/tests/egismoc/device
-index 6bd912a0..ac42e8d3 100644
+index 6bd912a..ac42e8d 100644
 --- a/tests/egismoc/device
 +++ b/tests/egismoc/device
 @@ -1,17 +1,21 @@
@@ -3305,23 +3378,20 @@ index 6bd912a0..ac42e8d3 100644
  A: resource=0x000000601d160000 0x000000601d16ffff 0x0000000000140204\n0x0000000000000000 0x0000000000000000 0x0000000000000000\n0x0000000000000000 0x0000000000000000 0x0000000000000000\n0x0000000000000000 0x0000000000000000 0x0000000000000000\n0x0000000000000000 0x0000000000000000 0x0000000000000000\n0x0000000000000000 0x0000000000000000 0x0000000000000000\n0x0000000000000000 0x0000000000000000 0x0000000000000000\n0x0000000000000000 0x0000000000000000 0x0000000000000000\n0x0000000000000000 0x0000000000000000 0x0000000000000000\n0x0000000000000000 0x0000000000000000 0x0000000000000000\n0x0000000000000000 0x0000000000000000 0x0000000000000000\n0x0000000000000000 0x0000000000000000 0x0000000000000000\n0x0000000000000000 0x0000000000000000 0x0000000000000000\n
  A: revision=0x01\n
 diff --git a/tests/meson.build b/tests/meson.build
-index 07c924be..9e3efeb5 100644
+index aad0675..ffd07b0 100644
 --- a/tests/meson.build
 +++ b/tests/meson.build
-@@ -52,9 +52,9 @@ drivers_tests = [
-     'nb1010',
-     'egis0570',
-     'egismoc',
--    'egismoc-05a1',
--    'egismoc-0586',
--    'egismoc-0587',
-+#    'egismoc-05a1', # commented out for now -- need new capture for this device!
-+#    'egismoc-0586', # commented out for now -- need new capture for this device!
-+#    'egismoc-0587', # commented out for now -- need new capture for this device!
-     'fpcmoc',
- 	'realtek',
- 	'realtek-5816',
-@@ -256,6 +256,7 @@ unit_tests = [
+@@ -53,9 +53,6 @@ drivers_tests = {
+     'egis0570': {},
+     'egismoc': {},
+     'egis_etu905': {},
+-    'egismoc-05a1': {},
+-    'egismoc-0586': {},
+-    'egismoc-0587': {},
+     'fpcmoc': {},
+ 	'realtek': {},
+ 	'realtek-5816': {},
+@@ -312,6 +309,7 @@ unit_tests = [
      'fpi-device',
      'fpi-ssm',
      'fpi-assembling',
@@ -3331,7 +3401,7 @@ index 07c924be..9e3efeb5 100644
  if 'virtual_image' in drivers
 diff --git a/tests/test-fpi-sdcp-device.c b/tests/test-fpi-sdcp-device.c
 new file mode 100644
-index 00000000..a3687165
+index 0000000..a368716
 --- /dev/null
 +++ b/tests/test-fpi-sdcp-device.c
 @@ -0,0 +1,568 @@
@@ -3905,7 +3975,7 @@ index 00000000..a3687165
 +}
 diff --git a/tests/test-fpi-sdcp-device.h b/tests/test-fpi-sdcp-device.h
 new file mode 100644
-index 00000000..5b6df85e
+index 0000000..5b6df85
 --- /dev/null
 +++ b/tests/test-fpi-sdcp-device.h
 @@ -0,0 +1,249 @@

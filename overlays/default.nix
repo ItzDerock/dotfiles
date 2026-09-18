@@ -66,17 +66,17 @@
     # "Print was not found on the devices storage".
     #
     # Applied as a patch on top of nixpkgs' libfprint rather than by overriding
-    # `src`, so we keep the 1.94.10 base and all of nixpkgs' backported USB-ID
-    # patches. The patch is the fork's 18 commits rebased onto v1.94.10:
+    # `src`, so we keep the 1.94.100 base. The patch is the fork's 18 commits
+    # rebased onto v1.94.100:
     #   git clone https://gitlab.freedesktop.org/libfprint/libfprint.git
     #   git remote add fork https://github.com/TenSeventy7/libfprint-egismoc-sdcp
-    #   git fetch fork && git checkout -b sdcp <fork-rev> && git rebase v1.94.10
-    #   git diff v1.94.10 sdcp -- . ':!tests/egismoc/custom.pcapng' \
+    #   git fetch fork && git checkout -b sdcp <fork-rev> && git rebase v1.94.100
+    #   git diff v1.94.100 sdcp -- . ':!tests/egismoc/custom.pcapng' \
     #     > patches/libfprint-egismoc-sdcp.patch
     # Regenerate on every fork update *and* every nixpkgs libfprint bump.
-    # Rebase notes: two fork commits (1c7a:0584 support) are already in 1.94.10
-    # and drop out; the only conflict is egismoc_id_table, resolved as the union
-    # (fork's MAX_ENROLL_STAGES_15 on 0583, upstream's 0584/0588 kept).
+    # Rebase notes: preserve upstream's response-length validation, G_N_ELEMENTS
+    # cleanup, new driver tests, and USB IDs while retaining the fork's SDCP
+    # enrollment/identify/verify flow.
     # https://github.com/TenSeventy7/libfprint-egismoc-sdcp
     libfprint = prev.libfprint.overrideAttrs (old: {
       # Mark the fork in the store path via pname, not version: nixpkgs derives
@@ -97,8 +97,13 @@
           }
         } tests/egismoc/custom.pcapng
 
-        # The fork adds 1C7A:05A5 to the egismoc driver without regenerating
-        # data/autosuspend.hwdb, which the udev-hwdb install-check diffs exactly.
+        # 1C7A:05A5 is listed as known-unsupported in upstream's generated hwdb.
+        # Move it to egismoc now that this patch implements the device; the
+        # udev-hwdb install-check compares both generated sources exactly.
+        substituteInPlace libfprint/fprint-list-udev-hwdb.c \
+          --replace-fail "  { .vid = 0x1c7a, .pid = 0x05a5 }," ""
+        substituteInPlace data/autosuspend.hwdb \
+          --replace-fail $'usb:v1C7Ap05A5*\n' ""
         substituteInPlace data/autosuspend.hwdb \
           --replace-fail "usb:v1C7Ap05A1*" $'usb:v1C7Ap05A1*\nusb:v1C7Ap05A5*'
       '';
