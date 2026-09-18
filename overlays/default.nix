@@ -8,6 +8,24 @@
   # You can change versions, add patches, set compilation flags, anything really.
   # https://nixos.wiki/wiki/Overlays
   modifications = final: prev: {
+    # Keep the stable packaging and FHS wrapper until nixpkgs catches up.
+    zed-editor = prev.zed-editor.overrideAttrs (_old: rec {
+      version = "1.20.2";
+      src = prev.fetchFromGitHub {
+        owner = "zed-industries";
+        repo = "zed";
+        tag = "v${version}";
+        hash = "sha256-CjRRWnPpk8TIr/HiscJEs4DIJNN9ouMCBody3mqOxBg=";
+      };
+      cargoHash = "sha256-8RBQrUyvZz0zwowgVGqQbd5Nf6IP6A2SEyxj1hX6C08=";
+      # buildRustPackage's cargoDeps closes over the original cargoHash.
+      cargoDeps = prev.rustPlatform.fetchCargoVendor {
+        inherit src;
+        name = "zed-editor-${version}";
+        hash = cargoHash;
+      };
+    });
+
     # Per-package CUDA opt-ins (cudaSupport is not enabled globally — see nixos/nvidia.nix).
     blender = prev.blender.override { cudaSupport = true; };
 
