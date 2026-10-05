@@ -118,7 +118,11 @@ in
 
       unzip
       yt-dlp
-      obs-studio
+      (pkgs.wrapOBS {
+        plugins = with pkgs.obs-studio-plugins; [
+          obs-vaapi
+        ];
+       })
 
       zoom-us
 

@@ -58,6 +58,7 @@ in
   networking.firewall = {
     allowedTCPPortRanges = [ { from = 1714; to = 1764; } ];
     allowedUDPPortRanges = [ { from = 1714; to = 1764; } ];
+    trustedInterfaces = [ "virbr0" ]; # qemu
   };
 
   # power saving
@@ -114,7 +115,7 @@ in
   users.extraGroups.plugdev = { };
   users.users.derock = {
     isNormalUser = true; description = "Derock";
-    extraGroups = [ "networkmanager" "wheel" "dialout" "storage" "plugdev" "windscribe" ];
+    extraGroups = [ "networkmanager" "wheel" "dialout" "storage" "plugdev" "windscribe" "libvirtd" ];
     packages = with pkgs; [ ];
   };
 
@@ -179,6 +180,7 @@ in
     btop.withoutGpu
     sbctl
     openfreebuds
+    dnsmasq
   ];
 
   virtualisation.waydroid.enable = true;
@@ -263,7 +265,12 @@ in
   };
 
   services.fprintd.enable = true;
-  # services.fprintd.tod.enable = true;
+  
+  virtualisation.libvirtd = {
+    enable = true;
+    qemu.vhostUserPackages = with pkgs; [ virtiofsd ];
+  };
+  programs.virt-manager.enable = true;
 
   # vpn
   programs.throne = {
