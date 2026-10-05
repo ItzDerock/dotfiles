@@ -32,6 +32,7 @@ in
     ./mpv.nix
 
     inputs.opnix.homeManagerModules.default
+    inputs.omp.homeManagerModules.default
   ]
   ++ (if host == "supernova" then [ ./overrides/supernova.nix ] else [ ])
   ++ (if host == "galaxy" then [ ./overrides/galaxy.nix ] else [ ]);

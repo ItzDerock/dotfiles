@@ -96,5 +96,9 @@ in {
       enableBashIntegration = true;
       nix-direnv.enable = true;
     };
+
+    omp = {
+      enable = true;
+    };
   };
 }
