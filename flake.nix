@@ -115,7 +115,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    omp.url = "github:can1357/oh-my-pi";
+    omp = {
+      url = "github:can1357/oh-my-pi";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # kernel
     cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
