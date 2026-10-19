@@ -171,6 +171,10 @@
     builders-use-substitutes = true
   '';
 
+  # Limit shutdown waits while allowing services time to clean up.
+  systemd.settings.Manager.DefaultTimeoutStopSec = "30s";
+  systemd.user.settings.Manager.DefaultTimeoutStopSec = "30s";
+
   # dont wait for networkmanager on boot
   systemd.services.NetworkManager-wait-online.enable = false;
 

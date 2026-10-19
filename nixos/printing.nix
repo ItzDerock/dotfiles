@@ -12,6 +12,8 @@ in {
   config = mkIf cfg.enable {
     services.printing.enable = true;
 
+    systemd.services.cups-browsed.serviceConfig.TimeoutStopSec = "15s";
+
     # autodiscovery
     services.avahi = {
       enable = true;
