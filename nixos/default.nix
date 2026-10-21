@@ -37,6 +37,13 @@
     ./sunshine.nix
   ];
 
+  # TODO: remove me once root ca revokation propogates
+  # https://emudhra.we-have-a-problem.com/
+  security.pki.caCertificateBlacklist = [
+    "Comodo AAA Services root"
+    "emSign ECC Root CA - G3"
+  ];
+
   # Apply overlays
   nixpkgs.overlays = [
     outputs.overlays.additions
