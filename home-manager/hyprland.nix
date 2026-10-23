@@ -36,6 +36,23 @@ let
     rev = caelestiaRev;
   };
   caelestia-cli = inputs.caelestia.inputs.caelestia-cli.packages.${pkgs.system}.default;
+  grimblast = pkgs.grimblast.override {
+    hyprpicker = inputs.hyprpicker.packages.${pkgs.system}.hyprpicker;
+  };
+  screen-ocr-recognize = pkgs.writers.writePython3Bin "screen-ocr-recognize" {
+    libraries = [ pkgs.python3Packages.rapidocr ];
+  } (builtins.readFile ../assets/scripts/screen-ocr.py);
+  screen-ocr = pkgs.writeShellApplication {
+    name = "screen-ocr";
+    runtimeInputs = [
+      pkgs.coreutils
+      grimblast
+      pkgs.libnotify
+      screen-ocr-recognize
+      pkgs.wl-clipboard
+    ];
+    text = builtins.readFile ../assets/scripts/screen-ocr.sh;
+  };
   hyprlandReload = ''
     for instance in /run/user/$(id -u)/hypr/*/; do
       [ -S "$instance/.socket.sock" ] || continue
@@ -58,9 +75,8 @@ in
 
     swww
     foot
-    (grimblast.override {
-      hyprpicker = inputs.hyprpicker.packages.${pkgs.system}.hyprpicker;
-    })
+    grimblast
+    screen-ocr
     playerctl
 
     adwaita-icon-theme

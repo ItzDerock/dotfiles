@@ -142,6 +142,7 @@ hl.bind("Print", hl.dsp.exec_cmd("caelestia screenshot"))
 hl.bind("CTRL + Print", hl.dsp.exec_cmd("caelestia screenshot -fr"))
 hl.bind(mod .. " + SHIFT + S", hl.dsp.exec_cmd("screenshot"))
 hl.bind(mod .. " + SHIFT + ALT + S", hl.dsp.exec_cmd("caelestia screenshot region"))
+hl.bind(mod .. " + SHIFT + T", hl.dsp.exec_cmd("screen-ocr"))
 hl.bind(mod .. " + SHIFT + Print", hl.dsp.exec_cmd("caelestia record -rs"))
 hl.bind("SHIFT + Print", hl.dsp.exec_cmd("caelestia record -r"))
 
