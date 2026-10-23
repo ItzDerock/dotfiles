@@ -108,7 +108,6 @@ hl.gesture({
 
 hl.on("hyprland.start", function()
   hl.exec_cmd("playerctld")
-  hl.exec_cmd("wl-paste --watch cliphist store")
   hl.exec_cmd("1password --silent")
   hl.exec_cmd("thunderbird")
   clamshell.reconcile()
@@ -175,8 +174,7 @@ hl.bind(mod .. " + R", hl.dsp.exec_cmd("kickoff"))
 hl.bind(mod .. " + ALT + SPACE", hl.dsp.exec_cmd("1password --quick-access"))
 
 -- Clipboard
-hl.bind(mod .. " + V", hl.dsp.exec_cmd("cliphist list | wofi -dmenu | cliphist decode | wl-copy"))
-hl.bind(mod .. " + SHIFT + D", hl.dsp.exec_cmd("cliphist list | wofi -dmenu | cliphist delete"))
+hl.bind(mod .. " + V", hl.dsp.exec_cmd("copyq toggle"))
 
 -- Hyprexpo plugin
 hl.bind(mod .. " + TAB", function()
@@ -253,16 +251,19 @@ hl.window_rule({
 
 -- Window rules (tag-setters first, then tag-consumers)
 hl.window_rule({
-  match = { class = "(blueberry.py|Impala|Wiremix|org.gnome.NautilusPreviewer|com.gabm.satty|About|TUI.float)" },
+  match = { class = "(blueberry.py|Impala|Wiremix|org.gnome.NautilusPreviewer|com.gabm.satty|com.github.hluk.copyq|About|TUI.float)" },
   tag = "+floating-window",
 })
 
+-- Match initial titles: portal pickers can later change to "Files — <app>".
+local filePickerTitle =
+  "(?i)^((Open|Save)( Files?| Folders?| Directory| Documents?| Images?| Project| Workspace)?|Save As|"
+  .. "(Select|Choose|Browse for) (a |an )?(Files?|Folders?|Directory|Directories|Documents?|Images?)|"
+  .. "All Files|File (Chooser|Picker|Upload)|Upload Files?)([[:space:]]*[-–—:].*|[[:space:]]*[.]{3}|…)?$"
+
 hl.window_rule({
-  match = {
-    class = "(xdg-desktop-portal-gtk|sublime_text|DesktopEditors|org.gnome.Nautilus)",
-    title = "^(Open.*Files?|Open [F|f]older.*|Save.*Files?|Save.*As|Save|All Files)",
-  },
-  tag = "+floating-window",
+  match = { initial_title = filePickerTitle },
+  tag = "+file-picker",
 })
 
 hl.window_rule({
@@ -281,8 +282,10 @@ hl.window_rule({
 })
 
 hl.window_rule({
-  match = { class = "(xdg-desktop-portal-gtk)" },
+  match = { tag = "file-picker" },
   float = true,
+  center = true,
+  size = { "monitor_w * 0.7", "monitor_h * 0.7" },
 })
 
 hl.window_rule({

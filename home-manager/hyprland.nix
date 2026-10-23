@@ -70,7 +70,6 @@ in
     hyprcursor # cursor cursorTheme
     rose-pine-cursor
 
-    cliphist # clipboard
     inputs.hyprpicker.packages.${pkgs.system}.hyprpicker # color picker + freeze screen
     annotator # editor
     kooha # video recorder
@@ -84,6 +83,11 @@ in
   ];
 
   services.network-manager-applet.enable = true;
+
+  services.copyq = {
+    enable = true;
+    forceXWayland = false;
+  };
 
   home.sessionVariables = {
     GDK_SCALE = "1";
