@@ -28,7 +28,7 @@ fi
 
 notify-send "BG Remover" "Processing image with $MODEL model... please wait."
 
-if rembg i -m "$MODEL" "$INPUT_FILE" "$OUTPUT_FILE" 2>/tmp/rembg_error.log; then
+if remove-background "$INPUT_FILE" "$OUTPUT_FILE" 2>/tmp/rembg_error.log; then
     wl-copy -t image/png < "$OUTPUT_FILE"
     notify-send "BG Remover" "Success! Background removed."
 else

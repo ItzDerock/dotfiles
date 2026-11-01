@@ -12,7 +12,26 @@ let
     builtins.readFile ../assets/scripts/quick-record.sh
   );
   screenshot = pkgs.writeScriptBin "screenshot" (builtins.readFile ../assets/scripts/screenshot.sh);
-  quick-rmbg = pkgs.writeScriptBin "quick-rmbg" (builtins.readFile ../assets/scripts/quick-rmbg.sh);
+  remove-background = pkgs.writeScriptBin "remove-background" ''
+    #!${pkgs.python3.withPackages (ps: [ ps.rembg ])}/bin/python3
+    import argparse
+    from pathlib import Path
+
+    parser = argparse.ArgumentParser(description="Remove an image background using U2-Net.")
+    parser.add_argument("input", type=Path)
+    parser.add_argument("output", type=Path)
+    args = parser.parse_args()
+
+    from rembg import new_session, remove
+
+    image = args.input.read_bytes()
+    result = remove(image, session=new_session("u2net"))
+    args.output.write_bytes(result)
+  '';
+  quick-rmbg = pkgs.writeShellScriptBin "quick-rmbg" ''
+    export PATH=${lib.makeBinPath [ remove-background ]}:$PATH
+    ${builtins.readFile ../assets/scripts/quick-rmbg.sh}
+  '';
 in
 {
   imports = [
@@ -43,7 +62,6 @@ in
       # Add overlays your own flake exports (from overlays and pkgs dir):
       outputs.overlays.additions
       outputs.overlays.modifications
-      outputs.overlays.unstable-packages
       outputs.overlays.dolphinFix
       outputs.overlays.hyprland
     ];
@@ -63,14 +81,6 @@ in
 
   # Add stuff for your user as you see fit:
   home.packages =
-    let
-      nixpkgs-master = (
-        import inputs.nixpkgs-master {
-          system = pkgs.system;
-          config.allowUnfree = true;
-        }
-      );
-    in
     with pkgs;
     [
       # browser (i am indecisive)
@@ -95,14 +105,14 @@ in
       mpv
       obsidian
       inkscape-with-extensions
-      darktable # 5.6.0 withAi, via overlays/default.nix
+      darktable # withAi enabled via overlays/default.nix
       interactive-bg-remover # pkgs/interactive-bg-remover.nix
       leela
       handbrake
 
       # social media
       (discord.override { withVencord = true; })
-      nixpkgs-master.thunderbird # need >145 for Exchange
+      thunderbird # need >145 for Exchange
 
       # gaymin
       steam
@@ -135,13 +145,12 @@ in
       screenshot
       satty # screenshot deps
       quick-rmbg
-      rembg # removebg script dep
+      remove-background
 
       # productivity
       libreoffice-qt6
       hunspell
       hunspellDicts.en_US
-      zotero
       localsend
 
       teams-for-linux

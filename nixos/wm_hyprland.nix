@@ -52,6 +52,9 @@ in
       };
     };
 
+    # The portal falls back to Union and crashes at startup; desktop apps use Breeze.
+    systemd.user.services.plasma-xdg-desktop-portal-kde.environment.QT_STYLE_OVERRIDE = "Breeze";
+
     # Outside a Plasma session nothing installs an XDG application menu, and
     # XDG_MENU_PREFIX is unset — so kbuildsycoca6 finds no root menu and every
     # KDE app list built from KServiceGroup comes up empty. Most visibly,

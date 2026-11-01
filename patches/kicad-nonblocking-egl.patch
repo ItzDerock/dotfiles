@@ -1,0 +1,105 @@
+diff --git a/3d-viewer/3d_canvas/eda_3d_canvas.cpp b/3d-viewer/3d_canvas/eda_3d_canvas.cpp
+index 5fb3ecd1..b0406a50 100644
+--- a/3d-viewer/3d_canvas/eda_3d_canvas.cpp
++++ b/3d-viewer/3d_canvas/eda_3d_canvas.cpp
+@@ -309,11 +309,7 @@ bool  EDA_3D_CANVAS::initializeOpenGL()
+         }
+     }
+ 
+-#if wxCHECK_VERSION( 3, 3, 3 )
+-    wxGLCanvas::SetSwapInterval( -1 );
+-#else
+     GL_UTILS::SetSwapInterval( this, -1 );
+-#endif
+ 
+     m_is_opengl_initialized = true;
+ 
+diff --git a/common/gal/opengl/opengl_gal.cpp b/common/gal/opengl/opengl_gal.cpp
+index 78ce1b9b..efa507fd 100644
+--- a/common/gal/opengl/opengl_gal.cpp
++++ b/common/gal/opengl/opengl_gal.cpp
+@@ -3074,12 +3074,7 @@ void OPENGL_GAL::init()
+         throw std::runtime_error( "Requested texture size is not supported" );
+     }
+ 
+-#if wxCHECK_VERSION( 3, 3, 3 )
+-    wxGLCanvas::SetSwapInterval( -1 );
+-    m_swapInterval = wxGLCanvas::GetSwapInterval();
+-#else
+     m_swapInterval = GL_UTILS::SetSwapInterval( this, -1 );
+-#endif
+ 
+     m_cachedManager = new VERTEX_MANAGER( true );
+     m_nonCachedManager = new VERTEX_MANAGER( false );
+diff --git a/common/kicad_gl/gl_utils.cpp b/common/kicad_gl/gl_utils.cpp
+index e0c54cc8..c8d1ba0e 100644
+--- a/common/kicad_gl/gl_utils.cpp
++++ b/common/kicad_gl/gl_utils.cpp
+@@ -78,9 +78,26 @@ wxString GL_UTILS::DetectGLBackend( wxGLCanvas* aCanvas )
+     return backend;
+ }
+ 
+-#if !wxCHECK_VERSION( 3, 3, 3 )
+ int GL_UTILS::SetSwapInterval( wxGLCanvas* aCanvas, int aVal )
+ {
++#if wxCHECK_VERSION( 3, 3, 3 )
++#ifdef __WXGTK__
++    if( aCanvas->GetEGLVersion( nullptr, nullptr ) )
++    {
++        // EGL turns adaptive vsync into ordinary vsync.  An occluded canvas can then
++        // wait indefinitely for a compositor frame callback, blocking every editor
++        // on the GUI thread.  Use the draw panel's timer-based pacing instead.
++        aCanvas->SetSwapInterval( 0 );
++        return 0;
++    }
++#endif
++
++    aCanvas->SetSwapInterval( aVal );
++    int interval = aCanvas->GetSwapInterval();
++
++    // GAL uses zero for both disabled and unknown synchronization.
++    return interval == wxGLCanvas::DefaultSwapInterval ? 0 : interval;
++#else
+ #if defined( GLAD_GLX )
+     // Check that wx is really using GLX
+     if( !wxGLCanvas::GetGLXVersion() )
+@@ -193,5 +210,5 @@ int GL_UTILS::SetSwapInterval( wxGLCanvas* aCanvas, int aVal )
+ 
+ #endif
+     return 0;
++#endif // wxCHECK_VERSION( 3, 3, 3 )
+ }
+-#endif /* !wxCHECK_VERSION( 3, 3, 3 ) */
+diff --git a/include/kicad_gl/gl_utils.h b/include/kicad_gl/gl_utils.h
+index 30f3ec9d..850a3cb8 100644
+--- a/include/kicad_gl/gl_utils.h
++++ b/include/kicad_gl/gl_utils.h
+@@ -24,7 +24,6 @@
+ #ifndef GL_UTILS_H
+ #define GL_UTILS_H
+ 
+-#include <wx/version.h>
+ #include <wx/string.h>
+ 
+ #include <kicommon.h>
+@@ -36,16 +35,17 @@ class KICOMMON_API GL_UTILS
+ public:
+     static wxString DetectGLBackend( wxGLCanvas* aCanvas );
+ 
+-#if !wxCHECK_VERSION( 3, 3, 3 )
+     /**
+      * Attempt to set the OpenGL swap interval.
+      *
++     * EGL always uses nonblocking swaps to avoid stalling the GUI thread when a
++     * canvas is occluded.  Callers must pace redraws when synchronization is disabled.
++     *
+      * @param aCanvas the canvas for which to set the swap interval
+      * @param aVal if -1 = try to set adaptive swapping, 0 = sync off, 1 = sync with VSYNC rate.
+-     * @return actual value set
++     * @return actual value set, or 0 if disabled or unknown
+      */
+     static int SetSwapInterval( wxGLCanvas* aCanvas, int aVal );
+-#endif /* !wxCHECK_VERSION( 3, 3, 3 ) */
+ };
+ 
+ #endif /* GL_UTILS_H */

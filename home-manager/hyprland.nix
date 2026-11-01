@@ -23,19 +23,25 @@ let
   # Keeping the `path:` input (rather than a git ref) is deliberate: it means
   # edits under external/caelestia-shell are picked up on the next rebuild with
   # no commit, push, or `nix flake update`.
-  caelestiaRev = builtins.substring 0 32 (
-    builtins.baseNameOf (
-      builtins.path {
-        path = inputs.caelestia.outPath;
-        name = "caelestia-shell";
-      }
-    )
-  );
-
-  caelestia = inputs.caelestia.packages.${pkgs.system}.default.override {
-    rev = caelestiaRev;
+  caelestiaSrc = lib.cleanSourceWith {
+    name = "caelestia-shell";
+    src = inputs.caelestia.outPath;
+    # Local CMake outputs must not enter the sandbox or change the source identity.
+    # Normalize /./ in relative path inputs before comparing filesystem paths.
+    filter = path: _type:
+      path != toString (/. + builtins.unsafeDiscardStringContext "${inputs.caelestia.outPath}/build");
   };
-  caelestia-cli = inputs.caelestia.inputs.caelestia-cli.packages.${pkgs.system}.default;
+  caelestiaRev = builtins.substring 0 32 (builtins.baseNameOf (toString caelestiaSrc));
+
+  caelestia = (inputs.caelestia.packages.${pkgs.system}.default.override {
+    rev = caelestiaRev;
+  }).overrideAttrs (_: {
+    src = caelestiaSrc;
+  });
+  caelestia-cli = inputs.caelestia.inputs.caelestia-cli.packages.${pkgs.system}.default.overrideAttrs (old: {
+    # Structured attributes do not automatically export the VCS version fallback.
+    preBuild = (old.preBuild or "") + "\nexport SETUPTOOLS_SCM_PRETEND_VERSION\n";
+  });
   grimblast = pkgs.grimblast.override {
     hyprpicker = inputs.hyprpicker.packages.${pkgs.system}.hyprpicker;
   };
@@ -152,10 +158,10 @@ in
 
     plugins = [
       # WIN + TAB, show all workspaces
-      (inputs.hyprexpo.packages.${pkgs.system}.hyprexpo.overrideAttrs (old: {
-        # Adapt hyprexpo 7cc7378 to the window, keybind and logging APIs at
-        # our Hyprland pin (7ebf13a). Remove once upstream supports these APIs.
-        patches = (old.patches or [ ]) ++ [ ../patches/hyprexpo-hyprland-api.patch ];
+      ((inputs.hyprexpo.packages.${pkgs.system}.hyprexpo.override {
+        # Use the exact compositor and plugin toolchain selected by the host overlay.
+        inherit (pkgs) hyprland hyprlandPlugins;
+      }).overrideAttrs (_: {
         doCheck = true;
       }))
     ];

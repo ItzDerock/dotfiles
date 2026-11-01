@@ -255,7 +255,6 @@ in
     };
 
     initrd = {
-      systemd.enable = true;
       availableKernelModules = [ "tpm_tis" ];
       luks.devices."luks-c4e1f149-9b46-426b-9494-cd8b9dd81254" = {
         # This merges with your hardware-configuration.nix, so you don't

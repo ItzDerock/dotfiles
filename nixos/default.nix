@@ -41,7 +41,6 @@
   # https://emudhra.we-have-a-problem.com/
   security.pki.caCertificateBlacklist = [
     "Comodo AAA Services root"
-    "emSign ECC Root CA - G3"
   ];
 
   # Apply overlays
@@ -68,14 +67,6 @@
   ];
 
   environment.systemPackages =
-    let
-      nixpkgs-master = (
-        import inputs.nixpkgs-master {
-          system = pkgs.system;
-          config.allowUnfree = true;
-        }
-      );
-    in
     with pkgs;
     [
       cachix
@@ -108,7 +99,7 @@
       ftgl # font
       libgsf # .odf
       gnome-epub-thumbnailer # .epub, .mobi
-      nixpkgs-master.f3d
+      f3d
 
       # utils
       pciutils

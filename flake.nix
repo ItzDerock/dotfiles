@@ -26,12 +26,6 @@
 
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-master.url = "github:nixos/nixpkgs/master";
-
-    # darktable 5.6.0 (withAi) landed via nixpkgs#534312, only in
-    # nixos-unstable-small so far. Pin the merge commit and pull just the
-    # package expression; deps still come from `nixpkgs` above (see overlays).
-    nixpkgs-darktable.url = "github:nixos/nixpkgs/c139b96a3e91971991dcb8a692b6cea9f9421e0e";
 
     # Home manager
     home-manager = {
@@ -42,23 +36,28 @@
 
     # - HYPRLAND STUFF
     hyprland = {
-      url = "github:hyprwm/Hyprland?ref=7ebf13abb3c391604c60c9f627c7a403bcec8d17";
+      url = "github:hyprwm/Hyprland/v0.57.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     hyprpicker.url = "github:hyprwm/hyprpicker";
 
     hyprland-plugins = {
-      url = "github:hyprwm/hyprland-plugins";
+      url = "github:hyprwm/hyprland-plugins/v0.57.0";
       inputs.hyprland.follows = "hyprland";
     };
 
+    # Not loaded: upstream still needs a Hyprland v0.57 API port.
     Hyprspace = {
       url = "github:KZDKM/Hyprspace";
       inputs.hyprland.follows = "hyprland";
     };
 
-    hyprsplit.url = "github:shezdy/hyprsplit";
+    hyprsplit = {
+      url = "github:shezdy/hyprsplit";
+      # Only the Lua module is used; do not import another Hyprland dependency graph.
+      flake = false;
+    };
 
     hyprqt6engine = {
       url = "github:hyprwm/hyprqt6engine";
@@ -66,7 +65,8 @@
     };
 
     hyprexpo = {
-      url = "github:sandwichfarm/hyprexpo";
+      # hyprland-git revision verified by upstream CI against Hyprland v0.57.0.
+      url = "github:sandwichfarm/hyprexpo/1db341b523dd833fa6d0f3dde26f17005977b669";
       inputs.hyprland.follows = "hyprland";
     };
 
@@ -75,6 +75,8 @@
       # url = "github:caelestia-dots/shell";
       url = "path:./external/caelestia-shell";
       inputs.nixpkgs.follows = "nixpkgs";
+      # Qt 6.12 QObject metatype fix: https://github.com/quickshell-mirror/quickshell/pull/1002
+      inputs.quickshell.url = "git+https://git.outfoxxed.me/outfoxxed/quickshell?rev=5d5d49873fe8cf1f99ddfd5006ceb2057c5c9b13";
     };
 
     # cursor theme
@@ -92,11 +94,6 @@
     };
 
     stylix.url = "github:danth/stylix";
-
-    windscribe-bin = {
-      url = "github:ItzDerock/windscribe-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
     # Secrets w/ 1password
     opnix = {

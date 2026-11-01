@@ -15,7 +15,6 @@ in
     [
       # Include the results of the hardware scan.
       inputs.home-manager.nixosModules.home-manager
-      inputs.windscribe-bin.nixosModules.default
       ../../nixos
       ./hardware-configuration.nix
     ];
@@ -81,8 +80,6 @@ in
     "i915.enable_dpcd_backlight=3"
   ];
 
-  services.windscribe.enable = true;
-
   boot.kernel.sysctl = {
     "net.ipv4.tcp_mtu_probing" = 1;
   };
@@ -115,7 +112,7 @@ in
   users.extraGroups.plugdev = { };
   users.users.derock = {
     isNormalUser = true; description = "Derock";
-    extraGroups = [ "networkmanager" "wheel" "dialout" "storage" "plugdev" "windscribe" "libvirtd" ];
+    extraGroups = [ "networkmanager" "wheel" "dialout" "storage" "plugdev" "libvirtd" ];
     packages = with pkgs; [ ];
   };
 
@@ -187,8 +184,7 @@ in
   powerManagement.enable = true;
 
   boot = {
-    # stock kernel ships CONFIG_SAMSUNG_GALAXYBOOK=m since 6.14; custom
-    # linuxSamsung overlay no longer needed (and never hits the binary cache)
+    # The stock kernel ships CONFIG_SAMSUNG_GALAXYBOOK=m since 6.14.
     kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest-lto-x86_64-v3;
 
     kernelModules = [
@@ -233,7 +229,6 @@ in
     bootspec.enableValidation = true;
 
     initrd = {
-      systemd.enable = true;
       availableKernelModules = [ "tpm_tis" ];
 
       luks.devices = {

@@ -8,58 +8,25 @@
   # You can change versions, add patches, set compilation flags, anything really.
   # https://nixos.wiki/wiki/Overlays
   modifications = final: prev: {
-    # Keep the stable packaging and FHS wrapper until nixpkgs catches up.
-    zed-editor = prev.zed-editor.overrideAttrs (_old: rec {
-      version = "1.20.2";
-      src = prev.fetchFromGitHub {
-        owner = "zed-industries";
-        repo = "zed";
-        tag = "v${version}";
-        hash = "sha256-CjRRWnPpk8TIr/HiscJEs4DIJNN9ouMCBody3mqOxBg=";
-      };
-      cargoHash = "sha256-8RBQrUyvZz0zwowgVGqQbd5Nf6IP6A2SEyxj1hX6C08=";
-      # buildRustPackage's cargoDeps closes over the original cargoHash.
-      cargoDeps = prev.rustPlatform.fetchCargoVendor {
-        inherit src;
-        name = "zed-editor-${version}";
-        hash = cargoHash;
-      };
-    });
-
     # Per-package CUDA opt-ins (cudaSupport is not enabled globally — see nixos/nvidia.nix).
     blender = prev.blender.override { cudaSupport = true; };
 
-    # darktable 5.6.0 with AI features (nixpkgs#534312), not yet in our nixpkgs
-    # channel. callPackage the pinned expression against `final` so only
-    # darktable rebuilds — all deps (incl. onnxruntime for withAi) resolve from
-    # our existing nixpkgs pin, keeping cache hits and disk use down.
-    # Drop this once nixos-unstable ships darktable >= 5.6.
-    darktable = final.callPackage "${inputs.nixpkgs-darktable}/pkgs/by-name/da/darktable/package.nix" {
+    # Keep AI support enabled while using the channel's package expression.
+    darktable = prev.darktable.override {
       withAi = true;
     };
 
-    # openldap test017-syncreplication-refresh is flaky; upstream issue:
-    # https://github.com/NixOS/nixpkgs/issues/514113
-    # Retry dropping this when Hydra shows green for openldap on the pinned nixpkgs commit:
-    # https://hydra.nixos.org/job/nixpkgs/trunk/openldap.x86_64-linux
-    openldap = prev.openldap.overrideAttrs (old: {
-      doCheck = false;
-    });
-
-    # nixpkgs pins app2unit 1.4.2, whose app2unit.1.scd has nested inline
-    # formatting that scdoc >= 1.11.5 rejects:
-    #   Error at 70:17: Cannot nest inline formatting (began with _ at 69:43)
-    # Upstream fixed the manpage in 1.4.3 ("docs: fix manpage syntax for newer
-    # scdoc, fixes #18"). Bump to 1.4.4; drop once nixpkgs catches up.
-    app2unit = prev.app2unit.overrideAttrs (_old: {
-      version = "1.4.4";
-      src = prev.fetchFromGitHub {
-        owner = "Vladimir-csp";
-        repo = "app2unit";
-        tag = "v1.4.4";
-        hash = "sha256-TIY+/9ekGub+10uyqXy5aYU+2NLysMtaQnD1PIjBCFA=";
-      };
-    });
+    # Keep wxWidgets 3.3 while avoiding compositor-blocked EGL swaps.  Patch the
+    # base through callPackage so the wrapper and all of its data paths use it.
+    kicad = prev.kicad.override {
+      callPackage = path: args:
+        let package = prev.callPackage path args;
+        in if (package.pname or "") == "kicad-base" then
+          package.overrideAttrs (old: {
+            patches = (old.patches or [ ]) ++ [ ../patches/kicad-nonblocking-egl.patch ];
+          })
+        else package;
+    };
 
     # SDCP support for the LighTuning ETU905A80-E reader (1C7A:05A5). Without
     # SDCP, prints are never persisted to device storage and verify fails with
@@ -109,20 +76,6 @@
       '';
     });
 
-    # nixpkgs ships openfreebuds; override only the source to track an open PR
-    # adding HUAWEI FreeBuds Pro 5 support, not yet merged upstream.
-    # https://github.com/Sherzod-Norkulov/OpenFreebuds/tree/pr/freebuds-pro-5
-    # ^ above got deleted, now using: https://github.com/melianmiko/OpenFreebuds/pull/116
-    openfreebuds = prev.openfreebuds.overrideAttrs (_old: {
-      version = "0.17.3-unstable-2026-05-31";
-      src = prev.fetchFromGitHub {
-        owner = "JehuAlv";
-        repo = "OpenFreebuds";
-        rev = "9bc5e90d198dc2c261c75e4be2ce3fe5a9f31244";
-        hash = "sha256-jzg/pgaHbf8J7GM711ZX4VhcygpkXLyWK0J3oOqIB0s=";
-      };
-    });
-
     # Ghidra has no declarative knob for HiDPI scaling: support/launch.properties
     # (which pins VMARGS_LINUX=-Dsun.java2d.uiScale=1) lives read-only in the store.
     # ghidraRun appends $GHIDRA_JAVA_OPTIONS to the java command line *after* the
@@ -161,69 +114,6 @@
       };
     });
 
-    linuxSamsung = prev.linuxPackagesFor (
-      prev.linuxPackages_latest.kernel.override {
-        structuredExtraConfig = with prev.lib.kernel; {
-          SAMSUNG_GALAXYBOOK = module;
-
-          # following are dependencies of SAMSUNG_GALAXYBOOK
-          # ACPI = yes;
-          # ACPI_BATTERY = yes;
-          # INPUT = yes;
-          # LEDS_CLASS = yes;
-          # SERIO_I8042 = yes;
-        };
-
-        ignoreConfigErrors = true;
-      }
-    );
-
-    pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
-      (python-final: python-prev: {
-        pyqtgraph = python-prev.pyqtgraph.overridePythonAttrs (_: {
-          doCheck = false;
-        });
-
-        # tests/test_qthreadexec.py stale-reference tests depend on CPython GC
-        # timing and fail on python 3.14 ("Stale reference to executor result
-        # not collected within timeout"). Skip just those two — doCheck = false
-        # would also drop nativeCheckInputs, breaking pythonImportsCheck
-        # ("No Qt implementations found").
-        qasync = python-prev.qasync.overridePythonAttrs (old: {
-          disabledTests = (old.disabledTests or [ ]) ++ [
-            "test_no_stale_reference_as_argument"
-            "test_no_stale_reference_as_result"
-          ];
-        });
-
-        # Workaround for bug #437058
-        i3ipc = python-prev.i3ipc.overridePythonAttrs (oldAttrs: {
-          doCheck = false;
-          checkPhase = ''
-            echo "Skipping pytest in Nix build"
-          '';
-          installCheckPhase = ''
-            echo "Skipping install checks in Nix build"
-          '';
-        });
-
-        psycopg = python-prev.psycopg.overridePythonAttrs (oldAttrs: {
-          doCheck = false;
-
-          propagatedBuildInputs = (oldAttrs.propagatedBuildInputs or [ ]) ++ [ python-prev.psycopg-pool ];
-
-          pythonImportsCheck = [
-            "psycopg"
-            "psycopg_pool"
-          ];
-        });
-
-        pytest-postgresql = python-prev.pytest-postgresql.overridePythonAttrs (_: {
-          doCheck = false;
-          doInstallCheck = false;
-        });
-      })
-    ];
   };
 
   # Fix dolphin's empty "Open with" list outside KDE by refreshing ksycoca before launch.
@@ -248,28 +138,17 @@
     );
   };
 
-  # Use Hyprland's upstream package graph and only align GUI utils with the
-  # GCC 16 libstdc++ used by hyprtoolkit in current nixpkgs.
+  # Keep Hyprland's pinned packages and the standalone GUI-utils dependency graph.
   hyprland =
     final: _prev:
     let
       upstream = inputs.hyprland.packages.${final.stdenv.hostPlatform.system};
       guiutils =
-        inputs.hyprland.inputs.hyprland-guiutils.packages.${final.stdenv.hostPlatform.system}.default.override
-          { stdenv = final.gcc16Stdenv; };
+        inputs.hyprland.inputs.hyprland-guiutils.packages.${final.stdenv.hostPlatform.system}.default;
     in
     {
       hyprland = upstream.hyprland.override { hyprland-guiutils = guiutils; };
       hyprland-guiutils = guiutils;
       xdg-desktop-portal-hyprland = upstream.xdg-desktop-portal-hyprland;
     };
-
-  # When applied, the unstable nixpkgs set (declared in the flake inputs) will
-  # be accessible through 'pkgs.unstable'
-  unstable-packages = final: _prev: {
-    unstable = import inputs.nixpkgs-unstable {
-      system = final.system;
-      config.allowUnfree = true;
-    };
-  };
 }
