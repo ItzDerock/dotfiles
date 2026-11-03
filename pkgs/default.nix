@@ -2,6 +2,7 @@
 # You can build them using 'nix build .#example'
 pkgs: {
   interactive-bg-remover = pkgs.callPackage ./interactive-bg-remover.nix { };
+  seadrive = pkgs.callPackage ./seadrive.nix { };
   kickoff-dot-desktop = pkgs.callPackage ./kickoff-dot-desktop.nix { };
   probe-rs-rules = pkgs.callPackage ./probe-rs-rules.nix { inherit pkgs; };
 }

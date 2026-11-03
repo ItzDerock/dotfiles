@@ -122,6 +122,9 @@ in
   services.tailscale.enable = true;
   services.flatpak.enable = true;
 
+  # SeaDrive uses the unprivileged user's mount via the fusermount3 wrapper.
+  programs.fuse.enable = true;
+
   # dm.lemurs.enable = true;
   wm.hyprland.enable = true;
 
