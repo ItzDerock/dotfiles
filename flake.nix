@@ -119,6 +119,11 @@
 
     # kernel
     cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
+
+    wshowkeys = {
+      url = "github:DreamMaoMao/wshowkeys";
+      inputs.nixpkgs.follows = "nixpkgs"; # optional
+    };
   };
 
   outputs =

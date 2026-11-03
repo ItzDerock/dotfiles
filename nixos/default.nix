@@ -52,6 +52,14 @@
     inputs.cachyos-kernel.overlays.pinned
   ];
 
+  # Nested flake nixConfig is not inherited; enable the CachyOS kernel cache here.
+  nix.settings = {
+    substituters = [ "https://cache.lantian.pub/lantian" ];
+    trusted-public-keys = [
+      "lantian:WVGO7vsRMSEN+h7Lp7kv6SAmrkEXgUGbbXm7jMDjBuQ="
+    ];
+  };
+
   # global configuration regardless of system
   fonts.fontDir.enable = true;
   fonts.enableDefaultPackages = true;

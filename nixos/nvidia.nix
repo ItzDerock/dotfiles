@@ -66,7 +66,23 @@ in
 
       # Optionally, you may need to select the appropriate driver version for your specific GPU.
       # Stable has a use-after-free bug .-.
-      package = config.boot.kernelPackages.nvidiaPackages.latest;
+      package =
+        let
+          driver = config.boot.kernelPackages.nvidiaPackages.latest;
+        in
+        driver // {
+          # NVIDIA 615 probes PCI sysfs from a kthread; Linux 7.3 gives it a nullfs root.
+          # Patch only the open module, preserving the cached kernel.
+          # https://github.com/CachyOS/kernel-patches/pull/191
+          open = driver.open.overrideAttrs (old: {
+            patches = (old.patches or [ ]) ++ [
+              (pkgs.fetchurl {
+                url = "https://raw.githubusercontent.com/CachyOS/kernel-patches/89bb22dec944d4d5b31332f2affbc740665cf0d9/7.3/misc/nvidia/0004-Open-sysfs-config-from-the-userspace-root-on-7.3.patch";
+                hash = "sha256-pruuHakb6tcDDteKFh3t0tyNONSV74evJGc2Qu8dfKk=";
+              })
+            ];
+          });
+        };
 
       prime = mkIf (!cfg.primary) {
         intelBusId = "PCI:0:2:0";
