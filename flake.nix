@@ -117,6 +117,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    backplane = {
+      url = "github:ItzDerock/backplane-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # kernel
     cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
 

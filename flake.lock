@@ -54,6 +54,26 @@
         "type": "github"
       }
     },
+    "backplane": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1793770773,
+        "narHash": "sha256-ml27VP69qYJuFVoXhE/sVM22Yi6Psu5BF0Gg/M/ktbQ=",
+        "owner": "ItzDerock",
+        "repo": "backplane-flake",
+        "rev": "853ead203dec9f0bf31c367d8dfa58a11c00bee9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ItzDerock",
+        "repo": "backplane-flake",
+        "type": "github"
+      }
+    },
     "base16": {
       "inputs": {
         "fromYaml": "fromYaml"
@@ -1461,6 +1481,7 @@
     "root": {
       "inputs": {
         "Hyprspace": "Hyprspace",
+        "backplane": "backplane",
         "cachyos-kernel": "cachyos-kernel",
         "caelestia": "caelestia",
         "home-manager": "home-manager",

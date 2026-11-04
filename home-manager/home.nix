@@ -64,6 +64,7 @@ in
       outputs.overlays.modifications
       outputs.overlays.dolphinFix
       outputs.overlays.hyprland
+      inputs.backplane.overlays.default
     ];
     # Configure your nixpkgs instance
     config = {
@@ -88,6 +89,7 @@ in
       firefox
       # microsoft-edge
       inputs.zen-browser.packages."${pkgs.system}".default
+      backplane # agentic hardware workspace (via inputs.backplane overlay)
 
       # file browser
       kdePackages.ark # zip
