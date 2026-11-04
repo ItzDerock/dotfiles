@@ -156,6 +156,9 @@ in
       teams-for-linux
 
       comma
+    ]
+    ++ lib.optionals (builtins.elem host [ "supernova" "galaxy" ]) [
+      seadrive # Virtual drive; accounts and cache settings stay GUI-managed.
     ];
 
   # darktable AI (withAi) needs an ONNX Runtime lib it can find. darktable
