@@ -7,7 +7,7 @@
       - NEVER modify `README.md`, `CHANGELOG.md`, `LICENSE`, or any other top-level Markdown file unless I explicitly name that file in the request. Ask first if a change seems to require it.
     '';
 
-    ".omp/agents/rules/tests.md".text = ''
+    ".omp/agent/rules/tests.md".text = ''
       ---
       description: Writing or reviewing tests. Covers what not to test.
       globs: ["**/*.test.*", "**/*.spec.*", "**/tests/**", "**/test_*.py"]
