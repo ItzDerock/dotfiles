@@ -1,10 +1,14 @@
-# Upstream's AppImage still bundles FUSE 2; nixpkgs' source package is broken
-# after FUSE 2's removal. Extract and patch it rather than using an FHS sandbox:
-# the mount must be visible to applications outside the client's namespace.
+# Keep the upstream GUI, but replace its FUSE 2 daemon with the FUSE 3 fork.
+# Extract and patch the AppImage without an FHS sandbox so mounts remain
+# visible to applications outside the client's namespace.
 {
   lib,
   stdenv,
   fetchurl,
+  fetchFromGitHub,
+  seadrive-fuse,
+  fuse3,
+  openssl,
   appimageTools,
   autoPatchelfHook,
   makeWrapper,
@@ -46,8 +50,23 @@
     hash = "sha256-dM1+70XkE8VkJayovaPMrl9G7djxuoCQ3Uz/KkwhJ5Q=";
   };
   contents = appimageTools.extract {inherit pname version src;};
-  # FUSE 2's mount protocol is supported by fusermount3. Use NixOS' existing
-  # privileged helper, not an obsolete setuid fusermount bundled by upstream.
+  daemon = (seadrive-fuse.override {fuse = fuse3;}).overrideAttrs (old: {
+    inherit version;
+    src = fetchFromGitHub {
+      owner = "ItzDerock";
+      repo = "seadrive-fuse";
+      rev = "4be7f8734348e3fad7d6637e0e36c54c65607286";
+      hash = "sha256-W+Ny5b/OhS0RcNoqPDjqTpF68m7IhLpBequDyWzYlxc=";
+    };
+    buildInputs = old.buildInputs ++ [openssl];
+    meta = old.meta // {
+      broken = false;
+      homepage = "https://github.com/ItzDerock/seadrive-fuse";
+      changelog = "https://github.com/ItzDerock/seadrive-fuse/commit/4be7f8734348e3fad7d6637e0e36c54c65607286";
+    };
+  });
+  # The GUI still invokes "fusermount" to clean up an existing mount.
+  # Forward it to NixOS' privileged FUSE 3 helper.
   mountHelper = writeShellScriptBin "fusermount" ''
     exec /run/wrappers/bin/fusermount3 "$@"
   '';
@@ -94,6 +113,8 @@ in
       runHook preInstall
       mkdir -p $out/lib/seadrive $out/bin $out/share
       cp -r usr/. $out/lib/seadrive/
+      rm $out/lib/seadrive/bin/seadrive $out/lib/seadrive/lib/libfuse.so.2
+      ln -s ${daemon}/bin/seadrive $out/lib/seadrive/bin/seadrive
       # Use host graphics/Wayland libraries; the bundled client library is too
       # old for the current system's libwayland-cursor.
       rm $out/lib/seadrive/lib/libEGL_mesa.so.* \
@@ -107,6 +128,8 @@ in
         --set SEAFILE_SSL_CA_PATH /etc/ssl/certs/ca-certificates.crt
       runHook postInstall
     '';
+
+    passthru = {inherit daemon;};
 
     meta = {
       description = "Seafile virtual drive with on-demand file caching";
