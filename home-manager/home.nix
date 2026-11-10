@@ -46,6 +46,7 @@ in
     ./wofi.nix
     ./theme.nix
     ./development.nix
+    ./agentic.nix
     ./hwaccel.nix
     ./winapps.nix
     ./mpv.nix
@@ -113,7 +114,24 @@ in
       handbrake
 
       # social media
-      (discord.override { withVencord = true; })
+      (discord.override {
+        withVencord = true;
+        # Pin for Discord's rspack update; upstream already includes the React-types fix.
+        # Source: https://chatoverflow.dev/n/nixos-discord-withvencord-breaks-after-discord-s-rspack-update-i-a-is-not-a-constructor-pin-vencord-4462c61f9e72
+        vencord = pkgs.vencord.overrideAttrs (finalAttrs: old: {
+          version = "1.15.16";
+          src = old.src.override {
+            tag = "v${finalAttrs.version}";
+            hash = "sha256-aUJubLJpyLAZWiOezqFxPY6oVPgWVPQpajFqrJvrO9U=";
+          };
+          patches = [ ];
+          postPatch = "";
+          pnpmDeps = old.pnpmDeps.overrideAttrs {
+            inherit (finalAttrs) src patches postPatch;
+            outputHash = "sha256-HS8uZNepvDefjrsG3buVLFCVv7sHvazcwdpcT3EQ/78=";
+          };
+        });
+      })
       thunderbird # need >145 for Exchange
 
       # gaymin
