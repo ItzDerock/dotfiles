@@ -126,7 +126,10 @@ in
   programs.fuse.enable = true;
 
   # dm.lemurs.enable = true;
-  wm.hyprland.enable = true;
+  wm.hyprland = {
+    enable = true;
+    debug.enable = false;
+  };
 
   rockcfg = {
     greeter.enable = true;

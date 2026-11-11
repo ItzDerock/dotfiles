@@ -4,10 +4,12 @@
   pkgs,
   config,
   outputs,
+  osConfig,
   ...
 }:
 let
   cursorTheme = inputs.rose-pine-hyprcursor.packages.${pkgs.system}.default;
+  hyprlandPackage = osConfig.programs.hyprland.package;
 
   # caelestia is a relative `path:` input (see flake.nix), which has no git
   # identity of its own -- so the `rev = self.rev or self.dirtyRev` in its
@@ -63,7 +65,7 @@ let
     for instance in /run/user/$(id -u)/hypr/*/; do
       [ -S "$instance/.socket.sock" ] || continue
       HYPRLAND_INSTANCE_SIGNATURE=$(basename "$instance") \
-        ${pkgs.hyprland}/bin/hyprctl reload || true
+        ${hyprlandPackage}/bin/hyprctl reload || true
     done
   '';
 in
@@ -160,7 +162,10 @@ in
       # WIN + TAB, show all workspaces
       ((inputs.hyprexpo.packages.${pkgs.system}.hyprexpo.override {
         # Use the exact compositor and plugin toolchain selected by the host overlay.
-        inherit (pkgs) hyprland hyprlandPlugins;
+        hyprland = hyprlandPackage;
+        hyprlandPlugins = pkgs.hyprlandPlugins.override {
+          hyprland = hyprlandPackage;
+        };
       }).overrideAttrs (_: {
         doCheck = true;
       }))
@@ -168,7 +173,18 @@ in
 
     settings = { };
 
-    extraConfig = ''require("hyprland-user")'';
+    extraConfig = ''
+      require("hyprland-user")
+    '' + lib.optionalString osConfig.wm.hyprland.debug.enable ''
+      -- Apply after the user config, which normally disables logging.
+      hl.config({
+        debug = {
+          disable_logs = false,
+          disable_time = false,
+          enable_stdout_logs = true,
+        },
+      })
+    '';
   };
 
   # HM only auto-reloads Hyprland when its own generated config changes, so

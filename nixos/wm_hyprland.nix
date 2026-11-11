@@ -9,17 +9,26 @@ with lib;
 let
   cfg = config.wm.hyprland;
   pkgs-hypr = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.system};
+  hyprland = if cfg.debug.enable then
+    pkgs.hyprland.overrideAttrs (_: {
+      separateDebugInfo = true;
+    })
+  else pkgs.hyprland;
 in
 {
   options.wm.hyprland = {
     enable = mkEnableOption "Enables Hyprland";
+    debug.enable = mkEnableOption ''
+      Hyprland crash diagnostics: logging, GDB, and matching Hyprland/Mesa
+      symbols while retaining the normal optimized build
+    '';
   };
 
   config = mkIf cfg.enable {
     # Hyprland
     programs.hyprland = {
       enable = true;
-      package = pkgs.hyprland;
+      package = hyprland;
       xwayland.enable = true;
       portalPackage = pkgs.xdg-desktop-portal-hyprland;
     };
@@ -30,6 +39,15 @@ in
       enable32Bit = true;
       enable = true;
     };
+
+    environment.systemPackages = optionals cfg.debug.enable [
+      pkgs.gdb
+      (getOutput "debug" hyprland)
+      (getOutput "debug" config.hardware.graphics.package)
+    ];
+    environment.variables.NIX_DEBUG_INFO_DIRS = mkIf cfg.debug.enable [
+      "/run/current-system/sw/lib/debug"
+    ];
 
     xdg.portal = {
       enable = true;
