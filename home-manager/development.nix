@@ -48,6 +48,8 @@ in {
       ghidra-scaled # ghidra + uiScale=2, via overlays/default.nix
 
       freecad
+      tectonic
+      zathura
     ];
 
   xdg.configFile."kicad/${kicadConfigVersion}/colors/american-embedded-dark.json".source =
