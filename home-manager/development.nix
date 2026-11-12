@@ -26,6 +26,7 @@ in {
       imagemagick
       ffmpeg-full
       libsecret
+      fzf
 
       devenv
 

@@ -26,6 +26,13 @@ eval "$(direnv hook bash)"
 # util functions
 mkcd() { mkdir -p "$@" && cd "$@"; }
 
+cdq() {
+    local directory
+    directory="$(zoxide query -ai -- "$@")" || return
+    [[ -n "$directory" ]] || return 1
+    builtin cd -- "$directory"
+}
+
 # apply theme
 if [ -f "$HOME/.local/state/caelestia/sequences.txt" ]; then
     cat "$HOME/.local/state/caelestia/sequences.txt"
