@@ -294,12 +294,13 @@ hl.window_rule({
   opacity = "0.9 override 0.9 override",
 })
 
+-- KiCad footprint chooser: open centered at 65% of the monitor dimensions.
 hl.window_rule({
   match = {
-    title = "^(Footprint Chooser.*)",
-    class = "kicad",
-    float = true,
+    initial_title = "^Footprint Chooser.*",
+    class = "^org[.]kicad[.]kicad$",
   },
-  size = { 1411, 854 },
+  float = true,
+  size = { "monitor_w * 0.65", "monitor_h * 0.65" },
   center = true,
 })
